@@ -52,43 +52,35 @@ Uma **Branch** é como um *universo paralelo* onde você pode desenvolver recurs
 
 ---
 
-# 🏷️ Convenções Profissionais para Nomeação de Branches
+# 🏷️ Convenções de Branches (Cheatsheet)
 
-*Este guia utiliza prefixos (baseado no Gitflow) para classificar o tipo de trabalho que a branch representa, facilitando a revisão de código e a organização do histórico.*
+## 📌 Principais
 
-## 1. ⚙️ Branches Principais (Permanentes)
-
-São as branches de longa duração que representam a linha de tempo do projeto.
-
-| Prefixo | Nome Comum | Propósito |
+| Nome | Função | Vida Útil |
 | :--- | :--- | :--- |
-| N/A | `main` ou `master` | Contém o código **em produção**, sempre estável e pronto para ir ao ar. |
-| N/A | `develop` | Contém o histórico de desenvolvimento mais recente. É o ponto de integração para novas *features*. |
+| `main` / `master` | Produção (código no ar). | Permanente |
+| `develop` | Integração (código mais recente/testado). | Permanente |
 
-## 2. ✨ Branches de Funcionalidades e Correções (Temporárias)
+## ✨ Desenvolvimento (Temporárias)
 
-São criadas a partir de `develop` e unidas de volta após a conclusão.
-
-| Prefixo | Tipo de Mudança | Exemplo de Nomeação |
+| Prefixo | Propósito | Exemplo |
 | :--- | :--- | :--- |
-| **`feature/`** | Adiciona **nova funcionalidade** visível ao usuário. | `feature/cadastro-de-usuarios` |
-| **`fix/`** | Corrige **bug** não crítico ou problema detectado no ciclo de desenvolvimento. | `fix/validacao-de-formulario` |
-| **`hotfix/`** | Corrige **bug crítico** na branch de produção (`main`). | `hotfix/erro-de-pagamento-urgente` |
+| **`feature/`** | Nova funcionalidade. | `feature/carrinho-de-compras` |
+| **`fix/`** | Correção de bug no desenvolvimento. | `fix/layout-mobile` |
+| **`hotfix/`** | Correção urgente na produção (`main`). | `hotfix/erro-de-api` |
 
-## 3. 🛠️ Branches Estruturais e de Manutenção
+## 🛠️ Manutenção e Estrutura (Temporárias)
 
-Usadas para melhorias internas, organização e tarefas de infraestrutura.
-
-| Prefixo | Tipo de Mudança | Exemplo de Nomeação |
+| Prefixo | Propósito | Exemplo |
 | :--- | :--- | :--- |
-| **`chore/`** (Recomendado) | **Tarefas de bastidores** (infraestrutura, ambiente, organização de pastas, dependências, etc.). Ideal para organizar a estrutura do projeto. | `chore/estrutura-de-pastas` |
-| **`refactor/`** | **Reorganização interna do código** para melhorar a arquitetura, sem mudar o comportamento externo. | `refactor/separar-componentes-auth` |
-| **`docs/`** | Adição ou alteração de **documentação** (ex: README, guias de contribuição). | `docs/adicionar-guia-api` |
-| **`test/`** | Adiciona ou refatora testes unitários ou de integração, sem alterar código de produção. | `test/adicionar-testes-login` |
+| **`chore/`** | Tarefas de infraestrutura, organização de pastas, dependências. (Ótimo para estrutura!) | `chore/estrutura-base` |
+| **`refactor/`** | Reorganização/limpeza de código (sem mudar comportamento). | `refactor/separar-handlers` |
+| **`docs/`** | Atualização de documentação. | `docs/atualizar-readme` |
+| **`test/`** | Adicionar ou refatorar testes. | `test/checkout-v2` |
 
-## 📝 Regras de Nomeação
+---
 
-1.  **Use Prefixos:** Inicie a branch com um prefixo (`feature/`, `chore/`, etc.) seguido de uma barra (`/`).
-2.  **Use Hífen:** Use hífens (`-`) para separar palavras no nome descritivo.
-3.  **Seja Descritivo:** O nome deve ser curto, mas informar o objetivo da branch.
-4.  **Use Letras Minúsculas:** Evite letras maiúsculas ou caracteres especiais.
+## 📝 Regras Rápidas
+
+* Sempre use: **`prefixo/nome-descritivo-com-hifens`**
+* Tudo em **minúsculas**.

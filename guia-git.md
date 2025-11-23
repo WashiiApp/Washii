@@ -17,7 +17,8 @@
 
 | Passo | Comando | Função Didática |
 | :--- | :--- | :--- |
-| **1. Adicionar** | `git add .` | **"Coloque tudo o que alterei no carrinho de compras."** (Prepara os arquivos para a versão). |
+| **1. Adicionar Tudo** | `git add .` | **"Coloque tudo o que alterei no carrinho de compras."** (Prepara os arquivos para a versão). |
+| **1.5. Adicionar Item**| `git add nome-arquivo`| Adicionar um arquivo específico|
 | **2. Confirmar** | `git commit -m "Nova feature: Adiciona busca por produtos"` | **"Feche o carrinho e salve esta versão com uma nota descritiva."** (Cria o ponto de salvamento/versão). |
 | **3. Enviar (Padrão)** | `git push` | **"Envie os pontos de salvamento (commits) para o GitHub."** (Sincroniza sua branch atual). |
 | **4. Enviar (1ª Vez)** | `git push --set-upstream origin [nome_da_branch]` | **"Envie esta branch nova e configure para onde ela deve ir no futuro."** (Comando usado ao subir uma branch nova pela primeira vez). |

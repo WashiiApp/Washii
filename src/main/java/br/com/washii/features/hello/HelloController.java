@@ -1,4 +1,4 @@
-package br.com.washii.main;
+package br.com.washii.features.hello;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,7 +1,7 @@
 # Washii
 
 <p align="center">
-<img src="Washiilogo.png" width="500" height="600">
+<img src="src/main/resources/br/com/washii/images/washii-logo.png" width="500" height="600">
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://shields.io/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)

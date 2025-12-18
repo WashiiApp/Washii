@@ -1,5 +1,6 @@
-package br.com.washii.main;
+package br.com.washii.app;
 
+import br.com.washii.features.hello.HelloApplication;
 import javafx.application.Application;
 
 public class Launcher {

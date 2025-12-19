@@ -1,0 +1,15 @@
+/* Estilização de Componentes, como botẽos, textos, etc */
+/* Aqui se utilizarar de classes para estilizar componentes */
+
+/* exemplo: */
+.button-primary {
+    -fx-background-color: #2D9CDB;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+
+.button-primary:hover {
+    -fx-background-color: #1a7fb3; /* Um pouco mais escuro no hover */
+}

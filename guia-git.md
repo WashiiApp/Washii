@@ -21,7 +21,7 @@
 | **1.5. Adicionar Item**| `git add nome-arquivo`| Adicionar um arquivo específico|
 | **2. Confirmar** | `git commit -m "Nova feature: Adiciona busca por produtos"` | **"Feche o carrinho e salve esta versão com uma nota descritiva."** (Cria o ponto de salvamento/versão). |
 | **3. Enviar (Padrão)** | `git push` | **"Envie os pontos de salvamento (commits) para o GitHub."** (Sincroniza sua branch atual). |
-| **4. Enviar (1ª Vez)** | `git push --set-upstream origin [nome_da_branch]` | **"Envie esta branch nova e configure para onde ela deve ir no futuro."** (Comando usado ao subir uma branch nova pela primeira vez). |
+| **4. Enviar (1ª Vez)** | `git push -u origin [nome_da_branch]` | **"Envie esta branch nova e configure para onde ela deve ir no futuro."** (Comando usado ao subir uma branch nova pela primeira vez). |
 | **5. Receber** | `git pull` | **"Baixe código novo do GitHub para sua máquina local."** (Sempre antes de começar a trabalhar!) |
 
 ---

@@ -121,6 +121,12 @@ public class Endereco {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Endereco endereco = (Endereco) o;
+
+        // Se o ID for nulo, eles só são iguais se forem o MESMO objeto (já verificado acima)
+        if (this.id == null || endereco.id == null) {
+            return false;
+        }
+
         return Objects.equals(id, endereco.id);
     }
 

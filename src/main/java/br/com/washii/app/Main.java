@@ -1,6 +1,7 @@
 package br.com.washii.app;
 
 import br.com.washii.core.SceneManager;
+import br.com.washii.domain.enums.CategoriaVeiculo;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

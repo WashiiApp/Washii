@@ -65,20 +65,29 @@ public abstract class Usuario {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(this.id, usuario.id);
+
+        // Se o ID for nulo, eles só são iguais se forem o MESMO objeto (já verificado acima)
+        if (this.id == null || usuario.id == null) {
+            return false;
+        }
+
+        return Objects.equals(getId(), usuario.getId());
     }
 
-    @Override 
+    @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
-        return String.format("Usuario[id=%d, nome='%s', e-mail='%s', tipo de usuario='%s']", 
-                getId(), getNome(), getEmail(), getTipoUsuario().toString());
+        return "Usuario{" +
+                "email='" + email + '\'' +
+                ", id=" + id +
+                ", nome='" + nome + '\'' +
+                ", tipoUsuario=" + tipoUsuario +
+                '}';
     }
 }

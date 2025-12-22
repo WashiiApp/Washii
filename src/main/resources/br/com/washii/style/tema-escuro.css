@@ -1,0 +1,9 @@
+.root {
+    /* EXEMPLO Paleta de Cores para Modo Escuro */
+    -cor-fundo-principal: #121212; /* Cinza quase preto para o fundo */
+    -cor-fundo-card: #1E1E1E;      /* Cinza levemente mais claro para elevar os cards */
+    -cor-texto-padrao: #E0E0E0;   /* Branco acinzentado para suavizar o contraste */
+    -cor-primaria: #2196F3;       /* Um azul mais claro para brilhar melhor no fundo escuro */
+    -cor-sucesso: #81C784;        /* Verde menos saturado */
+    -cor-borda: #333333;          /* Borda sutil para separar elementos */
+}

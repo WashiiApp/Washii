@@ -3,25 +3,42 @@
    Consome as variáveis definidas nos arquivos de tema.
 */
 
-.root {
+/* EXEMPLO Estilização Base baseada nas variáveis do .root */
+
+.main-container {
     -fx-background-color: -cor-fundo-principal;
 }
 
-.button {
-    -fx-background-color: -cor-primaria;
-    -fx-text-fill: white; /* Cor fixa para contraste no botão */
+.sidebar {
+    -fx-background-color: -cor-fundo-card; /* Lateral com a cor da marca */
+    -fx-padding: 15;
+    -fx-pref-width: 150;
 }
 
-.button:hover {
-    -fx-opacity: 0.8; /* Efeito visual ao passar o mouse */
+.logo-label {
+    -fx-text-fill: -cor-texto-padrao; /* Logotipo geralmente mantém contraste fixo ou use -cor-fundo-card */
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
 }
 
-.label {
-    -fx-text-fill: -cor-texto-padrao;
-}
-
-.text-field {
-    -fx-background-color: -cor-fundo-card;
+.content-pane {
+    -fx-background-color: -cor-fundo-principal;
     -fx-border-color: -cor-borda;
+    -fx-border-width: 0 0 0 1; /* Borda apenas na esquerda para separar da sidebar */
+}
+
+.welcome-label {
     -fx-text-fill: -cor-texto-padrao;
+    -fx-font-size: 20px;
+}
+
+.nav-button {
+    -fx-background-color: -cor-primaria;
+    -fx-text-fill: -cor-texto-padrao;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-opacity: 0.8;
 }

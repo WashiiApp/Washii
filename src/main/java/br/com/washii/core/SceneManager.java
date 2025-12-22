@@ -11,16 +11,27 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Responsável pelo gerenciamento de navegação e fluxo de telas da aplicação.
- * Gerencia dinamicamente os estilos CSS aplicados ao sistema.
+ * Responsável pelo gerenciamento de navegação, fluxo de telas e temas da aplicação Washii.
+ * Centraliza a lógica de carregamento de arquivos FXML e a aplicação dinâmica de estilos CSS.
+ * * @author Grupo Washii
  */
 public class SceneManager {
+
+    /** Janela principal da aplicação (Stage). */
     private final Stage primaryStage;
+
+    /** Área de conteúdo para carregamento de telas internas (ex: dashboard). */
     private Pane contentArea;
 
-    // Armazena as referências externas dos CSS ativos
+    /** * Armazena as URLs dos estilos CSS ativos de forma ordenada e única.
+     * Utilizado para garantir que novas janelas e cenas herdem o tema atual.
+     */
     private final Set<String> activeStylesheets = new LinkedHashSet<>();
 
+    /**
+     * Construtor do gerenciador de cenas.
+     * @param primaryStage O Stage principal fornecido pela classe Application do JavaFX.
+     */
     public SceneManager(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
@@ -28,8 +39,8 @@ public class SceneManager {
     // --- MÉTODOS DE GERENCIAMENTO DE ESTILO ---
 
     /**
-     * Adiciona um estilo globalmente e o aplica na cena atual.
-     * @param cssPath Caminho do recurso (ex: "/styles/base.css")
+     * Adiciona um arquivo CSS à lista de estilos ativos e o aplica imediatamente na janela principal.
+     * @param cssPath O caminho relativo do recurso CSS.
      */
     public void addGlobalStyle(String cssPath) {
         String url = getClass().getResource(cssPath).toExternalForm();
@@ -39,7 +50,8 @@ public class SceneManager {
     }
 
     /**
-     * Remove um estilo e atualiza a interface.
+     * Remove um estilo CSS da lista de ativos e atualiza a interface.
+     * @param cssPath O caminho relativo do recurso CSS a ser removido.
      */
     public void removeGlobalStyle(String cssPath) {
         String url = getClass().getResource(cssPath).toExternalForm();
@@ -49,7 +61,7 @@ public class SceneManager {
     }
 
     /**
-     * Força a atualização dos estilos na janela principal.
+     * Sincroniza os estilos da cena atual do Stage principal com a lista de estilos ativos.
      */
     private void applyToAllActiveScenes() {
         if (primaryStage.getScene() != null) {
@@ -57,8 +69,12 @@ public class SceneManager {
         }
     }
 
-    // --- MÉTODOS DE NAVEGAÇÃO ADAPTADOS ---
+    // --- MÉTODOS DE NAVEGAÇÃO ---
 
+    /**
+     * Substitui a cena inteira do Stage principal por uma nova tela.
+     * @param fxmlPath Caminho do arquivo FXML da nova tela.
+     */
     public void switchFullScene(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -66,7 +82,7 @@ public class SceneManager {
             injectManager(loader);
 
             Scene scene = new Scene(root);
-            // Aplica os estilos ativos na nova cena
+            // Aplica os estilos ativos na nova cena para manter consistência visual
             scene.getStylesheets().addAll(activeStylesheets);
 
             primaryStage.setScene(scene);
@@ -78,9 +94,9 @@ public class SceneManager {
     }
 
     /**
-     * Como telas internas herdam o estilo da Scene pai (primaryStage),
-     * você não precisa reaplicar o CSS aqui, a menos que o nó raiz
-     * tenha estilos específicos via FXML que você queira sobrescrever.
+     * Carrega uma tela FXML dentro de um container específico (Pane).
+     * @param fxmlPath Caminho do arquivo FXML da tela interna.
+     * @throws IllegalStateException Caso a contentArea não tenha sido definida previamente via setContentArea.
      */
     public void loadInternalScreen(String fxmlPath) {
         if (contentArea == null) {
@@ -98,6 +114,11 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Abre uma nova janela modal (Popup) que bloqueia a interação com a janela principal.
+     * @param fxmlPath Caminho do arquivo FXML do popup.
+     * @param title Título que será exibido na barra da janela.
+     */
     public void openPopup(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -110,7 +131,7 @@ public class SceneManager {
             popupStage.initOwner(primaryStage);
 
             Scene popupScene = new Scene(root);
-            // APLICAÇÃO DINÂMICA: Garante que o popup siga o tema atual (Dark/Light)
+            // Garante que o popup herde o tema atual (Dark/Light)
             popupScene.getStylesheets().addAll(activeStylesheets);
 
             popupStage.setScene(popupScene);
@@ -121,10 +142,19 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Define o container onde as telas internas serão renderizadas.
+     * @param contentArea O Pane (geralmente um StackPane ou AnchorPane) de destino.
+     */
     public void setContentArea(Pane contentArea) {
         this.contentArea = contentArea;
     }
 
+    /**
+     * Injeta a instância deste SceneManager no Controller da tela carregada.
+     * O Controller deve estender a classe BaseController para receber a referência.
+     * @param loader O FXMLLoader utilizado para carregar a tela atual.
+     */
     private void injectManager(FXMLLoader loader) {
         Object controller = loader.getController();
         if (controller instanceof BaseController) {

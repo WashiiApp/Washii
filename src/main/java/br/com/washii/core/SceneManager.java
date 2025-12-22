@@ -7,44 +7,68 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Responsável pelo gerenciamento de navegação e fluxo de telas da aplicação.
- * Centraliza a lógica de carregamento de FXML e injeção de dependências nos Controllers.
+ * Gerencia dinamicamente os estilos CSS aplicados ao sistema.
  */
 public class SceneManager {
     private final Stage primaryStage;
-    private Pane contentArea; 
+    private Pane contentArea;
 
-    /**
-     * @param primaryStage O estágio principal criado pelo JavaFX na classe Main.
-     */
+    // Armazena as referências externas dos CSS ativos
+    private final Set<String> activeStylesheets = new LinkedHashSet<>();
+
     public SceneManager(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    // --- MÉTODOS DE GERENCIAMENTO DE ESTILO ---
+
     /**
-     * Define o contêiner que receberá
-     * as telas internas do sistema após o login.
-     * @param contentArea Painel central localizado no MainLayout.
+     * Adiciona um estilo globalmente e o aplica na cena atual.
+     * @param cssPath Caminho do recurso (ex: "/styles/base.css")
      */
-    public void setContentArea(Pane contentArea) {
-        this.contentArea = contentArea;
+    public void addGlobalStyle(String cssPath) {
+        String url = getClass().getResource(cssPath).toExternalForm();
+        if (activeStylesheets.add(url)) {
+            applyToAllActiveScenes();
+        }
     }
 
     /**
-     * Substitui toda a cena atual da janela principal. 
-     * @param fxmlPath Caminho do arquivo FXML.
+     * Remove um estilo e atualiza a interface.
      */
+    public void removeGlobalStyle(String cssPath) {
+        String url = getClass().getResource(cssPath).toExternalForm();
+        if (activeStylesheets.remove(url)) {
+            applyToAllActiveScenes();
+        }
+    }
+
+    /**
+     * Força a atualização dos estilos na janela principal.
+     */
+    private void applyToAllActiveScenes() {
+        if (primaryStage.getScene() != null) {
+            primaryStage.getScene().getStylesheets().setAll(activeStylesheets);
+        }
+    }
+
+    // --- MÉTODOS DE NAVEGAÇÃO ADAPTADOS ---
+
     public void switchFullScene(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
-            // Injeta este manager no controller para permitir navegação futura
             injectManager(loader);
 
             Scene scene = new Scene(root);
+            // Aplica os estilos ativos na nova cena
+            scene.getStylesheets().addAll(activeStylesheets);
+
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -54,21 +78,19 @@ public class SceneManager {
     }
 
     /**
-     * Carrega um FXML dentro da área de conteúdo definida (contentArea).
-     * @param fxmlPath Caminho do arquivo FXML da funcionalidade.
-     * @throws IllegalStateException Se a contentArea não tiver sido inicializada.
+     * Como telas internas herdam o estilo da Scene pai (primaryStage),
+     * você não precisa reaplicar o CSS aqui, a menos que o nó raiz
+     * tenha estilos específicos via FXML que você queira sobrescrever.
      */
     public void loadInternalScreen(String fxmlPath) {
         if (contentArea == null) {
-            throw new IllegalStateException("Erro: A 'contentArea' (painel central) não foi definida.");
+            throw new IllegalStateException("Erro: A 'contentArea' não foi definida.");
         }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent node = loader.load();
-
             injectManager(loader);
 
-            // Substitui apenas os filhos do painel central pelo novo conteúdo
             contentArea.getChildren().setAll(node);
         } catch (IOException e) {
             System.err.println("Erro ao carregar tela interna: " + fxmlPath);
@@ -76,23 +98,22 @@ public class SceneManager {
         }
     }
 
-    /**
-     * Abre uma nova janela modal (bloqueia a interação com a tela de trás).
-     * @param fxmlPath Caminho do arquivo FXML do popup.
-     * @param title Título da janela popup.
-     */
     public void openPopup(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
             injectManager(loader);
 
             Stage popupStage = new Stage();
             popupStage.setTitle(title);
-            popupStage.initModality(Modality.APPLICATION_MODAL); 
-            popupStage.initOwner(primaryStage); // Vincula o popup à janela principal
-            popupStage.setScene(new Scene(root));
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(primaryStage);
+
+            Scene popupScene = new Scene(root);
+            // APLICAÇÃO DINÂMICA: Garante que o popup siga o tema atual (Dark/Light)
+            popupScene.getStylesheets().addAll(activeStylesheets);
+
+            popupStage.setScene(popupScene);
             popupStage.showAndWait();
         } catch (IOException e) {
             System.err.println("Erro ao abrir popup: " + fxmlPath);
@@ -100,10 +121,10 @@ public class SceneManager {
         }
     }
 
-    /**
-     * Método auxiliar privado para evitar repetição de código.
-     * Verifica se o Controller da tela carregada estende BaseController e injeta o Manager.
-     */
+    public void setContentArea(Pane contentArea) {
+        this.contentArea = contentArea;
+    }
+
     private void injectManager(FXMLLoader loader) {
         Object controller = loader.getController();
         if (controller instanceof BaseController) {

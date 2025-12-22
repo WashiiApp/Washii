@@ -1,0 +1,14 @@
+/* FUNÇÃO: Definição da Identidade Visual (Skin).
+   ATRIBUIÇÕES: Atribuição de valores hexadecimais para variáveis globais.
+   É o arquivo que o SceneManager alterna para mudar o visual (Dark/Light).
+*/
+
+.root {
+    /* Paleta de Cores para Modo Claro */
+    -cor-fundo-principal: #F4F4F4;
+    -cor-fundo-card: #FFFFFF;
+    -cor-texto-padrao: #333333;
+    -cor-primaria: #2196F3; /* Azul Washii */
+    -cor-sucesso: #4CAF50;
+    -cor-borda: #DDDDDD;
+}

@@ -11,8 +11,12 @@ public class Main extends Application {
         // TESTES
         SceneManager sceneManager = new SceneManager(primaryStage);
 
-        // 1. Testa carregar a primeira tela
+        // Testa carregar a primeira tela
         sceneManager.switchFullScene("/br/com/washii/feature/teste/main.fxml");
+        // Testa carregar css
+        sceneManager.addGlobalStyle("/br/com/washii/style/base.css");
+        sceneManager.addGlobalStyle("/br/com/washii/style/components.css");
+        sceneManager.addGlobalStyle("/br/com/washii/style/tema-claro.css");
     }
 
     public static void main(String[] args) {

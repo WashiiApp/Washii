@@ -1,15 +1,27 @@
-/* Estilização de Componentes, como botẽos, textos, etc */
-/* Aqui se utilizarar de classes para estilizar componentes */
+/* FUNÇÃO: Estilização dos Componentes JavaFX.
+   ATRIBUIÇÕES: Aplica as variáveis de cores nos componentes reais e outros efeitos visuais.
+   Consome as variáveis definidas nos arquivos de tema.
+*/
 
-/* exemplo: */
-.button-primary {
-    -fx-background-color: #2D9CDB;
-    -fx-text-fill: white;
-    -fx-background-radius: 5px;
-    -fx-padding: 10 20 10 20;
-    -fx-cursor: hand;
+.root {
+    -fx-background-color: -cor-fundo-principal;
 }
 
-.button-primary:hover {
-    -fx-background-color: #1a7fb3; /* Um pouco mais escuro no hover */
+.button {
+    -fx-background-color: -cor-primaria;
+    -fx-text-fill: white; /* Cor fixa para contraste no botão */
+}
+
+.button:hover {
+    -fx-opacity: 0.8; /* Efeito visual ao passar o mouse */
+}
+
+.label {
+    -fx-text-fill: -cor-texto-padrao;
+}
+
+.text-field {
+    -fx-background-color: -cor-fundo-card;
+    -fx-border-color: -cor-borda;
+    -fx-text-fill: -cor-texto-padrao;
 }

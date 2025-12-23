@@ -151,6 +151,13 @@ public class SceneManager {
     }
 
     /**
+     * @return Primary Stage
+     */
+    public Stage getPrimaryStage(){
+        return this.primaryStage;
+    }
+
+    /**
      * Injeta a instância deste SceneManager no Controller da tela carregada.
      * O Controller deve estender a classe BaseController para receber a referência.
      * @param loader O FXMLLoader utilizado para carregar a tela atual.

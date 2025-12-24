@@ -1,6 +1,6 @@
 package br.com.washii.dao;
 
-import br.com.washii.domain.Agendamento;
+import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import java.time.LocalDate;
 import java.time.LocalTime;

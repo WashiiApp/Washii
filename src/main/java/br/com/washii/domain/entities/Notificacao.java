@@ -1,4 +1,4 @@
-package br.com.washii.domain;
+package br.com.washii.domain.entities;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

@@ -1,8 +1,8 @@
 package br.com.washii.dao;
 
-import br.com.washii.domain.Notificacao;
-
 import java.util.List;
+
+import br.com.washii.domain.entities.Notificacao;
 
 public interface NotificacaoDAO extends BaseDAO<Notificacao> {
     List<Notificacao> listarPorUsuario(Long usuarioId);

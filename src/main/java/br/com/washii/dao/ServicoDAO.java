@@ -1,8 +1,8 @@
 package br.com.washii.dao;
 
-import br.com.washii.domain.Servico;
-
 import java.util.List;
+
+import br.com.washii.domain.entities.Servico;
 
 public interface ServicoDAO extends BaseDAO<Servico> {
     List<Servico> listarPorNegocio(Long negocioId);

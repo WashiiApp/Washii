@@ -1,7 +1,8 @@
 package br.com.washii.core;
 
-import br.com.washii.domain.Usuario;
 import java.util.Objects;
+
+import br.com.washii.domain.entities.Usuario;
 
 /**
  * Gerencia a sessão do usuário ativo na aplicação Washii.

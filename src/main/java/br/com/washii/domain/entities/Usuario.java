@@ -1,4 +1,4 @@
-package br.com.washii.domain;
+package br.com.washii.domain.entities;
 
 import java.util.Objects;
 

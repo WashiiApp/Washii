@@ -6,7 +6,7 @@
             styleClass="main-container"
             xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/17.0.12"
-            fx:controller="br.com.washii.feature.teste.MainController">
+            fx:controller="br.com.washii.presentation.teste.MainController">
 
     <left>
         <VBox spacing="10" styleClass="sidebar">

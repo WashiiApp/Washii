@@ -1,8 +1,8 @@
-package br.com.washii.feature.teste;
+package br.com.washii.presentation.teste;
 
 
-import br.com.washii.core.BaseController;
-import br.com.washii.core.SceneManager;
+import br.com.washii.infra.SceneManager;
+import br.com.washii.presentation.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
 
@@ -20,11 +20,11 @@ public class MainController extends BaseController {
 
     @FXML
     public void abrirTelaA() {
-        sceneManager.loadInternalScreen("/br/com/washii/feature/teste/teste1.fxml");
+        sceneManager.loadInternalScreen("/br/com/washii/view/teste/teste1.fxml");
     }
 
     @FXML
     public void abrirTelaB() {
-        sceneManager.loadInternalScreen("/br/com/washii/feature/teste/teste2.fxml");
+        sceneManager.loadInternalScreen("/br/com/washii/view/teste/teste2.fxml");
     }
 }

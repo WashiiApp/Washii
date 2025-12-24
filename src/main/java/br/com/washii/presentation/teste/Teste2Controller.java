@@ -1,9 +1,8 @@
-package br.com.washii.feature.teste;
+package br.com.washii.presentation.teste;
 
-import br.com.washii.core.BaseController;
+import br.com.washii.presentation.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 public class Teste2Controller extends BaseController{
     @FXML

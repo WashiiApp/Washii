@@ -3,6 +3,6 @@ module br.com.washii {
     requires javafx.fxml;
     requires javafx.graphics;
 
-    opens br.com.washii.feature.teste to javafx.fxml;
+    opens br.com.washii.presentation.teste to javafx.fxml;
     exports br.com.washii.app;
 }

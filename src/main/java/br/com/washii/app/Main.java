@@ -1,7 +1,6 @@
 package br.com.washii.app;
 
-import br.com.washii.core.SceneManager;
-import br.com.washii.domain.enums.CategoriaVeiculo;
+import br.com.washii.infra.SceneManager;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -20,7 +19,7 @@ public class Main extends Application {
 
 
         // Testa carregar a primeira tela
-        sceneManager.switchFullScene("/br/com/washii/feature/teste/main.fxml");
+        sceneManager.switchFullScene("/br/com/washii/view/teste/main.fxml");
         // Testa carregar css
         sceneManager.addGlobalStyle("/br/com/washii/style/base.css");
         sceneManager.addGlobalStyle("/br/com/washii/style/components.css");

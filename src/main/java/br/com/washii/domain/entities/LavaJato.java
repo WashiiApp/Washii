@@ -1,4 +1,4 @@
-package br.com.washii.domain;
+package br.com.washii.domain.entities;
 
 import br.com.washii.domain.enums.CategoriaVeiculo;
 import java.time.LocalTime;

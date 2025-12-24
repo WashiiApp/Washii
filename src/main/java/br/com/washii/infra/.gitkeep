@@ -1,3 +1,3 @@
-A pasta infra (infraestrutura) deve ser tratada como a "central de utilitários técnicos" que não têm nada a ver com o negócio "Lava-jato", mas que são essenciais para o software rodar.
+As ferramentas técnicas que fazem o prédio funcionar, mas não têm sabor de "lava-jato".
 
-Embora o SQL (a lógica de persistência) fique na pasta persistence, a ferramenta que abre a conexão fica na infra.
+    Conexão com banco de dados (DatabaseConnection), segurança (criptografia de senhas) e logs do sistema.

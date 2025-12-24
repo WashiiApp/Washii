@@ -1,6 +1,6 @@
 package br.com.washii.presentation.teste;
 
-import br.com.washii.presentation.BaseController;
+import br.com.washii.presentation.utils.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 

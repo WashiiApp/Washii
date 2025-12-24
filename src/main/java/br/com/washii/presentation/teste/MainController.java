@@ -1,8 +1,8 @@
 package br.com.washii.presentation.teste;
 
 
-import br.com.washii.infra.SceneManager;
-import br.com.washii.presentation.BaseController;
+import br.com.washii.presentation.utils.BaseController;
+import br.com.washii.presentation.utils.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
 

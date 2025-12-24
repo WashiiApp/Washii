@@ -1,4 +1,4 @@
-package br.com.washii.presentation.utils;
+package br.com.washii.presentation.core;
 
 public abstract class BaseController {
     protected SceneManager sceneManager;

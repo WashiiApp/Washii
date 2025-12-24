@@ -1,4 +1,4 @@
-package br.com.washii.presentation.utils;
+package br.com.washii.presentation.core;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

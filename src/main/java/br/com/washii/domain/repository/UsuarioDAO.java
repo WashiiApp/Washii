@@ -1,4 +1,4 @@
-package br.com.washii.dao;
+package br.com.washii.domain.repository;
 
 import br.com.washii.domain.entities.Usuario;
 

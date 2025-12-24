@@ -1,6 +1,8 @@
 package br.com.washii.domain.entities;
 
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.domain.exceptions.DataRetroativaException;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ public class Agendamento {
         this(); // chama o construtor padrão;
         this.cliente = cliente;
         this.negocio = negocio;
-        this.data = data;
+        setData(data);
+        setHora(hora);
         this.hora = hora;
         this.veiculo = veiculo;
     }
@@ -43,8 +46,8 @@ public class Agendamento {
         this.id = id;
         this.cliente = cliente;
         this.negocio = negocio;
-        this.data = data;
-        this.hora = hora;
+        setData(data);
+        setHora(hora);
         this.veiculo = veiculo;
         this.status = status;
         this.servicos = servicos != null ? servicos : new ArrayList<>();
@@ -84,10 +87,26 @@ public class Agendamento {
     public void setNegocio(Negocio negocio) { this.negocio = negocio; }
 
     public LocalDate getData() { return data; }
-    public void setData(LocalDate data) { this.data = data; }
+    public void setData(LocalDate data) { 
+        if (data == null){
+            throw new IllegalArgumentException("A data não pode ser nula");
+        }
+        if (data.isBefore(LocalDate.now())){
+            throw new DataRetroativaException();
+        }
+        this.data = data; 
+    }
 
     public LocalTime getHora() { return hora; }
-    public void setHora(LocalTime hora) { this.hora = hora; }
+    public void setHora(LocalTime hora) {
+        if (hora == null){
+            throw new IllegalArgumentException("O horario não pode ser nulo");
+        }
+        if (hora.isBefore(LocalTime.now())){
+            throw new DataRetroativaException();
+        }
+        this.hora = hora; 
+    }
 
     public Veiculo getVeiculo() { return veiculo; }
     public void setVeiculo(Veiculo veiculo) { this.veiculo = veiculo; }

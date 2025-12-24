@@ -1,6 +1,6 @@
 package br.com.washii.app;
 
-import br.com.washii.infra.SceneManager;
+import br.com.washii.presentation.core.SceneManager;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;

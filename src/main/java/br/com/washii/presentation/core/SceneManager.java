@@ -1,4 +1,4 @@
-package br.com.washii.infra;
+package br.com.washii.presentation.core;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import br.com.washii.presentation.BaseController;
 
 /**
  * Responsável pelo gerenciamento de navegação, fluxo de telas e temas da aplicação Washii.

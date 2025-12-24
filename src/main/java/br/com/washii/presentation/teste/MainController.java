@@ -20,11 +20,11 @@ public class MainController extends BaseController {
 
     @FXML
     public void abrirTelaA() {
-        sceneManager.loadInternalScreen("/br/com/washii/feature/teste/teste1.fxml");
+        sceneManager.loadInternalScreen("/br/com/washii/view/teste/teste1.fxml");
     }
 
     @FXML
     public void abrirTelaB() {
-        sceneManager.loadInternalScreen("/br/com/washii/feature/teste/teste2.fxml");
+        sceneManager.loadInternalScreen("/br/com/washii/view/teste/teste2.fxml");
     }
 }

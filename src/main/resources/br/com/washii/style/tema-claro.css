@@ -1,14 +1,25 @@
-/* FUNÇÃO: Definição da Identidade Visual (Skin).
-   ATRIBUIÇÕES: Atribuição de valores hexadecimais para variáveis globais.
-   É o arquivo que o SceneManager alterna para mudar o visual (Dark/Light).
-*/
-
 .root {
-    /* EXEMPLO Paleta de Cores para Modo Claro */
-    -cor-fundo-principal: #F4F4F4;
-    -cor-fundo-card: #FFFFFF;
-    -cor-texto-padrao: #333333;
-    -cor-primaria: #2196F3; /* Azul Washii */
-    -cor-sucesso: #4CAF50;
-    -cor-borda: #DDDDDD;
+    /* Identidade Washii */
+    -color-brand: #66B2F2;
+    -color-brand-glow: #4A90E2;      /* Azul mais profundo para hover */
+    -color-brand-low: #E3F2FD;       /* Fundo de destaque azul claro */
+
+    /* Superfícies (Profundidade) */
+    -color-bg: #FFFFFF;              /* Fundo principal */
+    -color-surface-lp: #F5F5F5;      /* Cards e painéis */
+    -color-surface-field: #FFFFFF;   /* Interior dos inputs */
+    
+    /* Linhas e Divisores */
+    -color-border: #E0E0E0;
+    -color-divider: #F0F0F0;
+
+    /* Tipografia */
+    -color-text-header: #212121;     /* Títulos */
+    -color-text-body: #424242;       /* Texto comum */
+    -color-text-muted: #9E9E9E;      /* Placeholder / Desativado */
+    
+    /* Status */
+    -color-success: #4CAF50;
+    -color-warning: #FFC107;
+    -color-danger: #EF5350;
 }

@@ -21,7 +21,7 @@ public class Main extends Application {
         // Testa carregar a primeira tela
         sceneManager.switchFullScene("/br/com/washii/view/teste/main.fxml");
         // Testa carregar css
-        sceneManager.addGlobalStyle("/br/com/washii/style/base.css");
+        sceneManager.addGlobalStyle("/br/com/washii/style/global.css");
         sceneManager.addGlobalStyle("/br/com/washii/style/components.css");
         sceneManager.addGlobalStyle("/br/com/washii/style/tema-claro.css");
     }

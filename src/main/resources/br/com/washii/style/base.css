@@ -1,6 +1,7 @@
 /* FUNÇÃO: Estrutura e Layout Permanente.
    ATRIBUIÇÕES: Definição de fontes, arredondamento de bordas (radius),
    espessamentos, margens e tamanhos fixos que não mudam com o tema.
+   Seletores de tipo
 */
 
 .root {

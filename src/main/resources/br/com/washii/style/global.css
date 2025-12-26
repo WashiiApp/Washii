@@ -1,0 +1,55 @@
+/* ================================================================================
+ARQUIVO: global.css (WASHII - Sistema de Gerenciamento de Lava-Jato)
+================================================================================
+OBJETIVO: 
+  Definir o DNA visual e o comportamento padrão dos componentes do sistema.
+  Este arquivo utiliza seletores de TIPO (ex: .button, .label, .text-field).
+
+ATRIBUIÇÕES DESTE ARQUIVO:
+  1. TIPOGRAFIA: Definição de fontes, tamanhos base e suavização de texto.
+  2. INTERAÇÃO: Comportamentos globais como o cursor (mãozinha) e efeitos de foco.
+  3. COMPONENTES DO SISTEMA: Estilização de elementos complexos como ScrollBars, 
+     TableViews e Tooltips.
+  4. RESET VISUAL: Garantir que todos os componentes herdem as cores das 
+     variáveis definidas no theme.css (-color-text-body, -color-bg, etc).
+
+O QUE NÃO COLOCAR AQUI:
+  - Margens (margin) e Espaçamentos (padding) específicos de uma tela (usar FXML).
+  - Classes específicas de componentes (.btn-primary, .card-cliente) (usar components.css).
+================================================================================
+*/
+
+/* Reset e Base */
+.root {
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-text-body;
+    -fx-background-color: -color-bg;
+}
+
+/* Tipos Genéricos */
+.label {
+    -fx-text-fill: -color-text-body;
+}
+
+.button {
+    -fx-cursor: hand;
+    -fx-transition: 0.2s; /* Se usar bibliotecas de animação */
+}
+
+/* Estilizando o foco para todo o sistema */
+.focused {
+    -fx-focus-color: -color-brand;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Ajuste fino de componentes complexos */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-border;
+}
+
+.table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 10 0 10; /* Respiro interno lateral para os dados */
+}

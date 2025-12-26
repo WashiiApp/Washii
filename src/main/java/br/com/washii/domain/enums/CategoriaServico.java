@@ -6,5 +6,5 @@ public enum CategoriaServico {
     HIGIENIZACAO,
     VETRIFICACAO,
     LAVAGEM_DETALHADA,
-    OUTROS;
+    OUTROS
 }

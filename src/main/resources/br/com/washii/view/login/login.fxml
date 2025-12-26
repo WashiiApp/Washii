@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane id="login-background" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loscar.controller.LoginController">
+    <center>
+        <VBox id="login-content" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+            <VBox alignment="CENTER">
+               <children>
+                      <ImageView fitHeight="139.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@../../assets/logos/lg-washii-blue.png" />
+                          </image>
+                      </ImageView>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="WASHII">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER">
+               <children>
+                  <ImageView pickOnBounds="true" preserveRatio="true" />
+                      <TextField id="input-email" fx:id="txtEmail" onKeyReleased="#onKeyReleased" promptText="E-mail" styleClass="input" HBox.hgrow="ALWAYS">
+                          <padding>
+                              <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                          </padding>
+                          <font>
+                              <Font size="14.0" />
+                          </font>
+                  </TextField>
+               </children>
+            </HBox>
+                <PasswordField id="input-senha" fx:id="pwdSenha" onKeyReleased="#onKeyReleased" promptText="Senha" styleClass="input">
+                    <padding>
+                        <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                    </padding>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </PasswordField>
+                <HBox maxWidth="-Infinity" prefHeight="24.0" prefWidth="400.0">
+                    <children>
+                        <Label fx:id="lblMsgErro" text="Mensagem de erro" textFill="#ef5350" underline="true" visible="false" />
+                        <Region HBox.hgrow="SOMETIMES" />
+                        <Hyperlink fx:id="lnkEsqueciSenha" text="Esqueci a senha" />
+                    </children>
+                </HBox>
+                <Button id="btn-enviar" fx:id="btnEnviar" mnemonicParsing="false" onAction="#onBtnEnviarClick" text="ENTRAR" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font></Button>
+                <Separator prefWidth="200.0" />
+                <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="400.0">
+                    <children>
+                        <Label text="Não tem conta cadastrada? " />
+                  <Hyperlink text="Clique Aqui!" />
+                        <Region HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <bottom>
+        <Label text="Washii © 2025 - Facilitando a sua vida" textFill="WHITE" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+    </bottom>
+</BorderPane>

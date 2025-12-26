@@ -21,7 +21,7 @@ O QUE NÃO COLOCAR AQUI:
 
 /* Reset e Base */
 .root {
-    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+    -fx-font-family: "Segoe UI",  sans-serif;
     -fx-font-size: 14px;
     -fx-text-fill: -color-text-body;
     -fx-background-color: -color-bg;
@@ -29,7 +29,7 @@ O QUE NÃO COLOCAR AQUI:
 
 /* Tipos Genéricos */
 .label {
-    -fx-text-fill: -color-text-body;
+  
 }
 
 .button {
@@ -52,4 +52,27 @@ O QUE NÃO COLOCAR AQUI:
 .table-cell {
     -fx-alignment: CENTER-LEFT;
     -fx-padding: 0 10 0 10; /* Respiro interno lateral para os dados */
+}
+
+.hyperlink {
+    -fx-text-fill: -color-brand;        /* Usa o seu azul principal */
+    -fx-underline: false;               /* Remove o sublinhado fixo */
+    -fx-border-color: transparent;      /* Remove a bordinha que o FX coloca ao clicar */
+    -fx-padding: 0;                     /* Ajusta o espaçamento */
+}
+
+/* Quando o usuário passa o mouse */
+.hyperlink:hover {
+    -fx-text-fill: -color-brand-glow;  /* Cor um pouco mais clara */
+    -fx-underline: true;                /* Mostra o sublinhado apenas no hover */
+}
+
+.hyperlink:focus-within {
+    -fx-text-fill: -color-brand-glow;  /* Cor um pouco mais clara */
+    -fx-underline: true;
+}
+
+/* Quando o link está sendo pressionado */
+.hyperlink:pressed {
+    -fx-opacity: 0.7;
 }

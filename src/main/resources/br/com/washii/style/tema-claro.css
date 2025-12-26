@@ -1,7 +1,7 @@
 .root {
     /* Identidade Washii */
-    -color-brand: #66B2F2;
-    -color-brand-glow: #4A90E2;      /* Azul mais profundo para hover */
+    -color-brand: #53bfe7;
+    -color-brand-glow: #46aace;      /* Azul mais profundo para hover */
     -color-brand-low: #E3F2FD;       /* Fundo de destaque azul claro */
 
     /* Superfícies (Profundidade) */
@@ -10,7 +10,7 @@
     -color-surface-field: #FFFFFF;   /* Interior dos inputs */
     
     /* Linhas e Divisores */
-    -color-border: #E0E0E0;
+    -color-border: #cecece;
     -color-divider: #F0F0F0;
 
     /* Tipografia */

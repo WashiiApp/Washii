@@ -12,17 +12,19 @@ public class Main extends Application {
         // TESTES
         SceneManager sceneManager = new SceneManager(primaryStage);
         primaryStage.setTitle("Tela de Login");
+        primaryStage.setMinHeight(450);
+        primaryStage.setMinWidth(400);
         primaryStage.getIcons().addAll(
-                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-black-32.png")),
-                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-black-128.png"))
+                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-blue-32.png")),
+                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-blue-128.png"))
         );
 
 
         // Testa carregar a primeira tela
-        sceneManager.switchFullScene("/br/com/washii/view/teste/main.fxml");
+        sceneManager.switchFullScene("/br/com/washii/view/login/login.fxml");
         // Testa carregar css
         sceneManager.addGlobalStyle("/br/com/washii/style/global.css");
-        sceneManager.addGlobalStyle("/br/com/washii/style/components.css");
+        sceneManager.addGlobalStyle("/br/com/washii/style/componentes.css");
         sceneManager.addGlobalStyle("/br/com/washii/style/tema-claro.css");
     }
 

@@ -7,5 +7,5 @@ public enum CategoriaVeiculo {
     PICKUP,
     CAMINHAO,
     VAN,
-    SUV;
+    SUV
 }

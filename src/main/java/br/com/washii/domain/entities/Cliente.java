@@ -6,29 +6,19 @@ import java.util.List;
 
 public class Cliente extends Usuario{
     private String telefone;
-    private Endereco endereco;
     private List<Veiculo> veiculos;
 
     public Cliente() {
     }
 
-    public Cliente(String nome, String email, String senha, TipoUsuario tipoUsuario) {
-        super(nome, email, senha, tipoUsuario);
+    public Cliente(String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario) {
+        super(nome, email, senha, endereco, tipoUsuario);
     }
 
     public Cliente(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario, List<Veiculo> veiculos, String telefone, Endereco endereco) {
-        super(id, nome, email, senha, tipoUsuario);
+        super(id, nome, email, senha, endereco, tipoUsuario);
         this.veiculos = veiculos;
         this.telefone = telefone;
-        this.endereco = endereco;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 
     public String getTelefone() {

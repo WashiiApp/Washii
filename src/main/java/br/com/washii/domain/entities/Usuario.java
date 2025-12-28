@@ -9,24 +9,27 @@ public abstract class Usuario {
     private String email;
     private String senha;
     private String nome;
+    private Endereco endereco;
     private TipoUsuario tipoUsuario;
 
     // Construtores (para diferentes situações)
     public Usuario() {}
 
-    public Usuario(String nome, String email, String senha, TipoUsuario tipoUsuario) {
+    public Usuario(String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario) {
         this.id = null;
         setNome(nome);
         setEmail(email);
         setSenha(senha);
+        setEndereco(endereco);
         this.tipoUsuario = tipoUsuario;
     }
 
-    public Usuario(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario) {
+    public Usuario(Long id, String nome, String email, String senha, Endereco endereco,TipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.endereco = endereco;
         this.tipoUsuario = tipoUsuario;
     }
 
@@ -35,6 +38,7 @@ public abstract class Usuario {
     public String getEmail() { return this.email; }
     public String getSenha() { return this.senha; }
     public String getNome() { return this.nome; }
+    public Endereco getEndereco() { return this.endereco; }
     public TipoUsuario getTipoUsuario() { return this.tipoUsuario; }
 
     public void setId(Long id){
@@ -59,6 +63,11 @@ public abstract class Usuario {
         }
         this.nome = nome.trim();
     }
+
+    public void setEndereco(Endereco endereco){
+        this.endereco = endereco;
+    }
+
     public void setTipoUsuario(TipoUsuario tipo){
         this.tipoUsuario = tipo;
     }

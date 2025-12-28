@@ -27,12 +27,9 @@ public abstract class Negocio extends Usuario {
     }
 
     /**
-     * Define o CNPJ removendo caracteres especiais e validando se não está vazio.
+     * Define o CNPJ removendo caracteres especiais.
      */
     public void setCnpj(String cnpj) {
-        if (cnpj == null || cnpj.trim().isEmpty()) {
-            throw new IllegalArgumentException("CNPJ é obrigatório para um Negócio.");
-        }
         // Remove tudo que não for número (pontos, barras e traços)
         this.cnpj = cnpj.replaceAll("[^0-9]", "");
     }
@@ -42,9 +39,6 @@ public abstract class Negocio extends Usuario {
     }
 
     public void setRazaoSocial(String razaoSocial) {
-        if (razaoSocial == null || razaoSocial.trim().isEmpty()) {
-            throw new IllegalArgumentException("Razão Social não pode ser vazia.");
-        }
         this.razaoSocial = razaoSocial.trim();
     }
 

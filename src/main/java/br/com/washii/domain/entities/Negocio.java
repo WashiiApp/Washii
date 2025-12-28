@@ -4,7 +4,6 @@ import br.com.washii.domain.enums.TipoUsuario;
 
 public abstract class Negocio extends Usuario {
     private String cnpj;
-    private Endereco endereco;
     private String razaoSocial;
 
 
@@ -12,15 +11,14 @@ public abstract class Negocio extends Usuario {
         super();
     }
 
-    public Negocio(String nome, String email, String senha, TipoUsuario tipoUsuario) {
-        super(nome, email, senha, tipoUsuario);
+    public Negocio(String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario) {
+        super(nome, email, senha, endereco, tipoUsuario);
     }
 
-    public Negocio(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario, 
-                   String cnpj, Endereco endereco, String razaoSocial) {
-        super(id, nome, email, senha, tipoUsuario);
+    public Negocio(Long id, String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario, 
+                   String cnpj, String razaoSocial) {
+        super(id, nome, email, senha, endereco, tipoUsuario);
         setCnpj(cnpj); 
-        this.endereco = endereco;
         this.razaoSocial = razaoSocial;
     }
 
@@ -37,14 +35,6 @@ public abstract class Negocio extends Usuario {
         }
         // Remove tudo que não for número (pontos, barras e traços)
         this.cnpj = cnpj.replaceAll("[^0-9]", "");
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 
     public String getRazaoSocial() {

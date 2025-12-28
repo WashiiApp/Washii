@@ -15,8 +15,7 @@ public abstract class Negocio extends Usuario {
         super(nome, email, senha, endereco, tipoUsuario);
     }
 
-    public Negocio(Long id, String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario, 
-                   String cnpj, String razaoSocial) {
+    public Negocio(Long id, String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario, String cnpj, String razaoSocial) {
         super(id, nome, email, senha, endereco, tipoUsuario);
         setCnpj(cnpj); 
         this.razaoSocial = razaoSocial;

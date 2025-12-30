@@ -1,11 +1,15 @@
 package br.com.washii.presentation.core;
 
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import java.io.IOException;
 
 /**
@@ -75,6 +79,40 @@ public class SceneManager {
             System.err.println("Erro ao carregar tela interna: " + fxmlPath);
             e.printStackTrace();
         }
+    }
+
+    public void loadCenterBorderPane(String fxmlPath) {
+    try {
+        // 1. Obtém a raiz da cena atual através do Stage principal
+        Parent root = primaryStage.getScene().getRoot();
+
+        // 2. Verifica se a raiz (ou o container principal) é um BorderPane
+        if (root instanceof BorderPane mainLayout) {
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent newNode = loader.load();
+            injectManager(loader);
+
+            // 3. Troca o centro diretamente
+            mainLayout.setCenter(newNode);
+            
+            // Opcional: Efeito visual
+            applyFadeTransition(newNode);
+
+        } else {
+            throw new IllegalStateException("A tela atual não possui um BorderPane como raiz.");
+        }
+        } catch (IOException e) {
+            System.err.println("Erro ao carregar FXML: " + fxmlPath);
+            e.printStackTrace();
+        }
+    }
+
+    private void applyFadeTransition(Node node) {
+        FadeTransition ft = new FadeTransition(Duration.millis(250), node);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
     }
 
     /**

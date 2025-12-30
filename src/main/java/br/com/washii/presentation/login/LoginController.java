@@ -7,7 +7,7 @@ public class LoginController extends BaseController{
 
     @FXML
     void onEntrar(){
-        sceneManager.switchFullScene("/br/com/washii/view/home/home.fxml");
+        sceneManager.switchFullScene("/br/com/washii/view/home/main-layout.fxml");
     }
 
 }

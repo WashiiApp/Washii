@@ -8,15 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-public class MainLayoutController extends BaseController {
+public class MainLayoutNegocioController extends BaseController {
     @FXML
-    private HBox navHome, navAgendamentos, navHistorico, navPerfil;
+    private HBox navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil;
 
     private List<HBox> allNavContainer;
 
     @FXML
     void initialize() {
-        allNavContainer = Arrays.asList(navHome, navAgendamentos, navHistorico, navPerfil);
+        allNavContainer = Arrays.asList(navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil);
     }
 
     @FXML

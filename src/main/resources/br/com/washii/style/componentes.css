@@ -6,7 +6,7 @@
 
 /* EXEMPLO Estilização Base baseada nas variáveis do .root */
 
-.main-container-login {
+.main-background{
     -fx-background-image: url("../assets/images/background-login.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover; /* Faz a imagem preencher a tela sem distorcer */
@@ -22,8 +22,12 @@
         -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 30, 0, 0, 5);
 }
 
+.icon {
+    -fx-icon-color: -color-brand;
+}
+
 .icon-login {
-    -fx-icon-color: -color-brand; /* Cor cinza quando parado */
+     /* Cor cinza quando parado */
     -fx-icon-size: 22;
 }
 
@@ -46,11 +50,11 @@
 
 .input-conteiner{
     -fx-background-color: -color-surface-field;
-    -fx-background-radius: 15px;
+    -fx-background-radius: 10px;
     -fx-border-width: 1px;
     -fx-border-color: -color-border;
     -fx-spacing: 10px;
-    -fx-border-radius: 15px;
+    -fx-border-radius: 10px;
     -fx-padding: 5px 10px;
 }
 
@@ -62,7 +66,7 @@
 
 
 .logo-label {
-    -fx-text-fill: #4eafd9; /* Logotipo geralmente mantém contraste fixo ou use -cor-fundo-card */
+    -fx-text-fill: #4eafd9; 
     -fx-font-weight: bold;
     -fx-font-size: 32px;
 }
@@ -92,11 +96,44 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 2);
 }
 
-.sidebar {
-    -fx-background-color: -cor-fundo-card; /* Lateral com a cor da marca */
-    -fx-padding: 15;
-    -fx-pref-width: 150;
+.header {
+    -fx-background-color: -color-bg;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 20, 0, 0, 5);
+    -fx-view-order: -1;
+    -fx-padding: 5px 10px;
 }
+
+.sidebar {
+    -fx-background-color: -color-surface-lp; /* Lateral com a cor da marca */
+    -fx-padding: 10;
+}
+
+.nav-container {
+    -fx-padding: 10;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-border-color: transparent;
+}
+
+.nav-container:hover{
+    -fx-border-color: -color-brand;
+    -fx-border-width: 1px;
+}
+
+.nav-container-active{
+    -fx-background-color: -color-brand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 3, 3);
+}
+
+.nav-container-active .label {
+    -fx-text-fill: white;
+}
+
+.nav-container-active FontIcon {
+    -fx-icon-color: white;
+}
+
 
 
 
@@ -120,4 +157,19 @@
 
 .nav-button:hover {
     -fx-opacity: 0.8;
+}
+
+.sistem-button {
+    -fx-background-color: -color-brand-low;
+    -fx-background-radius: 10px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 5px 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 2, 2);
+}
+
+.sistem-button:hover {
+    -fx-border-color: -color-brand;
+    -fx-border-width: 1px;
 }

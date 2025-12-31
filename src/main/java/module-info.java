@@ -2,6 +2,8 @@ module br.com.washii {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+    requires java.sql;
+    requires io.github.cdimascio.dotenv.java;
 
     opens br.com.washii.presentation.login to javafx.fxml;
     opens br.com.washii.presentation.home to javafx.fxml;

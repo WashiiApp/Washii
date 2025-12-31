@@ -75,10 +75,10 @@
     -fx-text-fill: white;
     -fx-cursor: hand;
     -fx-background-color: -color-brand;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
     -fx-padding: 5px 50px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);
     -fx-transition-duration: 0.2s;
 }
 
@@ -93,7 +93,23 @@
 .button-primary:pressed {
     /* Uma versão levemente mais escura do seu azul */
     -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 2);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 1);
+}
+
+.button-secondary{
+    -fx-text-fill: -color-brand;
+    -fx-background-color: -color-bg;
+    -fx-background-radius: 15px;
+    -fx-border-color: -color-brand;
+    -fx-border-radius: 15px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 3, 3);
+}
+
+.button-secondary:pressed {
+    /* Uma versão levemente mais escura do seu azul */
+    -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
 }
 
 .header {
@@ -159,17 +175,4 @@
     -fx-opacity: 0.8;
 }
 
-.sistem-button {
-    -fx-background-color: -color-brand-low;
-    -fx-background-radius: 10px;
-    -fx-border-color: transparent;
-    -fx-border-width: 1px;
-    -fx-border-radius: 10px;
-    -fx-padding: 5px 20px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 2, 2);
-}
 
-.sistem-button:hover {
-    -fx-border-color: -color-brand;
-    -fx-border-width: 1px;
-}

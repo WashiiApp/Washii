@@ -87,7 +87,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="400.0">
          <children>
             <Label text="Não tem conta cadastrada? " />
-            <Hyperlink text="Clique Aqui!" />
+            <Hyperlink onAction="#irParaCadastro" text="Clique Aqui!" />
             <Region HBox.hgrow="ALWAYS" />
          </children>
       </HBox>

@@ -1,6 +1,8 @@
 package br.com.washii.presentation.core;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -95,9 +97,6 @@ public class SceneManager {
 
             // 3. Troca o centro diretamente
             mainLayout.setCenter(newNode);
-            
-            // Opcional: Efeito visual
-            applyFadeTransition(newNode);
 
         } else {
             throw new IllegalStateException("A tela atual não possui um BorderPane como raiz.");
@@ -106,13 +105,6 @@ public class SceneManager {
             System.err.println("Erro ao carregar FXML: " + fxmlPath);
             e.printStackTrace();
         }
-    }
-
-    private void applyFadeTransition(Node node) {
-        FadeTransition ft = new FadeTransition(Duration.millis(250), node);
-        ft.setFromValue(0.0);
-        ft.setToValue(1.0);
-        ft.play();
     }
 
     /**
@@ -170,4 +162,22 @@ public class SceneManager {
             baseController.setSceneManager(this);
         }
     }
+
+    private void slideFade(Parent novaTela) {
+    // A tela começa um pouco para a direita (20 pixels) e invisível
+    novaTela.setTranslateX(20);
+    novaTela.setOpacity(0);
+
+    // Animação de movimento para a posição original (0)
+    TranslateTransition slide = new TranslateTransition(Duration.millis(300), novaTela);
+    slide.setToX(0);
+
+    // Animação de transparência
+    FadeTransition fade = new FadeTransition(Duration.millis(300), novaTela);
+    fade.setToValue(1);
+
+    // Roda as duas juntas
+    ParallelTransition combinada = new ParallelTransition(slide, fade);
+    combinada.play();
+}
 }

@@ -1,7 +1,6 @@
-package br.com.washii.domain.services;
-
+package br.com.washii.service;
 import br.com.washii.domain.entities.Usuario;
-import br.com.washii.domain.repositories.UsuarioRepository;
+import br.com.washii.domain.repository.UsuarioRepository;
 
 /**
  * Camada de Serviço responsável pelas regras de negócio do Usuário
@@ -45,6 +44,6 @@ public class UsuarioService {
             throw new IllegalArgumentException("Usuário inválido para remoção");
         }
 
-        usuarioRepository.remover(user);
+        usuarioRepository.remover(user.getId());
     }
 }

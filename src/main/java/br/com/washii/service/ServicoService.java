@@ -1,7 +1,6 @@
-package br.com.washii.domain.services;
-
+package br.com.washii.service;
 import br.com.washii.domain.entities.Servico;
-import br.com.washii.domain.repositories.ServicoRepository;
+import br.com.washii.domain.repository.ServicoRepository;
 
 /**
  * Classe responsável pelas regras de negócio relacionadas aos serviços.
@@ -33,7 +32,7 @@ public class ServicoService {
         if (servico == null) {
             throw new IllegalArgumentException("Serviço não pode ser nulo.");
         }
-        persistence.remover(servico);
+        persistence.remover(servico.getId());
     }
 
     /**

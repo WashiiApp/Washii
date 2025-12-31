@@ -1,7 +1,9 @@
-package br.com.washii.domain.services;
+package br.com.washii.service;
+
+//o packpage é sem o domain pesquisar o motivo do erro
 
 import br.com.washii.domain.entities.Usuario;
-import br.com.washii.domain.repositories.UsuarioRepository;
+import br.com.washii.domain.repository.UsuarioRepository;
 
 import java.util.Optional;
 

@@ -27,7 +27,7 @@ public class Main extends Application {
         );
 
         // Testa carregar a primeira tela
-        sceneManager.switchFullScene("/br/com/washii/view/login/login.fxml");
+        sceneManager.switchFullScene("/br/com/washii/view/acesso/acesso-layout.fxml");
     }
 
     public static void main(String[] args) {

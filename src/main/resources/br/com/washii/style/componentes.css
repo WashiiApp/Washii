@@ -19,7 +19,7 @@
     -fx-border-color: -color-brand;
     -fx-border-width: 2px;
     -fx-border-radius: 30px;
-        -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 30, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 30, 0, 0, 5);
 }
 
 .icon {

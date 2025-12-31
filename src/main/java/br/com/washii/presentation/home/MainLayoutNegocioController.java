@@ -3,12 +3,11 @@ package br.com.washii.presentation.home;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.washii.presentation.core.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-public class MainLayoutNegocioController extends BaseController {
+public class MainLayoutNegocioController extends MainLayoutController {
     @FXML
     private HBox navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil;
 
@@ -39,7 +38,7 @@ public class MainLayoutNegocioController extends BaseController {
         } else if (containerClicked == navHistorico && containerClicked != antecessor) {
             sceneManager.loadCenterBorderPane(null);
         } else if (containerClicked == navPerfil && containerClicked != antecessor) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/login/login.fxml");
+            sceneManager.loadCenterBorderPane(null);
         }
     }
 }

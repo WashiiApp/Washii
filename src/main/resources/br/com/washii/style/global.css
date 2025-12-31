@@ -76,3 +76,43 @@ O QUE NÃO COLOCAR AQUI:
 .hyperlink:pressed {
     -fx-opacity: 0.7;
 }
+
+/* 1. O Contêiner Principal */
+.scroll-pane {
+    -fx-background-color: -color-surface-lp;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10px;
+    -fx-padding: 0;
+}
+
+/* 2. A "Janela" de visualização (Viewport) */
+/* Isso remove o fundo branco padrão que fica atrás do conteúdo */
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* 3. Estilizando a Barra de Rolagem (Trilho) */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8; /* Deixa a barra mais fina */
+}
+
+/* 4. O "Thumb" (O botão que você arrasta) */
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: -color-border; /* Cinza suave */
+    -fx-background-radius: 10;
+    -fx-background-insets: 2;
+}
+
+/* 5. Efeito de Hover (Quando passa o mouse no botão) */
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -color-brand; /* Azul do Washii ao interagir */
+}
+
+/* Remove os botões de seta (incremento/decremento) para um visual cleaner */
+.scroll-pane .scroll-bar .increment-button, 
+.scroll-pane .scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+

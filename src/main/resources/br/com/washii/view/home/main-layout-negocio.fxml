@@ -99,7 +99,7 @@
             </HBox>
             <HBox fx:id="navRelatorio" alignment="CENTER_LEFT" focusTraversable="true" onMouseClicked="#handleNavClick" spacing="10.0" styleClass="nav-container">
                <children>
-                  <FontIcon iconLiteral="mdi2c-chart-box" iconSize="18" styleClass="icon"/>
+                  <FontIcon iconLiteral="mdi2c-chart-box" iconSize="18" styleClass="icon" />
                   <Label text="Relatórios" />
                </children>
                <padding>
@@ -116,10 +116,13 @@
                </padding>
             </HBox>
             <Region VBox.vgrow="ALWAYS" />
-            <Button mnemonicParsing="false" styleClass="sistem-button" text="Sair" textFill="#3e9bb5">
+            <Button mnemonicParsing="false" onAction="#onSair" styleClass="button-secondary" text="Sair" textFill="#3e9bb5">
                <font>
                   <Font name="System Bold" size="13.0" />
-               </font></Button>
+               </font>
+               <padding>
+                  <Insets bottom="1.0" left="20.0" right="20.0" top="1.0" />
+               </padding></Button>
          </children></VBox>
    </left>
    <center>

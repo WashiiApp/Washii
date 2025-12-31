@@ -1,8 +1,8 @@
-package br.com.washii.domain.services;
+package br.com.washii.service;
 
 import br.com.washii.domain.entities.Notificacao;
 import br.com.washii.domain.entities.Usuario;
-import br.com.washii.domain.repositories.NotificacaoRepository;
+import br.com.washii.domain.repository.NotificacaoRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

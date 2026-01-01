@@ -1,4 +1,4 @@
-package br.com.washii.infra;
+package br.com.washii.infra.database;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;

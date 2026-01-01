@@ -42,6 +42,6 @@ public class ServiceFactoryImpl implements ServiceFactory {
     @Override
     public UsuarioService criarUsuarioService() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'criarUsuarioService'");
+        return new UsuarioService(new UsuarioRepositoryFake());
     }
 }

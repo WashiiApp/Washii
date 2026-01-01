@@ -20,7 +20,7 @@ public class LoginController extends BaseController{
     private Button btnEntrar;
 
     @FXML
-    private TextFlow lblMsgErro;
+    private TextFlow errorContainer;
 
     @FXML
     private Hyperlink lnkCadastro;
@@ -41,10 +41,14 @@ public class LoginController extends BaseController{
 
     @FXML
     void onEntrar(ActionEvent event){
+        limparCampoErro();
+
         if (txtEmail.getText().isBlank() || pwdSenha.getText().isBlank()) {
             exibirErro("Preencha todos os campos");
             return;
         }
+
+        btnEntrar.setDisable(true);
 
         String email = txtEmail.getText();
         String senha = pwdSenha.getText();
@@ -59,6 +63,8 @@ public class LoginController extends BaseController{
         } catch (Exception e){
             e.printStackTrace();
             exibirErro("Ocorreu um erro inesperado.");
+        } finally {
+            btnEntrar.setDisable(false);
         }
     }
 
@@ -68,9 +74,13 @@ public class LoginController extends BaseController{
     }
 
     private void exibirErro(String msg){
-        lblMsgErro.setVisible(true);
-        lblMsgErro.getChildren().clear();
+        errorContainer.setVisible(true);
         Text erro = new Text(msg);
-        lblMsgErro.getChildren().add(erro);
+        errorContainer.getChildren().add(erro);
+    }
+
+    private void limparCampoErro(){
+        errorContainer.setVisible(false);
+        errorContainer.getChildren().clear();
     }
 }

@@ -14,7 +14,7 @@ public class UsuarioRepositoryFake implements UsuarioRepository {
     @Override
     public void salvar(Usuario usuario) {
         // Em vez de ir ao banco, apenas imprime no console
-        System.out.println("FINGINDO salvar usuário no banco: " + usuario.getNome());
+        System.out.println("FINGINDO salvar usuário no banco: " + usuario.toString());
     }
 
     @Override

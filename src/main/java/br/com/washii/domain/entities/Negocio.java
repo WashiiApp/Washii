@@ -57,7 +57,6 @@ public abstract class Negocio extends Usuario {
 
     @Override
     public String toString() {
-        return String.format("Negocio[id=%d, nome='%s', cnpj='%s', razaoSocial='%s']", 
-                getId(), getNome(), cnpj, razaoSocial);
+        return String.format("Negocio[id=%d, nome='%s', cnpj='%s', razaoSocial='%s']", getId(), getNome(), cnpj, razaoSocial);
     }
 }

@@ -23,7 +23,7 @@ public class ControllerFactory {
     public Object criar(Class<?> clazz) {
         // Centralizamos aqui a "receita" de cada Controller
         if (clazz == CadastroController.class) {
-            return new CadastroController();
+            return new CadastroController(serviceFactory.criarUsuarioService());
         }
         
         if (clazz == LoginController.class) {

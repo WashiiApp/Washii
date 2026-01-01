@@ -71,11 +71,11 @@
       </HBox>
       <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
          <children>
-            <TextFlow fx:id="lblMsgErro" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
+            <TextFlow fx:id="errorContainer" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
             <Hyperlink fx:id="lnkEsqueciSenha1" layoutX="269.0" layoutY="10.0" minWidth="-Infinity" text="Esqueci a senha" />
          </children>
       </HBox>
-      <Button fx:id="btnEntrar" mnemonicParsing="false" onAction="#onEntrar" styleClass="button-primary" text="ENTRAR" textFill="WHITE">
+      <Button fx:id="btnEntrar" defaultButton="true" mnemonicParsing="false" onAction="#onEntrar" styleClass="button-primary" text="ENTRAR" textFill="WHITE">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

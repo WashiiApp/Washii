@@ -116,3 +116,7 @@ O QUE NÃO COLOCAR AQUI:
     -fx-shape: "";
 }
 
+.error-container Text {
+    -fx-fill: -color-danger; /* No componente Text, usa-se -fx-fill em vez de -fx-text-fill */
+    -fx-font-size: 14px;
+}

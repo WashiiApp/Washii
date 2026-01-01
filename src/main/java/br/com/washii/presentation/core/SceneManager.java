@@ -1,17 +1,12 @@
 package br.com.washii.presentation.core;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import java.io.IOException;
 
 /**
@@ -162,22 +157,4 @@ public class SceneManager {
             baseController.setSceneManager(this);
         }
     }
-
-    private void slideFade(Parent novaTela) {
-    // A tela começa um pouco para a direita (20 pixels) e invisível
-    novaTela.setTranslateX(20);
-    novaTela.setOpacity(0);
-
-    // Animação de movimento para a posição original (0)
-    TranslateTransition slide = new TranslateTransition(Duration.millis(300), novaTela);
-    slide.setToX(0);
-
-    // Animação de transparência
-    FadeTransition fade = new FadeTransition(Duration.millis(300), novaTela);
-    fade.setToValue(1);
-
-    // Roda as duas juntas
-    ParallelTransition combinada = new ParallelTransition(slide, fade);
-    combinada.play();
-}
 }

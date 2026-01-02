@@ -214,14 +214,12 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                     throw new IllegalStateException("Tipo de usuário inválido");
                 }
 
-                // 🔹 campos comuns
                 usuario.setId(rs.getLong("id"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setSenha(rs.getString("senha"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setTipoUsuario(TipoUsuario.valueOf(tipoStr));
 
-                // 🔹 endereço
                 Endereco endereco = new Endereco();
                 endereco.setId(rs.getLong("endereco_id"));
                 endereco.setCep(rs.getString("cep"));
@@ -302,7 +300,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 throw new IllegalStateException("Tipo de usuário inválido");
             }
 
-            // campos comuns
             usuario.setId(rs.getLong("id"));
             usuario.setEmail(rs.getString("email"));
             usuario.setSenha(rs.getString("senha"));

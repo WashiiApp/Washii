@@ -13,8 +13,10 @@ public class Endereco {
     private String estado;
     private String cidade;
     private String rua;
+    private String bairro;
     private String numero; // Atributo importante que faltava
     private String referencia;
+
 
     // 1. CONSTRUTOR VAZIO (Obrigatório para frameworks/JDBC)
     public Endereco() {
@@ -22,22 +24,24 @@ public class Endereco {
 
     // 2. CONSTRUTOR DE CADASTRO (Sem ID - usado na UI)
     // Pedimos o básico obrigatório para um endereço ser válido
-    public Endereco(String cep, String cidade, String rua, String numero, String pais) {
+    public Endereco(String cep, String cidade, String rua, String bairro, String numero, String pais) {
         setCep(cep);
         setCidade(cidade);
         setRua(rua);
+        setBairro(bairro);
         setNumero(numero);
         setPais(pais); 
     }
 
     // 3. CONSTRUTOR COMPLETO (Usado pelo Felix ao buscar do banco)
-    public Endereco(Long id, String cep, String pais, String estado, String cidade, String rua, String numero, String referencia) {
+    public Endereco(Long id, String cep, String pais, String estado, String cidade, String rua, String bairro, String numero, String referencia) {
         this.id = id;
         this.cep = cep;
         this.pais = pais;
         this.estado = estado;
         this.cidade = cidade;
         this.rua = rua;
+        this.bairro = bairro;
         this.numero = numero;
         this.referencia = referencia;
     }
@@ -50,6 +54,14 @@ public class Endereco {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
     public String getCep() {

@@ -5,6 +5,7 @@ module br.com.washii {
     requires java.sql;
     requires io.github.cdimascio.dotenv.java;
     requires javafx.base;
+    requires jbcrypt;
 
     opens br.com.washii.presentation.home to javafx.fxml;
     opens br.com.washii.presentation.acesso to javafx.fxml;

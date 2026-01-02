@@ -12,12 +12,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="450.0" spacing="10.0" styleClass="login-content" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.acesso.CadastroController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="450.0" spacing="10.0" styleClass="login-content" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.acesso.CadastroController">
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="110.0" prefWidth="416.0">
          <children>
@@ -42,15 +42,15 @@
          <content>
             <VBox spacing="10.0">
                <children>
-                  <Label text="Tipo de conta:">
+                  <Label text="Tipo da conta:">
                      <font>
                         <Font size="15.0" />
                      </font></Label>
-                  <RadioButton mnemonicParsing="false" text="Cliente">
+                  <RadioButton fx:id="rbCliente" mnemonicParsing="false" text="Cliente">
                      <toggleGroup>
-                        <ToggleGroup fx:id="tipo_conta" />
+                        <ToggleGroup fx:id="tipoUsuario" />
                      </toggleGroup></RadioButton>
-                  <RadioButton mnemonicParsing="false" text="Negocio" toggleGroup="$tipo_conta" />
+                  <RadioButton fx:id="rbNegocio" mnemonicParsing="false" text="Negocio" toggleGroup="$tipoUsuario" />
                   <HBox alignment="CENTER" styleClass="input-conteiner">
                      <children>
                         <FontIcon iconLiteral="mdi2a-account" selectionEnd="0">
@@ -59,7 +59,7 @@
                               <String fx:value="icon" />
                            </styleClass>
                         </FontIcon>
-                        <TextField fx:id="txtEmail" promptText="Nome" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txtNome" promptText="Nome" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
@@ -80,7 +80,7 @@
                               <String fx:value="icon" />
                            </styleClass>
                         </FontIcon>
-                        <TextField fx:id="txtEmail1" promptText="E-mail" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txtEmail" promptText="E-mail" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
@@ -98,7 +98,7 @@
                               <String fx:value="icon" />
                            </styleClass>
                         </FontIcon>
-                        <TextField fx:id="txtEmail2" promptText="CEP" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txtCEP" promptText="CEP" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
@@ -122,7 +122,7 @@
                               <String fx:value="icon" />
                            </styleClass>
                         </FontIcon>
-                        <TextField fx:id="txtEmail3" promptText="Estado" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txtEstado" promptText="Estado" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
@@ -140,7 +140,7 @@
                               <String fx:value="icon" />
                            </styleClass>
                         </FontIcon>
-                        <TextField fx:id="txtEmail4" promptText="Cidade" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txtCidade" promptText="Cidade" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
@@ -179,7 +179,7 @@
                               <String fx:value="icon" />
                            </styleClass>
                         </FontIcon>
-                        <PasswordField fx:id="pwdSenha1" promptText="Repita a senha" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
+                        <PasswordField fx:id="pwdSenhaConferida" promptText="Confirme a senha" styleClass="input-invisivel" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
@@ -196,13 +196,8 @@
             </VBox>
          </content>
       </ScrollPane>
-      <HBox maxWidth="-Infinity" prefHeight="24.0" prefWidth="400.0">
-         <children>
-            <Label fx:id="lblMsgErro" maxHeight="1.7976931348623157E308" text="Mensagem de erro" textFill="#ef5350" underline="true" visible="false" />
-            <Region HBox.hgrow="SOMETIMES" />
-         </children>
-      </HBox>
-      <Button mnemonicParsing="false" prefWidth="200.0" styleClass="button-primary" text="CADASTRAR" textFill="WHITE">
+      <TextFlow fx:id="errorContainer" styleClass="error-container" visible="false" />
+      <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#onCadastrar" prefWidth="200.0" styleClass="button-primary" text="CADASTRAR" textFill="WHITE">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
@@ -210,7 +205,7 @@
             <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
          </padding>
       </Button>
-      <Button mnemonicParsing="false" onAction="#irParaLogin" prefWidth="200.0" styleClass="button-secondary" text="VOLTAR AO LOGIN">
+      <Button fx:id="btnIrParaLogin" mnemonicParsing="false" onAction="#irParaLogin" prefWidth="200.0" styleClass="button-secondary" text="VOLTAR AO LOGIN">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

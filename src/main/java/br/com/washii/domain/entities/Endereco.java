@@ -24,9 +24,10 @@ public class Endereco {
 
     // 2. CONSTRUTOR DE CADASTRO (Sem ID - usado na UI)
     // Pedimos o básico obrigatório para um endereço ser válido
-    public Endereco(String cep, String cidade, String rua, String bairro, String numero, String pais) {
+    public Endereco(String cep, String estado, String cidade, String rua, String numero, String pais) {
         setCep(cep);
         setCidade(cidade);
+        setEstado(estado);
         setRua(rua);
         setBairro(bairro);
         setNumero(numero);
@@ -88,7 +89,7 @@ public class Endereco {
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        this.estado = estado.trim();
     }
 
     public String getCidade() {
@@ -96,9 +97,6 @@ public class Endereco {
     }
 
     public void setCidade(String cidade) {
-        if (cidade == null || cidade.trim().isEmpty()) {
-            throw new IllegalArgumentException("Cidade é obrigatória.");
-        }
         this.cidade = cidade.trim();
     }
 

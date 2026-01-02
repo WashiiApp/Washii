@@ -1,5 +1,7 @@
 package br.com.washii.app;
 
+import br.com.washii.infra.factory.ControllerFactory;
+import br.com.washii.infra.factory.ServiceFactoryImpl;
 import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.presentation.core.StyleManager;
 import javafx.application.Application;
@@ -17,7 +19,13 @@ public class Main extends Application {
             "/br/com/washii/style/tema-claro.css"
         );
 
-        SceneManager sceneManager = new SceneManager(primaryStage, styleManager);
+
+        // Instancia a fabrica de construtores e a fabrica de services
+        // Centraliza a lógica de instancição de objetos
+        ControllerFactory controllerFactory = new ControllerFactory(new ServiceFactoryImpl());
+
+        SceneManager sceneManager = new SceneManager(primaryStage, styleManager, controllerFactory);
+
         primaryStage.setTitle("Tela de Login");
         primaryStage.setMinHeight(450);
         primaryStage.setMinWidth(400);

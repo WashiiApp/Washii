@@ -1,18 +1,14 @@
 package br.com.washii.presentation.core;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import java.io.IOException;
+import br.com.washii.infra.factory.ControllerFactory;
 
 /**
  * Responsável pelo gerenciamento de navegação, fluxo de telas e temas da aplicação Washii.
@@ -24,6 +20,7 @@ public class SceneManager {
     /** Janela principal da aplicação (Stage). */
     private final Stage primaryStage;
     private final StyleManager styleManager;
+    private final ControllerFactory controllerFactory;
 
     /** Área de conteúdo para carregamento de telas internas (ex: dashboard). */
     private Pane contentArea;
@@ -32,9 +29,10 @@ public class SceneManager {
      * Construtor do gerenciador de cenas.
      * @param primaryStage O Stage principal fornecido pela classe Application do JavaFX.
      */
-    public SceneManager(Stage primaryStage, StyleManager styleManager) {
+    public SceneManager(Stage primaryStage, StyleManager styleManager, ControllerFactory controllerFactory) {
         this.primaryStage = primaryStage;
         this.styleManager = styleManager;
+        this.controllerFactory = controllerFactory;
     }
 
 
@@ -47,6 +45,10 @@ public class SceneManager {
     public void switchFullScene(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            // Instancia o Controller no controllerFactory
+            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
+
             Parent root = loader.load();
             injectManager(loader);
 
@@ -73,6 +75,9 @@ public class SceneManager {
         }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
+
             Parent node = loader.load();
             injectManager(loader);
 
@@ -92,6 +97,9 @@ public class SceneManager {
         if (root instanceof BorderPane mainLayout) {
             
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
+
             Parent newNode = loader.load();
             injectManager(loader);
 
@@ -115,6 +123,9 @@ public class SceneManager {
     public void openPopup(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
+            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
+
             Parent root = loader.load();
             injectManager(loader);
 
@@ -162,22 +173,4 @@ public class SceneManager {
             baseController.setSceneManager(this);
         }
     }
-
-    private void slideFade(Parent novaTela) {
-    // A tela começa um pouco para a direita (20 pixels) e invisível
-    novaTela.setTranslateX(20);
-    novaTela.setOpacity(0);
-
-    // Animação de movimento para a posição original (0)
-    TranslateTransition slide = new TranslateTransition(Duration.millis(300), novaTela);
-    slide.setToX(0);
-
-    // Animação de transparência
-    FadeTransition fade = new FadeTransition(Duration.millis(300), novaTela);
-    fade.setToValue(1);
-
-    // Roda as duas juntas
-    ParallelTransition combinada = new ParallelTransition(slide, fade);
-    combinada.play();
-}
 }

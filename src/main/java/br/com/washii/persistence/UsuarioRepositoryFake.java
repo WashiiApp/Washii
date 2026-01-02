@@ -20,8 +20,9 @@ public class UsuarioRepositoryFake implements UsuarioRepository {
     @Override
     public Optional<Usuario> buscarPorEmail(String email) {
         // TODO Auto-generated method stub
+        // senha: 123
         if (email.equals("ch")) {
-            return Optional.ofNullable(new Cliente("João", "ch", "111", new Endereco(), TipoUsuario.CLIENTE));
+            return Optional.ofNullable(new Cliente("João", "ch", "$2a$12$0ylMW1on.hw3mPAt4sL84ehMI5So704i4yl9uwvZEXBFQgXLyWgJ2", new Endereco(), TipoUsuario.CLIENTE));
         }
         return Optional.empty();
     }

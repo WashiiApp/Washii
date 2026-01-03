@@ -6,6 +6,7 @@ import java.util.Optional;
 import br.com.washii.domain.exceptions.EmailNaoCadastradoException;
 import br.com.washii.domain.exceptions.SenhaInvalidaException;
 import br.com.washii.domain.session.Sessao;
+import br.com.washii.infra.security.SenhaUtils;
 
 
 /**
@@ -34,7 +35,7 @@ public class AutenticacaoService {
 
         Usuario usuario = usuarioOpt.get();
 
-        if (!usuario.getSenha().equals(senha)) {
+        if (!SenhaUtils.verificarSenha(senha, usuario.getSenha())) {
             throw new  SenhaInvalidaException();
 
         }
@@ -50,20 +51,16 @@ public class AutenticacaoService {
      */
     public void realizarLogout() {
        Sessao.getInstance().encerrarSessao();
-        System.out.println("Logout realizado com sucesso.");
 
     }
-
     /**
      * Simula a recuperação de senha via e-mail.
      */
     public void recuperarSenha(String email) {
         Optional<Usuario> usuarioOpt = persistence.buscarPorEmail(email);
 
-//        if (usuarioOpt.isEmpty()) {
-//            throw new IllegalArgumentException("E-mail não cadastrado.");
-//        }
-//
-//        System.out.println("Link de recuperação de senha enviado para: " + email);
-//    } CHAMAR A EXCEÇÃO DO EMAIL CADASTRADO.
-}}
+        if (usuarioOpt.isEmpty()) {
+            throw new EmailNaoCadastradoException(email);
+        }
+    }
+}

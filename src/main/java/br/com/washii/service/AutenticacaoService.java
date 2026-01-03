@@ -1,11 +1,12 @@
 package br.com.washii.service;
 
-//o packpage é sem o domain pesquisar o motivo do erro
-
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.repository.UsuarioRepository;
-
 import java.util.Optional;
+import br.com.washii.domain.exceptions.EmailNaoCadastradoException;
+import br.com.washii.domain.exceptions.SenhaInvalidaException;
+import br.com.washii.domain.session.Sessao;
+
 
 /**
  * Classe responsável pela autenticação de usuários.
@@ -13,7 +14,7 @@ import java.util.Optional;
  */
 public class AutenticacaoService {
 
-    // Dependência conforme o diagrama UML
+
     private UsuarioRepository persistence;
 
     // Construtor
@@ -28,14 +29,17 @@ public class AutenticacaoService {
         Optional<Usuario> usuarioOpt = persistence.buscarPorEmail(email);
 
         if (usuarioOpt.isEmpty()) {
-            throw new IllegalArgumentException("Usuário não encontrado.");
+            throw new EmailNaoCadastradoException(email);
         }
 
         Usuario usuario = usuarioOpt.get();
 
         if (!usuario.getSenha().equals(senha)) {
-            throw new IllegalArgumentException("Senha inválida.");
+            throw new  SenhaInvalidaException();
+
         }
+
+        Sessao.getInstance().iniciarSessao(usuario);
 
         return usuario;
     }
@@ -45,7 +49,9 @@ public class AutenticacaoService {
      * (Em sistemas simples, apenas controle de sessão)
      */
     public void realizarLogout() {
+       Sessao.getInstance().encerrarSessao();
         System.out.println("Logout realizado com sucesso.");
+
     }
 
     /**
@@ -54,10 +60,10 @@ public class AutenticacaoService {
     public void recuperarSenha(String email) {
         Optional<Usuario> usuarioOpt = persistence.buscarPorEmail(email);
 
-        if (usuarioOpt.isEmpty()) {
-            throw new IllegalArgumentException("E-mail não cadastrado.");
-        }
-
-        System.out.println("Link de recuperação de senha enviado para: " + email);
-    }
-}
+//        if (usuarioOpt.isEmpty()) {
+//            throw new IllegalArgumentException("E-mail não cadastrado.");
+//        }
+//
+//        System.out.println("Link de recuperação de senha enviado para: " + email);
+//    } CHAMAR A EXCEÇÃO DO EMAIL CADASTRADO.
+}}

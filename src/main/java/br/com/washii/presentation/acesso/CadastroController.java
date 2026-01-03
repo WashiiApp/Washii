@@ -102,7 +102,7 @@ void onCadastrar(ActionEvent event) {
     }
 
     // 4. Criação dos Objetos
-    Endereco endereco = new Endereco(cep, estado, cidade, null, null, "Brasil");
+    Endereco endereco = new Endereco(cep, estado, cidade, null, null, null, "Brasil");
     Usuario usuario;
 
     // Comparação mais segura (verifique se o texto no Scene Builder bate exatamente)

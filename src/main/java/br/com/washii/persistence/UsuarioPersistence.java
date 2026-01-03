@@ -324,4 +324,3 @@ public class UsuarioPersistence implements UsuarioRepository {
         }
     }
 }
-

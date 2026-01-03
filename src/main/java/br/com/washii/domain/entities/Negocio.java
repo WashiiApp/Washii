@@ -29,7 +29,11 @@ public abstract class Negocio extends Usuario {
      * Define o CNPJ removendo caracteres especiais.
      */
     public void setCnpj(String cnpj) {
-        // Remove tudo que não for número (pontos, barras e traços)
+        // cnpj nulo por enquanto - geraldo
+        if (cnpj == null) {
+            this.cnpj = null;
+            return;
+        }
         this.cnpj = cnpj.replaceAll("[^0-9]", "");
     }
 

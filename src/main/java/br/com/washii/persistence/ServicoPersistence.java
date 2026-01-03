@@ -26,7 +26,6 @@ public class ServicoPersistence implements ServicoRepository {
 
     @Override
     public void remover(Long aLong) {
-
     }
 
     @Override

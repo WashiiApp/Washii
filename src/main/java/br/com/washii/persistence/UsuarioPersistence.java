@@ -19,40 +19,8 @@ public class UsuarioPersistence implements UsuarioRepository {
                 VALUES (?, ?, ?, ?::tipo_usuario, ?)
                 """;
 
-
-        String sqlEndereco = """
-        INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia)
-        VALUES (?, ?, ?, ?, ?, ?)
-        RETURNING id
-    """;
-
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            if (usuario.getEndereco() == null) {
-                throw new IllegalStateException("Usuário precisa de endereço");
-            }
-
-            if (usuario.getEndereco().getId() == null) {
-
-                try (PreparedStatement stmtEndereco = conn.prepareStatement(sqlEndereco)) {
-
-                    Endereco e = usuario.getEndereco();
-
-                    stmtEndereco.setString(1, e.getCep());
-                    stmtEndereco.setString(2, e.getPais());
-                    stmtEndereco.setString(3, e.getEstado());
-                    stmtEndereco.setString(4, e.getBairro());
-                    stmtEndereco.setString(5, e.getRua());
-                    stmtEndereco.setString(6, e.getReferencia());
-
-                    ResultSet rs = stmtEndereco.executeQuery();
-                    if (rs.next()) {
-                        e.setId(rs.getLong("id"));
-                    }
-                }
-            }
-
 
             stmt.setString(1, usuario.getEmail());
             stmt.setString(2, usuario.getSenha());

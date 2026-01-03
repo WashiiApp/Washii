@@ -24,7 +24,7 @@ public class Endereco {
 
     // 2. CONSTRUTOR DE CADASTRO (Sem ID - usado na UI)
     // Pedimos o básico obrigatório para um endereço ser válido
-    public Endereco(String cep, String estado, String cidade, String rua, String bairro, String numero, String pais) {
+    public Endereco(String cep, String estado, String cidade, String rua, String numero, String pais) {
         setCep(cep);
         setCidade(cidade);
         setEstado(estado);

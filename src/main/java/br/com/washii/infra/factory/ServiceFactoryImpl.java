@@ -1,8 +1,6 @@
 package br.com.washii.infra.factory;
 
-import br.com.washii.persistence.UsuarioRepositoryFake;
-import br.com.washii.presentation.acesso.CadastroController;
-import br.com.washii.presentation.acesso.LoginController;
+import br.com.washii.persistence.UsuarioPersistence;
 import br.com.washii.service.AgendamentoService;
 import br.com.washii.service.AutenticacaoService;
 import br.com.washii.service.NotificacaoService;
@@ -16,16 +14,22 @@ public class ServiceFactoryImpl implements ServiceFactory {
     // injetados na instanciação dos services
 
     @Override
+    public UsuarioService criarUsuarioService() {
+        return new UsuarioService(new UsuarioPersistence());
+    }
+
+    @Override
+    public AutenticacaoService criarAutenticacaoService() {
+        return new AutenticacaoService(new UsuarioPersistence());
+    }
+
+    @Override
     public AgendamentoService criarAgendamentoService() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'criarAgendamentoService'");
     }
 
-    @Override
-    public AutenticacaoService criarAutenticacaoService() {
-        // TODO Auto-generated method stub
-        return new AutenticacaoService(new UsuarioRepositoryFake());
-    }
+    
 
     @Override
     public NotificacaoService criarNotificacaoService() {
@@ -37,11 +41,5 @@ public class ServiceFactoryImpl implements ServiceFactory {
     public ServicoService criarServicoService() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'criarServicoService'");
-    }
-
-    @Override
-    public UsuarioService criarUsuarioService() {
-        // TODO Auto-generated method stub
-        return new UsuarioService(new UsuarioRepositoryFake());
     }
 }

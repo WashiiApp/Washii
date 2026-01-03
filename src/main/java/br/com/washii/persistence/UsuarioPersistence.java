@@ -3,14 +3,14 @@ package br.com.washii.persistence;
 import br.com.washii.domain.entities.*;
 import br.com.washii.domain.repository.UsuarioRepository;
 import br.com.washii.domain.enums.TipoUsuario;
-import br.com.washii.infra.DatabaseConfig;
+import br.com.washii.infra.database.DatabaseConfig;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
-public class UsuarioRepositoryImpl implements UsuarioRepository {
+public class UsuarioPersistence implements UsuarioRepository {
 
     @Override
     public void salvar(Usuario usuario) {

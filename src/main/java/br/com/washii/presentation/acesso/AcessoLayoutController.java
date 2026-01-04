@@ -27,7 +27,7 @@ public class AcessoLayoutController extends BaseController {
         // Podemos desenvolver alguma lógica para pular o login, caso o sistema lembre quem está logado
         /*
         Platform.runLater(() -> {
-            sceneManager.switchFullScene("/br/com/washii/view/home/main-layout-cliente.fxml");
+            sceneManager.switchFullScene("/br/com/washii/view/layout/cliente-layout.fxml");
         });
          */
     }

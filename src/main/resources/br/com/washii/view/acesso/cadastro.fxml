@@ -196,7 +196,7 @@
             </VBox>
          </content>
       </ScrollPane>
-      <TextFlow fx:id="errorContainer" styleClass="error-container" visible="false" />
+      <TextFlow fx:id="avisoContainer" styleClass="error-container" visible="false" />
       <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#onCadastrar" prefWidth="200.0" styleClass="button-primary" text="CADASTRAR" textFill="WHITE">
          <font>
             <Font name="System Bold" size="16.0" />

@@ -20,7 +20,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 """;
 
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             salvarEndereco(usuario);
 
@@ -29,12 +29,34 @@ public class UsuarioPersistence implements UsuarioRepository {
             stmt.setString(3, usuario.getNome());
             stmt.setString(4, usuario.getTipoUsuario().name());
             stmt.setLong(5, usuario.getEndereco().getId());
+            String tipo = usuario.getTipoUsuario().name();
 
             stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                usuario.setId(rs.getLong(1));
+            }
+
+            if ("NEGOCIO".equals(tipo)) {
+                String sqlNegocio = """
+                    INSERT INTO negocio (id_usuario, cnpj, razao_social)
+                    VALUES (?, ?, ?)
+                """;
+
+                PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio);
+                stmtNegocio.setLong(1, usuario.getId());
+                stmtNegocio.setString(2, null);
+                stmtNegocio.setString(3, null);
+
+                stmtNegocio.executeUpdate();
+
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar usuário", e);
         }
+
     }
 
     @Override

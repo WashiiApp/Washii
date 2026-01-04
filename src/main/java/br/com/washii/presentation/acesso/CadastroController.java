@@ -71,7 +71,7 @@ public class CadastroController extends BaseController {
     }
 
    @FXML
-void onCadastrar(ActionEvent event) {
+    void onCadastrar(ActionEvent event) {
     limparCampoAviso();
 
     // 1. Captura e Validação do RadioButton

@@ -1,5 +1,7 @@
 package br.com.washii.presentation.acesso;
 
+import br.com.washii.domain.entities.Usuario;
+import br.com.washii.domain.enums.TipoUsuario;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.service.AutenticacaoService;
@@ -54,9 +56,16 @@ public class LoginController extends BaseController{
         String senha = pwdSenha.getText();
 
         try {
-            autenticacaoService.realizarLogin(email, senha);
+            Usuario user = autenticacaoService.realizarLogin(email, senha);
 
-            sceneManager.switchFullScene("/br/com/washii/view/home/main-layout-negocio.fxml");
+            // Escolhe a tela com base no TipoUsuario
+            if (user.getTipoUsuario() == TipoUsuario.CLIENTE){
+                sceneManager.switchFullScene("/br/com/washii/view/layout/cliente-layout.fxml");
+            } else if (user.getTipoUsuario() == TipoUsuario.NEGOCIO){
+                sceneManager.switchFullScene("/br/com/washii/view/layout/negocio-layout.fxml");
+            } else {
+                exibirErro("Tipo de Usuário desconhecido.");
+            }
 
         } catch (NegocioException e) {
             exibirErro(e.getMessage());

@@ -150,18 +150,10 @@
     -fx-icon-color: white;
 }
 
-
-
-
 .content-pane {
     -fx-background-color: -cor-fundo-principal;
     -fx-border-color: -cor-borda;
     -fx-border-width: 0 0 0 1; /* Borda apenas na esquerda para separar da sidebar */
-}
-
-.welcome-label {
-    -fx-text-fill: -cor-texto-padrao;
-    -fx-font-size: 20px;
 }
 
 .nav-button {

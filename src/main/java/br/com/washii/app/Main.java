@@ -21,7 +21,7 @@ public class Main extends Application {
 
 
         // Instancia a fabrica de construtores e a fabrica de services
-        // Centraliza a lógica de instancição de objetos
+        // Centraliza a lógica de instanciação de objetos
         ControllerFactory controllerFactory = new ControllerFactory(new ServiceFactoryImpl());
 
         SceneManager sceneManager = new SceneManager(primaryStage, styleManager, controllerFactory);
@@ -34,7 +34,7 @@ public class Main extends Application {
                 new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-blue-128.png"))
         );
 
-        // Testa carregar a primeira tela
+        // Carrega Inicialmente a tela de login
         sceneManager.switchFullScene("/br/com/washii/view/acesso/acesso-layout.fxml");
     }
 

@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="main-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.home.MainLayoutClienteController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="main-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.layout.ClienteLayoutController">
    <top>
       <HBox alignment="CENTER" prefHeight="32.0" spacing="10.0" styleClass="header" BorderPane.alignment="CENTER">
          <children>
@@ -29,7 +29,7 @@
                </font>
             </Label>
             <Region HBox.hgrow="ALWAYS" />
-            <Label text="Bem Vindo, Fulanin" />
+            <Label fx:id="lblBoasVindas" text="Bem Vindo, Fulanin" />
             <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0">
                <children>
                   <FontIcon iconLiteral="mdi2b-bell" iconSize="18" selectionEnd="1" styleClass="icon" />

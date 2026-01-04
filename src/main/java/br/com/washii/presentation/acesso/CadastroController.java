@@ -44,7 +44,7 @@ public class CadastroController extends BaseController {
     private PasswordField pwdSenhaConferida;
 
     @FXML
-    private TextFlow errorContainer;
+    private TextFlow avisoContainer;
 
     @FXML
     private TextField txtCEP;
@@ -72,12 +72,12 @@ public class CadastroController extends BaseController {
 
    @FXML
 void onCadastrar(ActionEvent event) {
-    limparCampoErro();
+    limparCampoAviso();
 
     // 1. Captura e Validação do RadioButton
     RadioButton selecionado = (RadioButton) tipoUsuario.getSelectedToggle();
     if (selecionado == null) {
-        exibirErro("Por favor, selecione o tipo da conta.");
+        exibirAvisoErro("Por favor, selecione o tipo da conta.");
         return;
     }
 
@@ -92,12 +92,12 @@ void onCadastrar(ActionEvent event) {
 
     // 3. Validação de campos vazios e senhas
     if (nome.isBlank() || email.isBlank() || cep.isBlank() || senha.isBlank()) {
-        exibirErro("Por favor, preencha todos os campos.");
+        exibirAvisoErro("Por favor, preencha todos os campos.");
         return;
     }
 
     if (!senha.equals(senha2)) {
-        exibirErro("As senhas não conferem.");
+        exibirAvisoErro("As senhas não conferem.");
         return;
     }
 
@@ -111,7 +111,7 @@ void onCadastrar(ActionEvent event) {
     } else if (selecionado == rbCliente) {
         usuario = new Cliente(nome, email, senha, endereco, TipoUsuario.CLIENTE);
     } else {
-        exibirErro("Tipo de conta não identificado.");
+        exibirAvisoErro("Tipo de conta não identificado.");
         return;
     }
 
@@ -120,25 +120,39 @@ void onCadastrar(ActionEvent event) {
         usuarioService.salvarNovoUsuario(usuario);
 
         // 6. Feedback de Sucesso
-        // Melhorar isso aqui 
-        exibirErro("Cadastro realizado com sucesso! Você já pode fazer login.");
+        exibirAvisoSucesso("Cadastro realizado com sucesso! Você já pode fazer login.");
 
     } catch (NegocioException e) {
-        exibirErro(e.getMessage());
+        exibirAvisoErro(e.getMessage());
     } catch (Exception e) {
-        exibirErro("Erro inesperado: " + e.getMessage());
+        exibirAvisoErro("Erro inesperado: " + e.getMessage());
         e.printStackTrace();
     }
 }
 
-    private void exibirErro(String msg){
-        errorContainer.setVisible(true);
+    private void exibirAvisoErro(String msg){
+        avisoContainer.setVisible(true);
+        avisoContainer.getStyleClass().clear();
+
+        avisoContainer.getStyleClass().add("error-container");
+
         Text erro = new Text(msg);
-        errorContainer.getChildren().add(erro);
+        avisoContainer.getChildren().add(erro);
     }
 
-    private void limparCampoErro(){
-        errorContainer.setVisible(false);
-        errorContainer.getChildren().clear();
+    private void exibirAvisoSucesso(String msg) {
+        avisoContainer.setVisible(true);
+        avisoContainer.getStyleClass().clear();
+
+        avisoContainer.getStyleClass().add("success-container");
+
+        Text aviso = new Text(msg);
+        avisoContainer.getChildren().add(aviso);
+    }
+
+    private void limparCampoAviso(){
+        avisoContainer.getStyleClass().clear();
+        avisoContainer.setVisible(false);
+        avisoContainer.getChildren().clear();
     }
 }

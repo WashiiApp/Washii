@@ -1,5 +1,6 @@
 package br.com.washii.infra.factory;
 
+import br.com.washii.persistence.ServicoPersistence;
 import br.com.washii.persistence.UsuarioPersistence;
 import br.com.washii.service.AgendamentoService;
 import br.com.washii.service.AutenticacaoService;
@@ -24,6 +25,11 @@ public class ServiceFactoryImpl implements ServiceFactory {
     }
 
     @Override
+    public ServicoService criarServicoService() {
+        return new ServicoService(new ServicoPersistence());
+    }
+
+    @Override
     public AgendamentoService criarAgendamentoService() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'criarAgendamentoService'");
@@ -35,11 +41,5 @@ public class ServiceFactoryImpl implements ServiceFactory {
     public NotificacaoService criarNotificacaoService() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'criarNotificacaoService'");
-    }
-
-    @Override
-    public ServicoService criarServicoService() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'criarServicoService'");
     }
 }

@@ -3,9 +3,8 @@ import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.exceptions.EmailJaCadastradoException;
 import br.com.washii.domain.repository.UsuarioRepository;
 import br.com.washii.infra.security.SenhaUtils;
-
 import java.util.Optional;
-import java.util.stream.Stream;
+
 
 /**
  * Camada de Serviço responsável pelas regras de negócio do Usuário

@@ -1,4 +1,4 @@
-package br.com.washii.presentation.home;
+package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,15 +7,17 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-public class MainLayoutClienteController extends MainLayoutController {
+public class NegocioLayoutController extends LayoutController {
     @FXML
-    private HBox navHome, navAgendamentos, navHistorico, navPerfil;
+    private HBox navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil;
 
     private List<HBox> allNavContainer;
 
     @FXML
     void initialize() {
-        allNavContainer = Arrays.asList(navHome, navAgendamentos, navHistorico, navPerfil);
+        setBoasVindas();
+
+        allNavContainer = Arrays.asList(navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil);
     }
 
     @FXML
@@ -41,6 +43,4 @@ public class MainLayoutClienteController extends MainLayoutController {
             sceneManager.loadCenterBorderPane(null);
         }
     }
-
-    
 }

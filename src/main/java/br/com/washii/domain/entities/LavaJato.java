@@ -27,9 +27,8 @@ public class LavaJato extends Negocio {
         super(nome, email, senha, endereco, tipoUsuario);
     }
 
-
-    public LavaJato(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario, String cnpj, Endereco endereco, String razaoSocial, LocalTime duracaoMediaServico, int capacidadeAtendimento, Set<CategoriaVeiculo> categoriasAceitas, List<Servico> servicosOferecidos) {
-        super(id, nome, email, senha, endereco, tipoUsuario, cnpj,  razaoSocial);
+    public LavaJato(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario, String cnpj, Endereco endereco, String razaoSocial, LocalTime horarioInicio, LocalTime horarioEncerramento, LocalTime duracaoMediaServico, int capacidadeAtendimento, Set<CategoriaVeiculo> categoriasAceitas, List<Servico> servicosOferecidos) {
+        super(id, nome, email, senha, endereco, tipoUsuario, cnpj,  razaoSocial, horarioInicio, horarioEncerramento);
         this.duracaoMediaServico = duracaoMediaServico;
         this.capacidadeAtendimentoSimultaneo = capacidadeAtendimento;
         this.categoriasAceitas = categoriasAceitas;

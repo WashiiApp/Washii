@@ -2,6 +2,8 @@ package br.com.washii.infra.factory;
 
 import br.com.washii.presentation.acesso.CadastroController;
 import br.com.washii.presentation.acesso.LoginController;
+import br.com.washii.presentation.layout.ClienteLayoutController;
+import br.com.washii.presentation.layout.NegocioLayoutController;
 import br.com.washii.service.ServiceFactory;
 
 public class ControllerFactory {
@@ -28,6 +30,14 @@ public class ControllerFactory {
         
         if (clazz == LoginController.class) {
             return new LoginController(serviceFactory.criarAutenticacaoService());
+        }
+
+        if (clazz == ClienteLayoutController.class){
+            return new ClienteLayoutController(serviceFactory.criarAutenticacaoService());
+        }
+
+        if (clazz == NegocioLayoutController.class) {
+            return new NegocioLayoutController(serviceFactory.criarAutenticacaoService());
         }
 
         // Se o controller não tiver dependências, usamos o construtor padrão

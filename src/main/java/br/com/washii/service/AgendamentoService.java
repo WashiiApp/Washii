@@ -4,12 +4,19 @@ import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.persistence.AgendamentoPersistence;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public class AgendamentoService<SlotHorario> {
+public class AgendamentoService {
+
+    private AgendamentoPersistence persistence;
+
+    public AgendamentoService(AgendamentoPersistence persistence) {
+        this.persistence = persistence;
+    }
 
     public void solicitarAgendamento(Agendamento a) {
         // Lógica para solicitar agendamento
@@ -29,7 +36,7 @@ public class AgendamentoService<SlotHorario> {
         return null;
     }
 
-    public List<SlotHorario> listarHorariosDisponiveis(LocalDate data, Negocio negocio) {
+    public List<LocalTime> listarHorariosDisponiveis(LocalDate data, Negocio negocio) {
         // Lógica para listar horários disponíveis
         return null;
     }

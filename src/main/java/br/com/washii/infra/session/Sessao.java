@@ -1,4 +1,4 @@
-package br.com.washii.domain.session;
+package br.com.washii.infra.session;
 
 import java.util.Objects;
 

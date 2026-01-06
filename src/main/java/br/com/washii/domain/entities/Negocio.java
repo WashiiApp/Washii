@@ -1,10 +1,14 @@
 package br.com.washii.domain.entities;
 
+import java.time.LocalTime;
+
 import br.com.washii.domain.enums.TipoUsuario;
 
 public abstract class Negocio extends Usuario {
     private String cnpj;
     private String razaoSocial;
+    private LocalTime inicioExpediente;
+    private LocalTime fimExpediente;
 
 
     public Negocio() {
@@ -15,10 +19,12 @@ public abstract class Negocio extends Usuario {
         super(nome, email, senha, endereco, tipoUsuario);
     }
 
-    public Negocio(Long id, String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario, String cnpj, String razaoSocial) {
+    public Negocio(Long id, String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario, String cnpj, String razaoSocial, LocalTime horarioIncio, LocalTime horarioEncerramento) {
         super(id, nome, email, senha, endereco, tipoUsuario);
         setCnpj(cnpj); 
         this.razaoSocial = razaoSocial;
+        this.inicioExpediente = horarioIncio;
+        this.fimExpediente = horarioEncerramento;
     }
 
     public String getCnpj() {
@@ -35,6 +41,22 @@ public abstract class Negocio extends Usuario {
             return;
         }
         this.cnpj = cnpj.replaceAll("[^0-9]", "");
+    }
+
+    public LocalTime getInicioExpediente() {
+        return this.inicioExpediente;
+    }
+
+    public LocalTime getFimExpediente() {
+        return this.fimExpediente;
+    }
+
+    public void setInicioExpediente(LocalTime horarioInicio){
+        this.inicioExpediente = horarioInicio;
+    }
+
+    public void setFimExpediente(LocalTime horarioEncerramento) {
+        this.fimExpediente = horarioEncerramento;
     }
 
     public String getRazaoSocial() {

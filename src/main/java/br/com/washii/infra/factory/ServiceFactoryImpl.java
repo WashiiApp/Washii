@@ -1,5 +1,7 @@
 package br.com.washii.infra.factory;
 
+import br.com.washii.persistence.AgendamentoPersistence;
+import br.com.washii.persistence.NotificacaoPersistence;
 import br.com.washii.persistence.ServicoPersistence;
 import br.com.washii.persistence.UsuarioPersistence;
 import br.com.washii.service.AgendamentoService;
@@ -14,32 +16,34 @@ public class ServiceFactoryImpl implements ServiceFactory {
     // Ou seja, será definido as implementações de repository e 
     // injetados na instanciação dos services
 
+    private final static UsuarioPersistence USUARIO_PERSISTENCE = new UsuarioPersistence();
+    private final static ServicoPersistence SERVICO_PERSISTENCE = new ServicoPersistence();
+    private final static AgendamentoPersistence AGENDAMENTO_PERSISTENCE = new AgendamentoPersistence();
+    private final static NotificacaoPersistence NOTIFICACAO_PERSISTENCE = new NotificacaoPersistence();
+
+    
     @Override
     public UsuarioService criarUsuarioService() {
-        return new UsuarioService(new UsuarioPersistence());
+        return new UsuarioService(USUARIO_PERSISTENCE);
     }
 
     @Override
     public AutenticacaoService criarAutenticacaoService() {
-        return new AutenticacaoService(new UsuarioPersistence());
+        return new AutenticacaoService(USUARIO_PERSISTENCE);
     }
 
     @Override
     public ServicoService criarServicoService() {
-        return new ServicoService(new ServicoPersistence());
+        return new ServicoService(SERVICO_PERSISTENCE);
     }
 
     @Override
     public AgendamentoService criarAgendamentoService() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'criarAgendamentoService'");
+        return new AgendamentoService(AGENDAMENTO_PERSISTENCE);
     }
-
-    
 
     @Override
     public NotificacaoService criarNotificacaoService() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'criarNotificacaoService'");
+        return new NotificacaoService(NOTIFICACAO_PERSISTENCE);
     }
 }

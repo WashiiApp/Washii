@@ -5,7 +5,6 @@ import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.repository.AgendamentoRepository;
-import br.com.washii.persistence.AgendamentoPersistence;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

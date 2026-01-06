@@ -23,7 +23,7 @@ public class ServicoPersistence implements ServicoRepository {
     public void salvar(Servico entidade) {
         String sql = """
                 INSERT INTO servico (nome, descricao, tipo, precobase, idNegocio)
-                VALUES (?,?,?::categoriaServico,?)
+                VALUES (?,?,?::categoriaServico,?,?)
                 """;
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -33,7 +33,9 @@ public class ServicoPersistence implements ServicoRepository {
             smtm.setString(2, entidade.getDescricao());
             smtm.setString(3, entidade.getCategoriaServico().name());
             smtm.setDouble(4, entidade.getPrecoBase());
-            smtm.setLong(5,entidade.getId());
+            smtm.setLong(5,entidade.getNegocio().getId());
+
+            smtm.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -41,7 +43,24 @@ public class ServicoPersistence implements ServicoRepository {
 
     @Override
     public void atualizar(Servico entidade) {
+        String sql = """
+                UPDATE servico
+                SET nome = ?, descricao = ?, tipo = ?::categoriaServico, precobase = ?, idNegocio = ?
+                WHERE id = ?
+        """;
 
+        try(Connection conn = DatabaseConfig.getConnection();
+        PreparedStatement smtm = conn.prepareStatement(sql)) {
+
+            smtm.setString(1, entidade.getNome());
+            smtm.setString(2, entidade.getDescricao());
+            smtm.setString(3, entidade.getCategoriaServico().name());
+            smtm.setDouble(4, entidade.getPrecoBase());
+            smtm.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

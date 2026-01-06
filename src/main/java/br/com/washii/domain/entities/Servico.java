@@ -13,6 +13,7 @@ public class Servico {
     private String descricao;
     private CategoriaServico categoriaServico;
     private double precoBase;
+    private Negocio negocio;
 
     // Construtor Padrão
     public Servico() {
@@ -27,12 +28,13 @@ public class Servico {
     }
 
     // Construtor Completo para o Felix (Banco de Dados)
-    public Servico(Long id, String nome, String descricao, CategoriaServico categoriaServico, double precoBase) {
+    public Servico(Long id, String nome, String descricao, CategoriaServico categoriaServico, double precoBase, Negocio negocio) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.categoriaServico = categoriaServico;
         this.precoBase = precoBase;
+        this.negocio = negocio;
     }
 
     // --- Getters e Setters ---
@@ -75,6 +77,14 @@ public class Servico {
 
     public void setPrecoBase(double precoBase) {
         this.precoBase = precoBase;
+    }
+
+    public Negocio getNegocio() {
+        return negocio;
+    }
+
+    public void setNegocio(Negocio negocio) {
+        this.negocio = negocio;
     }
 
     // --- Equals e HashCode (Proteção contra IDs nulos) ---

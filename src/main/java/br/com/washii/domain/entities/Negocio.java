@@ -1,14 +1,15 @@
 package br.com.washii.domain.entities;
 
 import java.time.LocalTime;
-
 import br.com.washii.domain.enums.TipoUsuario;
 
 public abstract class Negocio extends Usuario {
     private String cnpj;
     private String razaoSocial;
-    private LocalTime inicioExpediente;
-    private LocalTime fimExpediente;
+    private LocalTime duracaoMediaServico = LocalTime.of(1, 0);
+    private LocalTime inicioExpediente = LocalTime.of(8,0);
+    private LocalTime fimExpediente = LocalTime.of(17, 0);
+    private int capacidadeAtendimentoSimultaneo = 1;
 
 
     public Negocio() {
@@ -19,12 +20,28 @@ public abstract class Negocio extends Usuario {
         super(nome, email, senha, endereco, tipoUsuario);
     }
 
-    public Negocio(Long id, String nome, String email, String senha, Endereco endereco, TipoUsuario tipoUsuario, String cnpj, String razaoSocial, LocalTime horarioIncio, LocalTime horarioEncerramento) {
+    public Negocio(
+        Long id, 
+        String nome, 
+        String email, 
+        String senha, 
+        Endereco endereco, 
+        TipoUsuario tipoUsuario, 
+        String cnpj, 
+        String razaoSocial, 
+        LocalTime duracaoMediaServico, 
+        LocalTime horarioIncio, 
+        LocalTime horarioEncerramento, 
+        int capacidadeAtendimentoSimultaneo
+    ) {
         super(id, nome, email, senha, endereco, tipoUsuario);
+
         setCnpj(cnpj); 
         this.razaoSocial = razaoSocial;
+        this.duracaoMediaServico = duracaoMediaServico;
         this.inicioExpediente = horarioIncio;
         this.fimExpediente = horarioEncerramento;
+        this.capacidadeAtendimentoSimultaneo = capacidadeAtendimentoSimultaneo;
     }
 
     public String getCnpj() {
@@ -65,6 +82,22 @@ public abstract class Negocio extends Usuario {
 
     public void setRazaoSocial(String razaoSocial) {
         this.razaoSocial = razaoSocial.trim();
+    }
+
+        public LocalTime getDuracaoMediaServico() {
+        return duracaoMediaServico;
+    }
+
+    public void setDuracaoMediaServico(LocalTime duracaoMediaServico) {
+        this.duracaoMediaServico = duracaoMediaServico;
+    }
+
+    public int getCapacidadeAtendimentoSimultaneo() {
+        return capacidadeAtendimentoSimultaneo;
+    }
+
+    public void setCapacidadeAtendimentoSimultaneo(int capacidadeAtendimentoSimultaneo) {
+        this.capacidadeAtendimentoSimultaneo = capacidadeAtendimentoSimultaneo;
     }
 
     @Override

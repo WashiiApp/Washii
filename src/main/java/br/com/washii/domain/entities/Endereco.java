@@ -7,14 +7,14 @@ import java.util.Objects;
  */
 public class Endereco {
     
-    private Long id; // ID para persistência no PostgreSQL
+    private Long id;
     private String cep;
-    private String pais; // Corrigido de 'paiz' para 'pais'
+    private String pais; 
     private String estado;
     private String cidade;
     private String rua;
     private String bairro;
-    private String numero; // Atributo importante que faltava
+    private String numero; 
     private String referencia;
 
 

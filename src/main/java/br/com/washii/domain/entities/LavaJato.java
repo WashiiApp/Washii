@@ -13,8 +13,6 @@ import java.util.Set;
  */
 public class LavaJato extends Negocio {
 
-    private LocalTime duracaoMediaServico = LocalTime.of(1, 0,0);
-    private int capacidadeAtendimentoSimultaneo = 1; // Quantidade de vagas/boxes
     private Set<CategoriaVeiculo> categoriasAceitas = new HashSet<>();
     private List<Servico> servicosOferecidos = new ArrayList<>();
 
@@ -27,10 +25,24 @@ public class LavaJato extends Negocio {
         super(nome, email, senha, endereco, tipoUsuario);
     }
 
-    public LavaJato(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario, String cnpj, Endereco endereco, String razaoSocial, LocalTime horarioInicio, LocalTime horarioEncerramento, LocalTime duracaoMediaServico, int capacidadeAtendimento, Set<CategoriaVeiculo> categoriasAceitas, List<Servico> servicosOferecidos) {
-        super(id, nome, email, senha, endereco, tipoUsuario, cnpj,  razaoSocial, horarioInicio, horarioEncerramento);
-        this.duracaoMediaServico = duracaoMediaServico;
-        this.capacidadeAtendimentoSimultaneo = capacidadeAtendimento;
+    public LavaJato(
+        Long id, 
+        String nome, 
+        String email, 
+        String senha, 
+        TipoUsuario tipoUsuario, 
+        String cnpj, 
+        Endereco endereco, 
+        String razaoSocial, 
+        LocalTime duracaoMediaServico, 
+        LocalTime horarioInicio, 
+        LocalTime horarioEncerramento, 
+        int capacidadeAtendimento, 
+        Set<CategoriaVeiculo> categoriasAceitas, 
+        List<Servico> servicosOferecidos
+    ) {
+        super(id, nome, email, senha, endereco, tipoUsuario, cnpj,  razaoSocial, duracaoMediaServico, horarioInicio, horarioEncerramento, capacidadeAtendimento);
+
         this.categoriasAceitas = categoriasAceitas;
         this.servicosOferecidos = servicosOferecidos;
     }
@@ -43,22 +55,6 @@ public class LavaJato extends Negocio {
     }
 
     // --- Getters e Setters ---
-
-    public LocalTime getDuracaoMediaServico() {
-        return duracaoMediaServico;
-    }
-
-    public void setDuracaoMediaServico(LocalTime duracaoMediaServico) {
-        this.duracaoMediaServico = duracaoMediaServico;
-    }
-
-    public int getCapacidadeAtendimentoSimultaneo() {
-        return capacidadeAtendimentoSimultaneo;
-    }
-
-    public void setCapacidadeAtendimentoSimultaneo(int capacidadeAtendimentoSimultaneo) {
-        this.capacidadeAtendimentoSimultaneo = capacidadeAtendimentoSimultaneo;
-    }
 
     public Set<CategoriaVeiculo> getCategoriasAceitas() {
         return categoriasAceitas;

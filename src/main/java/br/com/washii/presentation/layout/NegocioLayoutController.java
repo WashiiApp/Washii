@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.washii.service.AutenticacaoService;
-import br.com.washii.service.UsuarioService;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;

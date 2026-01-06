@@ -1,5 +1,9 @@
 package br.com.washii.infra.factory;
 
+import br.com.washii.domain.repository.AgendamentoRepository;
+import br.com.washii.domain.repository.NotificacaoRepository;
+import br.com.washii.domain.repository.ServicoRepository;
+import br.com.washii.domain.repository.UsuarioRepository;
 import br.com.washii.persistence.AgendamentoPersistence;
 import br.com.washii.persistence.NotificacaoPersistence;
 import br.com.washii.persistence.ServicoPersistence;
@@ -16,10 +20,10 @@ public class ServiceFactoryImpl implements ServiceFactory {
     // Ou seja, será definido as implementações de repository e 
     // injetados na instanciação dos services
 
-    private final static UsuarioPersistence USUARIO_PERSISTENCE = new UsuarioPersistence();
-    private final static ServicoPersistence SERVICO_PERSISTENCE = new ServicoPersistence();
-    private final static AgendamentoPersistence AGENDAMENTO_PERSISTENCE = new AgendamentoPersistence();
-    private final static NotificacaoPersistence NOTIFICACAO_PERSISTENCE = new NotificacaoPersistence();
+    private final static UsuarioRepository USUARIO_PERSISTENCE = new UsuarioPersistence();
+    private final static ServicoRepository SERVICO_PERSISTENCE = new ServicoPersistence();
+    private final static AgendamentoRepository AGENDAMENTO_PERSISTENCE = new AgendamentoPersistence();
+    private final static NotificacaoRepository NOTIFICACAO_PERSISTENCE = new NotificacaoPersistence();
 
     
     @Override

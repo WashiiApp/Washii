@@ -4,6 +4,7 @@ import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.domain.repository.AgendamentoRepository;
 import br.com.washii.persistence.AgendamentoPersistence;
 
 import java.time.LocalDate;
@@ -12,9 +13,9 @@ import java.util.List;
 
 public class AgendamentoService {
 
-    private AgendamentoPersistence persistence;
+    private AgendamentoRepository persistence;
 
-    public AgendamentoService(AgendamentoPersistence persistence) {
+    public AgendamentoService(AgendamentoRepository persistence) {
         this.persistence = persistence;
     }
 

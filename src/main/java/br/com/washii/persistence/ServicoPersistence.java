@@ -64,7 +64,21 @@ public class ServicoPersistence implements ServicoRepository {
     }
 
     @Override
-    public void remover(Long aLong) {
+    public void remover(Long id) {
+        String sql = """
+                DELETE FROM servico WHERE id = ?
+        """;
+
+        try(Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement smtm = conn.prepareStatement(sql)) {
+
+            smtm.setLong(1, id);
+            smtm.executeUpdate();
+
+        }  catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

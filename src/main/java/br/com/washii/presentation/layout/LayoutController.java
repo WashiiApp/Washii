@@ -1,7 +1,8 @@
 package br.com.washii.presentation.layout;
 
-import br.com.washii.domain.session.Sessao;
+import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.core.BaseController;
+import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -9,13 +10,20 @@ import javafx.scene.control.Label;
 // Agrupa metodos ou atributos comuns aos controllers do MainLayout 
 public abstract class LayoutController extends BaseController {
 
+    private AutenticacaoService autenticacaoService;
+
     @FXML
     private Label lblBoasVindas;
+
+    public LayoutController(AutenticacaoService autenticacaoService){
+        this.autenticacaoService = autenticacaoService;
+    }
 
     @FXML
     void onSair(){
         // Realizar logout
         sceneManager.switchFullScene("/br/com/washii/view/acesso/acesso-layout.fxml");
+        autenticacaoService.realizarLogout();
     }
 
     protected void setBoasVindas(){

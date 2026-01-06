@@ -2,16 +2,21 @@ package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
-
+import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 public class ClienteLayoutController extends LayoutController {
+
     @FXML
     private HBox navHome, navAgendamentos, navHistorico, navPerfil;
 
     private List<HBox> allNavContainer;
+
+    public ClienteLayoutController(AutenticacaoService autenticacaoService) {
+        super(autenticacaoService);
+    }
 
     @FXML
     void initialize() {

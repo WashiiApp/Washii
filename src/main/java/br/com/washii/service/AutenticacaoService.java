@@ -5,8 +5,8 @@ import br.com.washii.domain.repository.UsuarioRepository;
 import java.util.Optional;
 import br.com.washii.domain.exceptions.EmailNaoCadastradoException;
 import br.com.washii.domain.exceptions.SenhaInvalidaException;
-import br.com.washii.domain.session.Sessao;
 import br.com.washii.infra.security.SenhaUtils;
+import br.com.washii.infra.session.Sessao;
 
 
 /**

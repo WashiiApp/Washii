@@ -79,6 +79,14 @@ public class Servico {
         this.precoBase = precoBase;
     }
 
+    public Negocio getNegocio() {
+        return negocio;
+    }
+
+    public void setNegocio(Negocio negocio) {
+        this.negocio = negocio;
+    }
+
     // --- Equals e HashCode (Proteção contra IDs nulos) ---
 
     @Override

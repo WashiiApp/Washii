@@ -17,11 +17,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<ScrollPane fitToWidth="true" prefHeight="650.0" prefWidth="850.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.servico.GestaoServicosController">
+<ScrollPane fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.servico.GestaoServicosController">
    <content>
       <VBox alignment="TOP_CENTER" styleClass="background-transparente">
          <children>
-            <VBox maxWidth="800.0" spacing="25.0" styleClass="background-transparente">
+            <VBox maxWidth="1000.0" spacing="25.0" styleClass="background-transparente">
                <children>
                   <VBox spacing="5.0">
                      <children>
@@ -84,9 +84,12 @@
                               
                               <HBox alignment="CENTER_RIGHT" spacing="15.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                                  <children>
-                                    <TextFlow fx:id="avisoContainer" visible="false" HBox.hgrow="ALWAYS" />
+                                    <TextFlow fx:id="avisoContainerNS" visible="false" HBox.hgrow="ALWAYS" />
                                     <Button mnemonicParsing="false" onAction="#onLimpar" prefHeight="30.0" prefWidth="100.0" styleClass="button-secondary" text="Limpar" />
-                                    <Button mnemonicParsing="false" onAction="#onAdicionarServico" prefHeight="30.0" prefWidth="150.0" styleClass="button-primary" text="Adicionar" />
+                                    <Button mnemonicParsing="false" onAction="#onAdicionarServico" prefHeight="30.0" prefWidth="150.0" styleClass="button-primary" text="+ Adicionar">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font></Button>
                                  </children>
                               </HBox>
                            </children>
@@ -97,25 +100,39 @@
                      </children>
                   </VBox>
       
-                  <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                  <VBox spacing="10.0" styleClass="container-generic" VBox.vgrow="SOMETIMES">
                      <children>
                         <Label styleClass="texto-titulo" text="Serviços Cadastrados" textFill="#333333">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="tblServicos" minHeight="300.0" prefHeight="400.0" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-overflow-x: hidden;" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tblServicos" minHeight="100.0" prefHeight="200.0">
                           <columns>
-                            <TableColumn fx:id="colNome" prefWidth="200.0" text="Serviço" />
-                            <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoria" />
-                            <TableColumn fx:id="colPreco" prefWidth="100.0" text="Preço" />
-                            <TableColumn fx:id="colDescricao" maxWidth="-1.0" prefWidth="-1.0" text="Descrição" />
+                            <TableColumn fx:id="colNome" minWidth="50.0" prefWidth="-1.0" text="Serviço" />
+                            <TableColumn fx:id="colCategoria" minWidth="50.0" prefWidth="-1.0" text="Categoria" />
+                            <TableColumn fx:id="colDescricao" minWidth="50.0" prefWidth="-1.0" text="Descrição" />
+                            <TableColumn fx:id="colPrecoBase" minWidth="50.0" prefWidth="-1.0" text="Preço" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                           <children>
+                              <TextFlow fx:id="avisoContainerSC" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#onEditar" prefHeight="30.0" prefWidth="80.0" styleClass="button-secondary" text="Editar" />
+                              <Button fx:id="btnRemover" mnemonicParsing="false" onAction="#onRemover" prefHeight="30.0" prefWidth="100.0" styleClass="button-danger" text="Remover">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
+                     <padding>
+                        <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+                     </padding>
                   </VBox>
                </children>
             </VBox>

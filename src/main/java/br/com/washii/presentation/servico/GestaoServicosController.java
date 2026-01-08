@@ -2,21 +2,23 @@ package br.com.washii.presentation.servico;
 
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Servico;
-import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.CategoriaServico;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.infra.session.Sessao;
+import br.com.washii.presentation.utils.AvisoUtils;
 import br.com.washii.service.ServicoService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
 
@@ -28,22 +30,25 @@ public class GestaoServicosController {
     private ChoiceBox<CategoriaServico> cbCategoria;
 
     @FXML
-    private TableColumn<?, ?> colCategoria;
+    private TableColumn<Servico, CategoriaServico> colCategoria;
 
     @FXML
-    private TableColumn<?, ?> colDescricao;
+    private TableColumn<Servico, String> colDescricao;
 
     @FXML
-    private TableColumn<?, ?> colNome;
+    private TableColumn<Servico, String> colNome;
 
     @FXML
-    private TableColumn<?, ?> colPreco;
+    private TableColumn<Servico, Double> colPrecoBase;
 
     @FXML
-    private TableView<?> tblServicos;
+    private TableView<Servico> tblServicos;
 
     @FXML
-    private TextFlow avisoContainer;
+    private TextFlow avisoContainerNS; // container de erro do Novo Serviço
+
+    @FXML
+    private TextFlow avisoContainerSC; // container de erro do Serviços Cadastrados
 
     @FXML
     private TextArea txtDescricao;
@@ -53,6 +58,14 @@ public class GestaoServicosController {
 
     @FXML
     private TextField txtPreco;
+
+    @FXML
+    private Button btnRemover;
+
+    @FXML
+    private Button btnEditar;
+
+    private ObservableList<Servico> listaServicos = FXCollections.observableArrayList();
 
     @FXML
     void initialize(){
@@ -69,16 +82,41 @@ public class GestaoServicosController {
             public CategoriaServico fromString(String string) {
                 return null; // Não necessário para ChoiceBox de seleção simples
             }
-    });
+        });
+
+        // 1. Ligar as colunas aos atributos da classe Servico
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoriaServico"));
+        colPrecoBase.setCellValueFactory(new PropertyValueFactory<>("precoBase"));
+        colDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+
+        // 2. Ligar a lista à tabela
+        tblServicos.setItems(listaServicos);
+
+        // Padronização da celula do preco 
+        colPrecoBase.setCellFactory(tc -> new TableCell<Servico, Double>() {
+            @Override
+            protected void updateItem(Double preco, boolean empty) {
+                super.updateItem(preco, empty);
+                if (empty || preco == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("R$ %.2f", preco));
+                }
+            }
+        });
+
+
     }
 
     public GestaoServicosController(ServicoService service){
         this.servicoService = service;
+
+        atualizarListaServicos();
     }
 
     @FXML
     void onAdicionarServico(ActionEvent event) {
-        limparCampoAviso();
 
         String nome = txtNome.getText();
         String descricao = txtDescricao.getText();
@@ -86,14 +124,14 @@ public class GestaoServicosController {
         CategoriaServico categoriaServico = cbCategoria.getValue();
 
         if (!(Sessao.getInstance().getUsuarioLogado() instanceof Negocio)){
-            exibirAvisoErro("Usuário não é do tipo Negocio. \nLogo, não pode criar um servico");
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, "Usuário não é do tipo Negocio. \nLogo, não pode criar um servico");
             return;
         }
         
         Negocio negocio = (Negocio) Sessao.getInstance().getUsuarioLogado();
 
         if (nome.isBlank() || descricao.isBlank() || precoStr.isBlank() || (categoriaServico == null)){
-            exibirAvisoErro("Peencha todos os campos, por favor.");
+            AvisoUtils.exibirAvisoAlerta(avisoContainerNS, "Peencha todos os campos, por favor");
             return;
         }
 
@@ -102,13 +140,17 @@ public class GestaoServicosController {
         Servico servico = new Servico(nome, descricao, categoriaServico, preco, negocio);
 
         try {
-            //servicoService.salvarServico(servico);
+            servicoService.lista.add(servico);
 
-            exibirAvisoSucesso("Servico cadastrado com sucesso!");
+
+            AvisoUtils.exibirAvisoSucesso(avisoContainerNS, "Serviço cadastrado com sucesso");
+
+            atualizarListaServicos();
+
         } catch (NegocioException e) {
-            exibirAvisoErro(e.getMessage());
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
         } catch (Exception e) {
-            exibirAvisoErro("Ocorreu um erro inesperado: " + e.getCause());
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -124,30 +166,28 @@ public class GestaoServicosController {
 
     }
 
-    private void exibirAvisoErro(String msg) {
-        avisoContainer.setVisible(true);
-        avisoContainer.getStyleClass().clear();
+    @FXML
+    void onRemover(ActionEvent event){
 
-        avisoContainer.getStyleClass().add("error-container");
-
-        Text erro = new Text(msg);
-        avisoContainer.getChildren().add(erro);
     }
 
-    private void exibirAvisoSucesso(String msg){
-        avisoContainer.setVisible(true);
-        avisoContainer.getStyleClass().clear();
+    @FXML
+    void onEditar(ActionEvent event) {
 
-        avisoContainer.getStyleClass().add("success-container");
-
-        Text aviso = new Text(msg);
-        avisoContainer.getChildren().add(aviso);
     }
 
     private void limparCampoAviso(){
-        avisoContainer.getStyleClass().clear();
-        avisoContainer.setVisible(false);
-        avisoContainer.getChildren().clear();
+        avisoContainerNS.getChildren().clear();
+    }
+
+    private void atualizarListaServicos(){
+        //List<Servico> lista = servicoService.listarServicos((Negocio) Sessao.getInstance().getUsuarioLogado());
+
+        if (tblServicos != null){
+            tblServicos.getItems().clear();
+        }
+        
+        listaServicos.addAll(servicoService.lista);
     }
 
 }

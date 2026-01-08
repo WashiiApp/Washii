@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -141,6 +142,40 @@ public class ServicoPersistence implements ServicoRepository {
 
     @Override
     public List<Servico> listarTodos() {
-        return List.of();
+        String sql = """
+        SELECT id, nome, descricao, tipo, precobase, id_negocio
+        FROM servico
+    """;
+
+        List<Servico> servicos = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Servico servico = new Servico();
+                servico.setId(rs.getLong("id"));
+                servico.setNome(rs.getString("nome"));
+                servico.setDescricao(rs.getString("descricao"));
+                servico.setCategoriaServico(
+                        CategoriaServico.valueOf(rs.getString("tipo"))
+                );
+                servico.setPrecoBase(rs.getDouble("precobase"));
+
+                // FK → referência simples (Negocio abstrato)
+                Negocio negocio = new Negocio() {}; // classe anônima
+                negocio.setId(rs.getLong("id_negocio"));
+                servico.setNegocio(negocio);
+
+                servicos.add(servico);
+            }
+
+            return servicos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar serviços", e);
+        }
     }
+
 }

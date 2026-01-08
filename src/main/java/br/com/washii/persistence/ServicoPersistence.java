@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,13 +87,18 @@ public class ServicoPersistence implements ServicoRepository {
     @Override
     public Optional<Servico> buscarPorId(Long id) {
         String sql = """
-        SELECT s.id, s.nome, s.descricao, s.tipo, s.precobase,
-               n.id AS id_negocio,
-               n.cnpj,
-               n.razaoSocial,
-               
+        SELECT 
+            s.id AS servico_id,
+            s.nome,
+            s.descricao,
+            s.tipo,
+            s.precobase,
+
+            n.id AS negocio_id,
+            n.cnpj,
+            n.razao_social
         FROM servico s
-        JOIN negocio n ON s.id = n.id_negocio
+        JOIN negocio n ON n.id = s.id_negocio
         WHERE s.id = ?
     """;
 
@@ -101,9 +107,10 @@ public class ServicoPersistence implements ServicoRepository {
 
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 Servico servico = new Servico();
-                servico.setId(rs.getLong("id"));
+                servico.setId(rs.getLong("servico_id"));
                 servico.setNome(rs.getString("nome"));
                 servico.setDescricao(rs.getString("descricao"));
                 servico.setCategoriaServico(
@@ -111,11 +118,15 @@ public class ServicoPersistence implements ServicoRepository {
                 );
                 servico.setPrecoBase(rs.getDouble("precobase"));
 
-                // pra terminar ainda
+                Negocio negocio = new Negocio() {}; // classe anônima
+                negocio.setId(rs.getLong("id_negocio"));
+                servico.setNegocio(negocio);
+                // antigo -> to fazendo
+//                negocio.setId(rs.getLong("negocio_id"));
+//                negocio.setCnpj(rs.getString("cnpj"));
+//                negocio.setRazaoSocial(rs.getString("razao_social"));
 
-//                Negocio negocio = new Negocio();
-//                negocio.setId(rs.getLong("id_negocio"));
-//                servico.setNegocio(negocio);
+                servico.setNegocio(negocio);
 
                 return Optional.of(servico);
             }
@@ -128,8 +139,42 @@ public class ServicoPersistence implements ServicoRepository {
     }
 
 
+
     @Override
     public List<Servico> listarTodos() {
-        return List.of();
+        String sql = """
+        SELECT id, nome, descricao, tipo, precobase, id_negocio
+        FROM servico
+    """;
+
+        List<Servico> servicos = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Servico servico = new Servico();
+                servico.setId(rs.getLong("id"));
+                servico.setNome(rs.getString("nome"));
+                servico.setDescricao(rs.getString("descricao"));
+                servico.setCategoriaServico(
+                        CategoriaServico.valueOf(rs.getString("tipo"))
+                );
+                servico.setPrecoBase(rs.getDouble("precobase"));
+
+                Negocio negocio = new Negocio() {}; // classe anônima
+                negocio.setId(rs.getLong("id_negocio"));
+                servico.setNegocio(negocio);
+
+                servicos.add(servico);
+            }
+
+            return servicos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar serviços", e);
+        }
     }
+
 }

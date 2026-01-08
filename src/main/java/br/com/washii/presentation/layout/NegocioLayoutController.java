@@ -29,23 +29,23 @@ public class NegocioLayoutController extends LayoutController {
     @FXML
     void handleNavClick(MouseEvent event){
         HBox containerClicked = (HBox) event.getSource();
-        HBox antecessor = null;
 
         for (HBox nav : allNavContainer) {
             if(nav.getStyleClass().remove("nav-container-active")){
-                antecessor = nav;
             }
         }
 
         containerClicked.getStyleClass().add("nav-container-active");
 
-        if (containerClicked == navHome && containerClicked != antecessor) {
+        if (containerClicked == navHome) {
             sceneManager.loadCenterBorderPane(null);
-        } else if (containerClicked == navAgendamentos && containerClicked != antecessor) {
+        } else if (containerClicked == navAgendamentos) {
             sceneManager.loadCenterBorderPane(null);
-        } else if (containerClicked == navHistorico && containerClicked != antecessor) {
+        } else if (containerClicked == navHistorico) {
             sceneManager.loadCenterBorderPane(null);
-        } else if (containerClicked == navPerfil && containerClicked != antecessor) {
+        } else if (containerClicked == navServico) {
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/servico/gestao-servicos.fxml");
+        } else if (containerClicked == navPerfil) {
             sceneManager.loadCenterBorderPane(null);
         }
     }

@@ -2,7 +2,7 @@
     /* Identidade Washii */
     -color-brand: #53bfe7;
     -color-brand-glow: #46aace;      /* Azul mais profundo para hover */
-    -color-brand-low: #E3F2FD;       /* Fundo de destaque azul claro */
+    -color-brand-low: #f3faff;       /* Fundo de destaque azul claro */
 
     /* Superfícies (Profundidade) */
     -color-bg: #FFFFFF;              /* Fundo principal */
@@ -15,7 +15,7 @@
 
     /* Tipografia */
     -color-text-header: #212121;     /* Títulos */
-    -color-text-body: #424242;       /* Texto comum */
+    -color-text-body: #555555;       /* Texto comum */
     -color-text-muted: #9E9E9E;      /* Placeholder / Desativado */
     
     /* Status */

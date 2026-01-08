@@ -29,7 +29,7 @@ O QUE NÃO COLOCAR AQUI:
 
 /* Tipos Genéricos */
 .label {
-  
+  -fx-text-fill: -color-text-header;
 }
 
 .button {

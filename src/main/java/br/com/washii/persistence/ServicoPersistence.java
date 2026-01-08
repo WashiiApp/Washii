@@ -163,7 +163,6 @@ public class ServicoPersistence implements ServicoRepository {
                 );
                 servico.setPrecoBase(rs.getDouble("precobase"));
 
-                // FK → referência simples (Negocio abstrato)
                 Negocio negocio = new Negocio() {}; // classe anônima
                 negocio.setId(rs.getLong("id_negocio"));
                 servico.setNegocio(negocio);

@@ -91,7 +91,6 @@
     -fx-background-color: -color-brand;
     -fx-background-radius: 15px;
     -fx-border-radius: 15px;
-    -fx-padding: 5px 50px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);
     -fx-transition-duration: 0.2s;
 }

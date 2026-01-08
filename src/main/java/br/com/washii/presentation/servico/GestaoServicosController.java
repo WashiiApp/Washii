@@ -99,7 +99,7 @@ public class GestaoServicosController {
 
         double preco = Double.parseDouble(precoStr.replace(",", "."));
 
-        Servico servico = new Servico(nome, descricao, null, preco, negocio);
+        Servico servico = new Servico(nome, descricao, categoriaServico, preco, negocio);
 
         try {
             //servicoService.salvarServico(servico);

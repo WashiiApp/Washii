@@ -20,11 +20,12 @@ public class Servico {
     }
 
     // Construtor para criação inicial (sem ID)
-    public Servico(String nome, String descricao, CategoriaServico categoriaServico, double precoBase) {
+    public Servico(String nome, String descricao, CategoriaServico categoriaServico, double precoBase, Negocio negocio) {
         this.nome = nome;
         this.descricao = descricao;
         this.categoriaServico = categoriaServico;
         this.precoBase = precoBase;
+        this.negocio = negocio;
     }
 
     // Construtor Completo para o Felix (Banco de Dados)

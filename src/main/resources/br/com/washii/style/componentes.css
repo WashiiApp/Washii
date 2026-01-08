@@ -6,11 +6,15 @@
 
 /* EXEMPLO Estilização Base baseada nas variáveis do .root */
 
-.main-background{
+.login-background{
     -fx-background-image: url("../assets/images/background-login.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover; /* Faz a imagem preencher a tela sem distorcer */
     -fx-background-position: center center;
+}
+
+.main-background{
+    -fx-background-color: -color-surface-lp;
 }
 
 .login-content{
@@ -20,6 +24,16 @@
     -fx-border-width: 2px;
     -fx-border-radius: 30px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 30, 0, 0, 5);
+}
+
+/* Textos */
+.texto-comum {
+    -fx-text-fill: -color-text-body;
+}
+
+.texto-titulo {
+    -fx-text-fill: -color-text-header;
+    -fx-font-style: bold;
 }
 
 .icon {
@@ -122,6 +136,7 @@
 .sidebar {
     -fx-background-color: -color-surface-lp; /* Lateral com a cor da marca */
     -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 20, 0, 0, 5);
 }
 
 .nav-container {
@@ -167,4 +182,12 @@
     -fx-opacity: 0.8;
 }
 
+.background-transparente {
+    -fx-background-color: transparent;
+}
 
+.container-generic {
+    -fx-background-color: -color-bg;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 0)
+}

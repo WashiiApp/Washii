@@ -45,7 +45,7 @@ public class ClienteLayoutController extends LayoutController {
         } else if (containerClicked == navHistorico && containerClicked != antecessor) {
             sceneManager.loadCenterBorderPane(null);
         } else if (containerClicked == navPerfil && containerClicked != antecessor) {
-            sceneManager.loadCenterBorderPane(null);
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-usuario.fxml");
         }
     }
 

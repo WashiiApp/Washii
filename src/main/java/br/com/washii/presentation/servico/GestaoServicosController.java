@@ -165,11 +165,10 @@ public class GestaoServicosController {
             servicoService.salvarServico(servico);
 
             AvisoUtils.exibirAvisoSucesso(avisoContainerNS, "Serviço cadastrado com sucesso");
-
             AvisoUtils.limparCampoAviso(avisoContainerNS, 5);
 
             atualizarListaServicos();
-            onLimpar(event);
+            limparCampos();
 
         } catch (NegocioException e) {
             AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());       

@@ -85,8 +85,8 @@
                               <HBox alignment="CENTER_RIGHT" spacing="15.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                                  <children>
                                     <TextFlow fx:id="avisoContainerNS" visible="false" HBox.hgrow="ALWAYS" />
-                                    <Button mnemonicParsing="false" onAction="#onLimpar" prefHeight="30.0" prefWidth="100.0" styleClass="button-secondary" text="Limpar" />
-                                    <Button mnemonicParsing="false" onAction="#onAdicionarServico" prefHeight="30.0" prefWidth="150.0" styleClass="button-primary" text="+ Adicionar">
+                                    <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#onLimpar" prefHeight="30.0" prefWidth="100.0" styleClass="button-secondary" text="Limpar" />
+                                    <Button fx:id="btnAdicionar" mnemonicParsing="false" onAction="#onAdicionarServico" prefHeight="30.0" prefWidth="150.0" styleClass="button-primary" text="+ Adicionar">
                                        <font>
                                           <Font name="System Bold" size="13.0" />
                                        </font></Button>
@@ -121,8 +121,8 @@
                         <HBox alignment="CENTER_RIGHT" spacing="20.0">
                            <children>
                               <TextFlow fx:id="avisoContainerSC" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#onEditar" prefHeight="30.0" prefWidth="80.0" styleClass="button-secondary" text="Editar" />
-                              <Button fx:id="btnRemover" mnemonicParsing="false" onAction="#onRemover" prefHeight="30.0" prefWidth="100.0" styleClass="button-danger" text="Remover">
+                              <Button fx:id="btnEditar" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditar" prefHeight="30.0" prefWidth="80.0" styleClass="button-secondary" text="Editar" />
+                              <Button fx:id="btnRemover" minWidth="-Infinity" mnemonicParsing="false" onAction="#onRemover" prefHeight="30.0" prefWidth="100.0" styleClass="button-danger" text="Remover">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>

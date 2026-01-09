@@ -1,5 +1,7 @@
 package br.com.washii.presentation.servico;
 
+import java.util.List;
+
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Servico;
 import br.com.washii.domain.enums.CategoriaServico;
@@ -11,7 +13,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -60,12 +64,20 @@ public class GestaoServicosController {
     private TextField txtPreco;
 
     @FXML
+    private Button btnAdicionar;
+
+    @FXML
+    private Button btnLimpar;
+
+    @FXML
     private Button btnRemover;
 
     @FXML
     private Button btnEditar;
 
     private ObservableList<Servico> listaServicos = FXCollections.observableArrayList();
+
+    private Servico servicoEmEdicao = null;
 
     @FXML
     void initialize(){
@@ -118,6 +130,11 @@ public class GestaoServicosController {
     @FXML
     void onAdicionarServico(ActionEvent event) {
 
+        if (servicoEmEdicao != null) {
+            atualizarServico();
+            return;
+        }
+
         String nome = txtNome.getText();
         String descricao = txtDescricao.getText();
         String precoStr = txtPreco.getText(); 
@@ -135,17 +152,27 @@ public class GestaoServicosController {
             return;
         }
 
-        double preco = Double.parseDouble(precoStr.replace(",", "."));
+        double preco;
+
+        try{
+            preco = Double.parseDouble(precoStr.replace(",", "."));
+        } catch (NumberFormatException e){
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, "Preço inválido");
+            return;
+        }
+            
 
         Servico servico = new Servico(nome, descricao, categoriaServico, preco, negocio);
 
         try {
-            servicoService.lista.add(servico);
-
+            servicoService.salvarServico(servico);
 
             AvisoUtils.exibirAvisoSucesso(avisoContainerNS, "Serviço cadastrado com sucesso");
 
+            AvisoUtils.limparCampoAviso(avisoContainerNS, 5);
+
             atualizarListaServicos();
+            onLimpar(event);
 
         } catch (NegocioException e) {
             AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
@@ -157,37 +184,127 @@ public class GestaoServicosController {
 
     @FXML
     void onLimpar(ActionEvent event) {
-        limparCampoAviso();
-
         txtNome.setText("");
         txtDescricao.setText("");
         txtPreco.setText("");
         cbCategoria.setValue(null);
 
+        if (servicoEmEdicao != null) {
+            servicoEmEdicao = null;
+            btnAdicionar.setText("+ Adicionar");
+            btnLimpar.setText("Limpar");
+        }
     }
 
     @FXML
     void onRemover(ActionEvent event){
+        Servico servicoSelecionado = tblServicos.getSelectionModel().getSelectedItem();
 
+        if (servicoSelecionado == null) {
+            AvisoUtils.exibirAvisoAlerta(avisoContainerSC, "Selecione um serviço na tabela para remover.");
+            return;
+        }
+
+        // 2. Criar um alerta de confirmação nativo do JavaFX
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Exclusão");
+        alert.setHeaderText("Deseja realmente excluir o serviço: " + servicoSelecionado.getNome() + "?");
+        alert.setContentText("Esta ação não pode ser desfeita.");
+
+        if (alert.showAndWait().get() == ButtonType.OK){
+            try {
+                servicoService.removerServico(servicoSelecionado);
+
+                atualizarListaServicos();
+
+                AvisoUtils.exibirAvisoSucesso(avisoContainerSC, "Serviço removido com sucesso!");
+
+                AvisoUtils.limparCampoAviso(avisoContainerSC, 3);
+
+            } catch (NegocioException e) {
+                AvisoUtils.exibirAvisoErro(avisoContainerSC, e.getMessage());
+            } catch (Exception e) {
+                AvisoUtils.exibirAvisoErro(avisoContainerSC,"Houve um erro inesperado: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     void onEditar(ActionEvent event) {
+        servicoEmEdicao = tblServicos.getSelectionModel().getSelectedItem();
+
+        if (servicoEmEdicao == null) {
+            AvisoUtils.exibirAvisoAlerta(avisoContainerSC, "Selecione um serviço para editar.");
+            return;
+        }
+
+        txtNome.setText(servicoEmEdicao.getNome());
+        txtDescricao.setText(servicoEmEdicao.getDescricao());
+        txtPreco.setText(String.valueOf(servicoEmEdicao.getPrecoBase()));
+        cbCategoria.setValue(servicoEmEdicao.getCategoriaServico());
+
+        btnAdicionar.setText("Atualizar");
+        btnLimpar.setText("Cancelar");
 
     }
 
-    private void limparCampoAviso(){
-        avisoContainerNS.getChildren().clear();
+    private void atualizarServico() {
+        String nome = txtNome.getText();
+        String descricao = txtDescricao.getText();
+        String precoStr = txtPreco.getText(); 
+        CategoriaServico categoriaServico = cbCategoria.getValue();
+
+        if (nome.isBlank() || descricao.isBlank() || precoStr.isBlank() || (categoriaServico == null)){
+            AvisoUtils.exibirAvisoAlerta(avisoContainerNS, "Peencha todos os campos, por favor");
+            return;
+        }
+
+        double preco;
+
+        try{
+            preco = Double.parseDouble(precoStr.replace(",", "."));
+        } catch (NumberFormatException e){
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, "Preço inválido");
+            return;
+        }
+
+        servicoEmEdicao.setNome(nome);
+        servicoEmEdicao.setDescricao(descricao);
+        servicoEmEdicao.setPrecoBase(preco);
+        servicoEmEdicao.setCategoriaServico(categoriaServico);
+
+        try{
+            servicoService.atualizarServico(servicoEmEdicao);
+
+            onLimpar(null);
+            atualizarListaServicos();
+
+            btnAdicionar.setText("+ Adicionar");
+            btnLimpar.setText("Limpar");
+
+            servicoEmEdicao = null;
+
+            AvisoUtils.exibirAvisoSucesso(avisoContainerNS, "Serviço atualizado com sucesso");
+
+            AvisoUtils.limparCampoAviso(avisoContainerNS, 5);
+
+        } catch (NegocioException e) {
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
+        } catch (Exception e) {
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
+            e.printStackTrace();
+        }
+        
     }
 
     private void atualizarListaServicos(){
-        //List<Servico> lista = servicoService.listarServicos((Negocio) Sessao.getInstance().getUsuarioLogado());
+        List<Servico> lista = servicoService.listarServicos((Negocio) Sessao.getInstance().getUsuarioLogado());
 
         if (tblServicos != null){
             tblServicos.getItems().clear();
         }
         
-        listaServicos.addAll(servicoService.lista);
+        listaServicos.addAll(lista);
     }
-
 }

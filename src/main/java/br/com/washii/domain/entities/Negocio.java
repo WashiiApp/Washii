@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import br.com.washii.domain.enums.TipoUsuario;
 
 public abstract class Negocio extends Usuario {
+    private Long id;
     private String cnpj;
     private String razaoSocial;
     private LocalTime duracaoMediaServico = LocalTime.of(1, 0);
@@ -58,6 +59,15 @@ public abstract class Negocio extends Usuario {
             return;
         }
         this.cnpj = cnpj.replaceAll("[^0-9]", "");
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public LocalTime getInicioExpediente() {

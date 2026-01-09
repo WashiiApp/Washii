@@ -177,7 +177,44 @@ public class ServicoPersistence implements ServicoRepository {
 
     @Override
     public List<Servico> listarPorNegocio(Long negocioId) {
-        return List.of();
-    }
 
+        String sql = """
+        SELECT id, nome, descricao, tipo, precobase
+        FROM servico
+        WHERE id_negocio = ?
+        ORDER BY id
+    """;
+
+        List<Servico> servicos = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, negocioId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Servico servico = new Servico();
+                servico.setId(rs.getLong("id"));
+                servico.setNome(rs.getString("nome"));
+                servico.setDescricao(rs.getString("descricao"));
+                servico.setCategoriaServico(
+                        CategoriaServico.valueOf(rs.getString("tipo"))
+                );
+                servico.setPrecoBase(rs.getDouble("precobase"));
+
+                // referência de negocio
+                Negocio negocio = new Negocio() {}; // classe anônima
+                negocio.setId(negocioId);
+                servico.setNegocio(negocio);
+
+                servicos.add(servico);
+            }
+
+            return servicos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar serviços por negócio", e);
+        }
+    }
 }

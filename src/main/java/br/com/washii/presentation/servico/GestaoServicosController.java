@@ -105,7 +105,7 @@ public class GestaoServicosController {
         // 2. Ligar a lista à tabela
         tblServicos.setItems(listaServicos);
 
-        // Padronização da celula do preco 
+        // Padronização da celula do preço 
         colPrecoBase.setCellFactory(tc -> new TableCell<Servico, Double>() {
             @Override
             protected void updateItem(Double preco, boolean empty) {
@@ -117,8 +117,6 @@ public class GestaoServicosController {
                 }
             }
         });
-
-
     }
 
     public GestaoServicosController(ServicoService service){
@@ -141,7 +139,7 @@ public class GestaoServicosController {
         CategoriaServico categoriaServico = cbCategoria.getValue();
 
         if (!(Sessao.getInstance().getUsuarioLogado() instanceof Negocio)){
-            AvisoUtils.exibirAvisoErro(avisoContainerNS, "Usuário não é do tipo Negocio. \nLogo, não pode criar um servico");
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, "Usuário não é do tipo Negocio. \nLogo, não pode criar um serviço");
             return;
         }
         
@@ -161,7 +159,6 @@ public class GestaoServicosController {
             return;
         }
             
-
         Servico servico = new Servico(nome, descricao, categoriaServico, preco, negocio);
 
         try {
@@ -175,7 +172,7 @@ public class GestaoServicosController {
             onLimpar(event);
 
         } catch (NegocioException e) {
-            AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
+            AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());       
         } catch (Exception e) {
             AvisoUtils.exibirAvisoErro(avisoContainerNS, e.getMessage());
             e.printStackTrace();
@@ -184,10 +181,8 @@ public class GestaoServicosController {
 
     @FXML
     void onLimpar(ActionEvent event) {
-        txtNome.setText("");
-        txtDescricao.setText("");
-        txtPreco.setText("");
-        cbCategoria.setValue(null);
+        limparCampos();
+        AvisoUtils.limparCampoAviso(avisoContainerNS, 0);
 
         if (servicoEmEdicao != null) {
             servicoEmEdicao = null;
@@ -306,5 +301,12 @@ public class GestaoServicosController {
         }
         
         listaServicos.addAll(lista);
+    }
+
+    private void limparCampos(){
+        txtNome.setText("");
+        txtDescricao.setText("");
+        txtPreco.setText("");
+        cbCategoria.setValue(null);
     }
 }

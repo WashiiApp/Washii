@@ -2,7 +2,6 @@ package br.com.washii.presentation.acesso;
 
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.presentation.core.SceneManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 //import javafx.application.Platform;
 
@@ -21,12 +20,4 @@ public class AcessoLayoutController extends BaseController {
             loginController.setSceneManager(sceneManager);
         }
     }
-
-    @FXML
-    void initialize(){
-        // Usamos o runLater para esperar a janela estar pronta e o manager injetado
-        // Podemos desenvolver alguma lógica para pular o login, caso o sistema lembre quem está logado
-         
-    }
-
 }

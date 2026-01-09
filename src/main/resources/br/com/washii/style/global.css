@@ -27,11 +27,6 @@ O QUE NÃO COLOCAR AQUI:
     -fx-background-color: -color-bg;
 }
 
-/* Tipos Genéricos */
-.label {
-  -fx-text-fill: -color-text-header;
-}
-
 .button {
     -fx-cursor: hand;
     -fx-transition: 0.2s; /* Se usar bibliotecas de animação */

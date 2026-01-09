@@ -7,6 +7,7 @@ module br.com.washii {
     requires javafx.base;
     requires jbcrypt;
 
+    opens br.com.washii.domain.entities to javafx.base, javafx.fxml;
     opens br.com.washii.presentation.layout to javafx.fxml;
     opens br.com.washii.presentation.acesso to javafx.fxml;
     opens br.com.washii.presentation.servico to javafx.fxml;

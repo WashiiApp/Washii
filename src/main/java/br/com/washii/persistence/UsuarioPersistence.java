@@ -53,6 +53,19 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             }
 
+            else {
+                String sqlCliente = """
+                        INSERT INTO cliente (id_usuario, telefone)
+                        VALUES (?, ?)
+                        """;
+
+                PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente);
+                stmtCliente.setLong(1, usuario.getId());
+                stmtCliente.setString(2, null);
+
+                stmtCliente.executeUpdate();
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar usuário", e);
         }

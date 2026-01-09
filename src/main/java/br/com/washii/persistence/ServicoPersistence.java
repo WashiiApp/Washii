@@ -17,16 +17,10 @@ import java.util.Optional;
 
 public class ServicoPersistence implements ServicoRepository {
 
-
-    @Override
-    public List<Servico> listarPorNegocio(Long negocioId) {
-        return List.of();
-    }
-
     @Override
     public void salvar(Servico entidade) {
         String sql = """
-                INSERT INTO servico (nome, descricao, tipo, precobase, idNegocio)
+                INSERT INTO servico (nome, descricao, tipo, precobase, id_Negocio)
                 VALUES (?,?,?::categoriaServico,?,?)
                 """;
 
@@ -43,13 +37,14 @@ public class ServicoPersistence implements ServicoRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }}
+        }
+    }
 
     @Override
     public void atualizar(Servico entidade) {
         String sql = """
                 UPDATE servico
-                SET nome = ?, descricao = ?, tipo = ?::categoriaServico, precobase = ?, idNegocio = ?
+                SET nome = ?, descricao = ?, tipo = ?::categoriaServico, precobase = ?
                 WHERE id = ?
         """;
 
@@ -60,6 +55,7 @@ public class ServicoPersistence implements ServicoRepository {
             smtm.setString(2, entidade.getDescricao());
             smtm.setString(3, entidade.getCategoriaServico().name());
             smtm.setDouble(4, entidade.getPrecoBase());
+            smtm.setLong(5, entidade.getId());
             smtm.executeUpdate();
 
         } catch (SQLException e) {
@@ -120,6 +116,8 @@ public class ServicoPersistence implements ServicoRepository {
 
                 Negocio negocio = new Negocio() {}; // classe anônima
                 negocio.setId(rs.getLong("id_negocio"));
+                negocio.setCnpj(rs.getString("cnpj"));
+                negocio.setRazaoSocial(rs.getString("razao_social"));
                 servico.setNegocio(negocio);
                 // antigo -> to fazendo
 //                negocio.setId(rs.getLong("negocio_id"));
@@ -175,6 +173,11 @@ public class ServicoPersistence implements ServicoRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar serviços", e);
         }
+    }
+
+    @Override
+    public List<Servico> listarPorNegocio(Long negocioId) {
+        return List.of();
     }
 
 }

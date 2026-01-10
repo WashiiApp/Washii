@@ -8,8 +8,6 @@ import javafx.util.Duration;
 
 public class AvisoUtils {
 
-    // --- Métodos Públicos (Atalhos) ---
-
     public static void exibirAvisoSucesso(TextFlow container, String mensagem) {
         configurarEExibir(container, mensagem, "msg-sucesso");
     }

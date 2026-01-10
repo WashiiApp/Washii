@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -74,6 +75,9 @@ public class GestaoServicosController {
 
     @FXML
     private Button btnEditar;
+
+    @FXML 
+    private ScrollPane scrollPrincipal;
 
     private ObservableList<Servico> listaServicos = FXCollections.observableArrayList();
 
@@ -230,8 +234,13 @@ public class GestaoServicosController {
 
         if (servicoEmEdicao == null) {
             AvisoUtils.exibirAvisoAlerta(avisoContainerSC, "Selecione um serviço para editar.");
+            AvisoUtils.limparCampoAviso(avisoContainerSC, 3);
             return;
         }
+
+        // Voltar ao topo e dar foco
+        if (scrollPrincipal != null) scrollPrincipal.setVvalue(0);
+        txtNome.requestFocus();
 
         txtNome.setText(servicoEmEdicao.getNome());
         txtDescricao.setText(servicoEmEdicao.getDescricao());
@@ -271,7 +280,7 @@ public class GestaoServicosController {
         try{
             servicoService.atualizarServico(servicoEmEdicao);
 
-            onLimpar(null);
+            limparCampos();
             atualizarListaServicos();
 
             btnAdicionar.setText("+ Adicionar");

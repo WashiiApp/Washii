@@ -94,10 +94,6 @@
     -fx-transition-duration: 0.2s;
 }
 
-.button-primary:hover {
-   -fx-background-color: -color-brand-glow;
-}
-
 .button-primary:focus-within {
     -fx-background-color: -color-brand-glow;
 }
@@ -132,6 +128,11 @@
     -fx-border-radius: 15px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);
     -fx-transition-duration: 0.2s;
+}
+
+.button-danger:pressed {
+    -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
 }
 
 .header {
@@ -217,4 +218,67 @@
 
 .msg-alerta {
     -fx-fill: -color-warning; /* Amarelo/Castanho */
+}
+
+/* ---------------- Card de Negocio ---------------------- */
+/* Container Principal do Card */
+.card-negocio {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    /* Sombra suave para dar efeito de elevação */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* Efeito de Hover (quando o mouse passa por cima) */
+.card-negocio:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 6);
+    -fx-translate-y: -2px; /* Sobe levemente o card */
+}
+
+/* Títulos das seções (Serviços, Veículos) */
+.label-sessao {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-header;
+    -fx-padding: 0 0 5 0;
+}
+
+/* Itens das listas (os marcadores •) */
+.item-lista {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+    -fx-padding: 0 0 0 5;
+}
+
+/* Estilização da Avaliação */
+.label-avaliacao {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F39C12; /* Cor dourada/alaranjada */
+}
+
+.label-avaliacao .icon {
+    -fx-icon-color:#F39C12; /* Cor dourada/alaranjada */
+}
+
+/* Botão de Agendamento */
+.btn-agendar {
+    -fx-background-color: #27AE60; /* Verde vibrante */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.btn-agendar:hover {
+    -fx-background-color: #2ECC71;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.btn-agendar:pressed {
+    -fx-background-color: #1E8449;
 }

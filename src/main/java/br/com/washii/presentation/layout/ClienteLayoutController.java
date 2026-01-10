@@ -2,8 +2,6 @@ package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
-
-import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
@@ -30,23 +28,20 @@ public class ClienteLayoutController extends LayoutController {
     @FXML
     void handleNavClick(MouseEvent event){
         HBox containerClicked = (HBox) event.getSource();
-        HBox antecessor = null;
 
         for (HBox nav : allNavContainer) {
-            if(nav.getStyleClass().remove("nav-container-active")){
-                antecessor = nav;
-            }
+            nav.getStyleClass().remove("nav-container-active");
         }
 
         containerClicked.getStyleClass().add("nav-container-active");
 
-        if (containerClicked == navHome && containerClicked != antecessor) {
+        if (containerClicked == navHome) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/homescene/home-tela.fxml");
-        } else if (containerClicked == navAgendamentos && containerClicked != antecessor) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/cliente-agendamento.fxml");
-        } else if (containerClicked == navHistorico && containerClicked != antecessor) {
+        } else if (containerClicked == navAgendamentos) {
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/negocio-card.fxml");
+        } else if (containerClicked == navHistorico) {
             sceneManager.loadCenterBorderPane(null);
-        } else if (containerClicked == navPerfil && containerClicked != antecessor) {
+        } else if (containerClicked == navPerfil) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-usuario.fxml");
         }
     }

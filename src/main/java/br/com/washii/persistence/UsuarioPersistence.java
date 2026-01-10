@@ -40,14 +40,19 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             if ("NEGOCIO".equals(tipo)) {
                 String sqlNegocio = """
-                    INSERT INTO negocio (id_usuario, cnpj, razao_social)
-                    VALUES (?, ?, ?)
+                    INSERT INTO negocio (id_usuario, cnpj, razao_social, inicio_expediente, fim_expediente)
+                    VALUES (?, ?, ?, ?, ?)
                 """;
 
                 PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio);
                 stmtNegocio.setLong(1, usuario.getId());
                 stmtNegocio.setString(2, null);
                 stmtNegocio.setString(3, null);
+//                LavaJato lavajato = new LavaJato(); -> antigo
+                if (usuario instanceof LavaJato lavajato) {
+                    stmtNegocio.setTime(4, Time.valueOf(lavajato.getInicioExpediente()));
+                    stmtNegocio.setTime(5, Time.valueOf(lavajato.getFimExpediente()));
+                }
 
                 stmtNegocio.executeUpdate();
 

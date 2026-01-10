@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" prefHeight="650.0" prefWidth="850.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox alignment="TOP_CENTER" styleClass="background-transparente">
+         <children>
+            <VBox maxWidth="800.0" spacing="25.0" styleClass="background-transparente">
+               <children>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label styleClass="texto-titulo" text="Solicitar Agendamento" textFill="#333333">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                           <children>
+                              <Circle fill="#dadada" radius="5.0" />
+                              <Label fx:id="lblNomeLavaJato" styleClass="texto-comum" text="Clean Car - Rua da Praia, 789" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+      
+                  <VBox styleClass="container-generic">
+                     <children>
+                        <GridPane hgap="30.0" vgap="15.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="NEVER" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="NEVER" />
+                           </rowConstraints>
+                           <children>
+                              
+                              <VBox spacing="20.0" GridPane.rowIndex="1">
+                                 <children>
+                                    <VBox spacing="5.0">
+                                       <Label styleClass="texto-titulo" text="Dados do Serviço">
+                                          <font><Font name="System Bold" size="16.0" /></font>
+                                       </Label>
+                                    </VBox>
+
+                                    <VBox spacing="5.0">
+                                       <Label styleClass="texto-comum" text="Escolha o Serviço" textFill="#555555" />
+                                       <ComboBox fx:id="cmbTipoServico" maxWidth="1.7976931348623157E308" prefHeight="30.0" style="-fx-background-radius: 5;" />
+                                    </VBox>
+
+                                    <VBox spacing="5.0">
+                                       <Label styleClass="texto-comum" text="Veículo" textFill="#555555" />
+                                       <ComboBox fx:id="cmbModeloCarro" maxWidth="1.7976931348623157E308" prefHeight="30.0" promptText="Selecione o Modelo" style="-fx-background-radius: 5;" />
+                                    </VBox>
+
+                                    <VBox spacing="5.0">
+                                       <Label styleClass="texto-comum" text="Placa" textFill="#555555" />
+                                       <TextField fx:id="txtPlaca" prefHeight="30.0" promptText="ABC-1234" style="-fx-background-radius: 5;" />
+                                    </VBox>
+                                 </children>
+                              </VBox>
+
+                              <VBox spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label styleClass="texto-titulo" text="Data e Hora">
+                                       <font><Font name="System Bold" size="16.0" /></font>
+                                    </Label>
+                                    
+                                    <VBox style="-fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-padding: 10;">
+                                       <children>
+                                          <Label alignment="CENTER" maxWidth="Infinity" styleClass="texto-comum" text="Janeiro 2026" textFill="#333333">
+                                              <font><Font name="System Bold" size="14.0"/></font>
+                                              <padding><Insets bottom="10"/></padding>
+                                          </Label>
+                                          <GridPane fx:id="gridCalendario" alignment="CENTER" hgap="10.0" vgap="10.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                                <ColumnConstraints halignment="CENTER" prefWidth="30" />
+                                            </columnConstraints>
+                                            <children>
+                                                <Label text="D" textFill="#999" /><Label text="S" textFill="#999" GridPane.columnIndex="1" /><Label text="T" textFill="#999" GridPane.columnIndex="2" /><Label text="Q" textFill="#999" GridPane.columnIndex="3" /><Label text="Q" textFill="#999" GridPane.columnIndex="4" /><Label text="S" textFill="#999" GridPane.columnIndex="5" /><Label text="S" textFill="#999" GridPane.columnIndex="6" />
+                                                
+                                                <Button text="1" style="-fx-background-color: transparent;" GridPane.rowIndex="1" />
+                                                <Button text="5" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 15;" GridPane.rowIndex="1" GridPane.columnIndex="4" />
+                                            </children>
+                                          </GridPane>
+                                       </children>
+                                    </VBox>
+
+                                    <VBox spacing="5.0">
+                                       <Label styleClass="texto-comum" text="Horários Disponíveis" textFill="#555555" />
+                                       <HBox spacing="10.0">
+                                          <Button text="09:00" style="-fx-background-color: transparent; -fx-border-color: #ddd; -fx-border-radius: 5;" />
+                                          <Button text="10:00" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5;" />
+                                       </HBox>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+
+                              <HBox alignment="CENTER_RIGHT" spacing="15.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                 <children>
+                                    <Button fx:id="btnCancelar" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" styleClass="button-secondary" text="Cancelar" />
+                                    <Button fx:id="btnConfirmar" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" styleClass="button-primary" text="Confirmar" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                           </padding>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </content>
+</ScrollPane>

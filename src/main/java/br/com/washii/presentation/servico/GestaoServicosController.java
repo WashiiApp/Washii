@@ -93,7 +93,7 @@ public class GestaoServicosController {
         Negocio negocio = (Negocio) Sessao.getInstance().getUsuarioLogado();
 
         if (nome.isBlank() || descricao.isBlank() || precoStr.isBlank() || (categoriaServico == null)){
-            exibirAvisoErro("Peencha todos os campos, por favor.");
+            exibirAvisoErro("Preencha todos os campos, por favor.");
             return;
         }
 

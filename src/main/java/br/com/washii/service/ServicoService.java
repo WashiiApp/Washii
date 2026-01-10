@@ -1,4 +1,7 @@
 package br.com.washii.service;
+
+import java.util.List;
+import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Servico;
 import br.com.washii.domain.repository.ServicoRepository;
 
@@ -43,5 +46,13 @@ public class ServicoService {
             throw new IllegalArgumentException("Serviço inválido para atualização.");
         }
         persistence.atualizar(servico);
+    }
+
+    public List<Servico> listarServicos(Negocio negocio) {
+        if (negocio == null) {
+            throw new IllegalArgumentException("Negocio não pode ser nulo.");
+        }
+
+        return persistence.listarPorNegocio(negocio.getId());
     }
 }

@@ -33,7 +33,6 @@
 
 .texto-titulo {
     -fx-text-fill: -color-text-header;
-    -fx-font-style: bold;
 }
 
 .icon {
@@ -125,6 +124,16 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
 }
 
+.button-danger{
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-color: -color-danger;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);
+    -fx-transition-duration: 0.2s;
+}
+
 .header {
     -fx-background-color: -color-bg;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 20, 0, 0, 5);
@@ -189,4 +198,23 @@
     -fx-background-color: -color-bg;
     -fx-background-radius: 10;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 0)
+}
+
+/* Estilo comum para as mensagens */
+.mensagem-aviso {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Cores específicas para o preenchimento (fill) do texto */
+.msg-sucesso {
+    -fx-fill: -color-success; /* Verde */
+}
+
+.msg-erro {
+    -fx-fill: -color-danger; /* Vermelho */
+}
+
+.msg-alerta {
+    -fx-fill: -color-warning; /* Amarelo/Castanho */
 }

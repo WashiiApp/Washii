@@ -2,6 +2,8 @@ package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
+
+import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
@@ -39,15 +41,13 @@ public class ClienteLayoutController extends LayoutController {
         containerClicked.getStyleClass().add("nav-container-active");
 
         if (containerClicked == navHome && containerClicked != antecessor) {
-            sceneManager.loadCenterBorderPane(null);
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/homescene/home-tela.fxml");
         } else if (containerClicked == navAgendamentos && containerClicked != antecessor) {
-            sceneManager.loadCenterBorderPane(null);
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/cliente-agendamento.fxml");
         } else if (containerClicked == navHistorico && containerClicked != antecessor) {
             sceneManager.loadCenterBorderPane(null);
         } else if (containerClicked == navPerfil && containerClicked != antecessor) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-usuario.fxml");
         }
     }
-
-    
 }

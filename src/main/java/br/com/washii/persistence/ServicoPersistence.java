@@ -83,20 +83,21 @@ public class ServicoPersistence implements ServicoRepository {
     @Override
     public Optional<Servico> buscarPorId(Long id) {
         String sql = """
-        SELECT 
-            s.id AS servico_id,
-            s.nome,
-            s.descricao,
-            s.tipo,
-            s.precobase,
+    SELECT 
+        s.id AS servico_id,
+        s.nome,
+        s.descricao,
+        s.tipo,
+        s.precobase,
 
-            n.id AS negocio_id,
-            n.cnpj,
-            n.razao_social
-        FROM servico s
-        JOIN negocio n ON n.id = s.id_negocio
-        WHERE s.id = ?
-    """;
+        n.id AS negocio_id,
+        n.cnpj,
+        n.razao_social
+    FROM servico s
+    LEFT JOIN negocio n ON n.id = s.id_negocio
+    WHERE s.id = ?
+""";
+
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -114,17 +115,13 @@ public class ServicoPersistence implements ServicoRepository {
                 );
                 servico.setPrecoBase(rs.getDouble("precobase"));
 
-                Negocio negocio = new Negocio() {}; // classe anônima
-                negocio.setId(rs.getLong("id_negocio"));
-                negocio.setCnpj(rs.getString("cnpj"));
-                negocio.setRazaoSocial(rs.getString("razao_social"));
-                servico.setNegocio(negocio);
-                // antigo -> to fazendo
-//                negocio.setId(rs.getLong("negocio_id"));
-//                negocio.setCnpj(rs.getString("cnpj"));
-//                negocio.setRazaoSocial(rs.getString("razao_social"));
-
-                servico.setNegocio(negocio);
+                if (rs.getObject("negocio_id") != null) {
+                    Negocio negocio = new Negocio() {};
+                    negocio.setId(rs.getLong("negocio_id"));
+                    negocio.setCnpj(rs.getString("cnpj"));
+                    negocio.setRazaoSocial(rs.getString("razao_social"));
+                    servico.setNegocio(negocio);
+                }
 
                 return Optional.of(servico);
             }

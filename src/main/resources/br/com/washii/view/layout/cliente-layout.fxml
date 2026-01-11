@@ -108,6 +108,6 @@
          </children></VBox>
    </left>
    <center>
-      <fx:include fx:id="homeinitialize" source="../homescene/home-tela.fxml"/>
+      <fx:include fx:id="homeCliente" source="../home/home-cliente.fxml"/>
    </center>
 </BorderPane>

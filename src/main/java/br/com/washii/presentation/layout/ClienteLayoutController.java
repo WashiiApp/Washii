@@ -2,17 +2,35 @@ package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
+import br.com.washii.presentation.core.SceneManager;
+import br.com.washii.presentation.home.HomeClienteController;
 import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 public class ClienteLayoutController extends LayoutController {
 
+    // O JavaFX injeta automaticamente o controller do <fx:include>
+    @FXML private HomeClienteController homeClienteController;
+
     @FXML
     private HBox navHome, navAgendamentos, navHistorico, navPerfil;
 
     private List<HBox> allNavContainer;
+
+    @Override
+    public void setSceneManager(SceneManager sceneManager) {
+        // 1. Seta no próprio Layout
+        super.setSceneManager(sceneManager);
+        
+        // 2. Repassa para a Home que foi incluída
+        if (homeClienteController != null) {
+            homeClienteController.setSceneManager(sceneManager);
+            homeClienteController.carregarNegocios();
+        }
+    }
 
     public ClienteLayoutController(AutenticacaoService autenticacaoService) {
         super(autenticacaoService);
@@ -36,9 +54,13 @@ public class ClienteLayoutController extends LayoutController {
         containerClicked.getStyleClass().add("nav-container-active");
 
         if (containerClicked == navHome) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/homescene/home-tela.fxml");
+            FXMLLoader loader =sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-cliente.fxml");
+
+            HomeClienteController controller = loader.getController();
+            controller.carregarNegocios();
+
         } else if (containerClicked == navAgendamentos) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/negocio-card.fxml");
+            sceneManager.loadCenterBorderPane(null);
         } else if (containerClicked == navHistorico) {
             sceneManager.loadCenterBorderPane(null);
         } else if (containerClicked == navPerfil) {

@@ -88,31 +88,36 @@ public class SceneManager {
         }
     }
 
-    public void loadCenterBorderPane(String fxmlPath) {
-    try {
-        // 1. Obtém a raiz da cena atual através do Stage principal
-        Parent root = primaryStage.getScene().getRoot();
+    public FXMLLoader loadCenterBorderPane(String fxmlPath) {
+        try {
+            // 1. Obtém a raiz da cena atual através do Stage principal
+            Parent root = primaryStage.getScene().getRoot();
 
-        // 2. Verifica se a raiz (ou o container principal) é um BorderPane
-        if (root instanceof BorderPane mainLayout) {
-            
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            // 2. Verifica se a raiz (ou o container principal) é um BorderPane
+            if (root instanceof BorderPane mainLayout) {
+                
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 
-            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
+                loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
 
-            Parent newNode = loader.load();
-            injectManager(loader);
+                Parent newNode = loader.load();
+                injectManager(loader);
 
-            // 3. Troca o centro diretamente
-            mainLayout.setCenter(newNode);
+                // 3. Troca o centro diretamente
+                mainLayout.setCenter(newNode);
 
-        } else {
-            throw new IllegalStateException("A tela atual não possui um BorderPane como raiz.");
-        }
+                return loader;
+
+            } else {
+                throw new IllegalStateException("A tela atual não possui um BorderPane como raiz.");
+            }
+
         } catch (IOException e) {
             System.err.println("Erro ao carregar FXML: " + fxmlPath);
             e.printStackTrace();
         }
+
+        return null;
     }
 
     /**

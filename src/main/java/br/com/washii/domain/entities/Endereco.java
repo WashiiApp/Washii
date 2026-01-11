@@ -113,7 +113,7 @@ public class Endereco {
     }
 
     public void setNumero(String numero) {
-        this.numero = numero;
+        this.numero = (numero == null)? "S/N": numero;
     }
 
     public String getReferencia() {

@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" prefHeight="650.0" prefWidth="850.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fitToWidth="true" prefHeight="650.0" prefWidth="850.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.ClienteAgendamentoController">
    <content>
       <VBox alignment="TOP_CENTER" styleClass="background-transparente">
          <children>

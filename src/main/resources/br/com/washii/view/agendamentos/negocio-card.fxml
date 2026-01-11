@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="cardRoot" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="500.0" styleClass="card-negocio" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.NegocioCardController">
+<VBox fx:id="cardRoot" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="card-negocio" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.NegocioCardController">
    <children>
       <HBox spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
@@ -34,17 +34,17 @@
 
             <VBox prefWidth="160.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label styleClass="label-sessao" text="Serviços Oferecidos" textFill="#2c3e50">
+                  <Label styleClass="label-sessao" text="Serviços Oferecidos" textFill="#2c3e50" wrapText="true">
                      <font><Font name="System Bold" size="13.0" /></font>
                   </Label>
                   <VBox fx:id="vboxServicos" spacing="3.0">
                      <children>
-                        <Label styleClass="item-lista" text="• Lavagem Completa">
+                        <Label styleClass="item-lista" text="• Lavagem Completa" wrapText="true">
                            <font>
                               <Font size="12.0" />
                            </font></Label>
-                        <Label styleClass="item-lista" text="• Higienização" />
-                        <Label styleClass="item-lista" text="• Cera de Carnaúba" />
+                        <Label styleClass="item-lista" text="• Higienização" wrapText="true" />
+                        <Label styleClass="item-lista" text="• Cera de Carnaúba" wrapText="true" />
                      </children>
                   </VBox>
                </children>
@@ -54,14 +54,14 @@
 
             <VBox prefWidth="160.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label styleClass="label-sessao" text="Veículos Atendidos" textFill="#2c3e50">
+                  <Label styleClass="label-sessao" text="Veículos Atendidos" textFill="#2c3e50" wrapText="true">
                      <font><Font name="System Bold" size="13.0" /></font>
                   </Label>
                   <VBox fx:id="vboxVeiculos" spacing="3.0">
                      <children>
-                        <Label styleClass="item-lista" text="• Carros de Passeio" />
-                        <Label styleClass="item-lista" text="• Motocicletas" />
-                        <Label styleClass="item-lista" text="• SUVs e Picapes" />
+                        <Label styleClass="item-lista" text="• Carros de Passeio" wrapText="true" />
+                        <Label styleClass="item-lista" text="• Motocicletas" wrapText="true" />
+                        <Label styleClass="item-lista" text="• SUVs e Picapes" wrapText="true" />
                      </children>
                   </VBox>
                </children>
@@ -74,9 +74,9 @@
 
       <HBox alignment="CENTER" spacing="10.0">
          <children>
-            <Label fx:id="lblAvaliacao" styleClass="label-avaliacao" text="★ 4.8 (120 avaliações)" />
+            <Label fx:id="lblAvaliacao" styleClass="label-avaliacao" text="★ 4.8 (120 avaliações)" wrapText="true" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnAgendar" mnemonicParsing="false" onAction="#onAgendarAction" styleClass="btn-agendar" text="Solicitar Agendamento" />
+            <Button fx:id="btnAgendar" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#onAgendarAction" styleClass="btn-agendar" text="Solicitar Agendamento" wrapText="true" />
          </children>
          <padding>
             <Insets bottom="12.0" left="15.0" right="15.0" top="10.0" />

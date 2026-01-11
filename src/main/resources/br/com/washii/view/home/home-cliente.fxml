@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" prefHeight="650.0" prefWidth="1000.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fx:id="homeCliente" fitToWidth="true" prefHeight="650.0" prefWidth="1000.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.home.HomeClienteController">
    <content>
       <VBox alignment="TOP_CENTER" styleClass="background-transparente">
          <children>
@@ -55,7 +55,7 @@
                               <VBox spacing="5.0" GridPane.rowIndex="1">
                                  <children>
                                     <Label styleClass="texto-comum" text="Localização" textFill="#555555" />
-                                    <TextField fx:id="txtAvaliacao1" prefHeight="35.0" promptText="Estado / Cidade" style="-fx-background-radius: 5;" />
+                                    <TextField fx:id="txtLocalizacao" prefHeight="35.0" promptText="Estado / Cidade" style="-fx-background-radius: 5;" />
                                  </children>
                               </VBox>
       
@@ -69,13 +69,13 @@
                               <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <children>
                                     <Label styleClass="texto-comum" text="Preço:" textFill="#555555" />
-                                    <TextField fx:id="txtAvaliacao" prefHeight="35.0" promptText="Ex: 50,00" style="-fx-background-radius: 5;" />
+                                    <TextField fx:id="txtPreco" prefHeight="35.0" promptText="Ex: 50,00" style="-fx-background-radius: 5;" />
                                  </children>
                               </VBox>
                               
                               <HBox alignment="CENTER_RIGHT" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                                  <children>
-                                    <Button fx:id="btnFiltrar" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" styleClass="button-primary" text="Buscar" />
+                                    <Button fx:id="btnFiltrar" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" styleClass="button-primary" text="FILTRAR" />
                                  </children>
                               </HBox>
                            </children>

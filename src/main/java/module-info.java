@@ -12,5 +12,7 @@ module br.com.washii {
     opens br.com.washii.presentation.acesso to javafx.fxml;
     opens br.com.washii.presentation.servico to javafx.fxml;
     opens br.com.washii.presentation.agendamentos to javafx.fxml;
+    opens br.com.washii.presentation.home to javafx.fxml;
+    
     exports br.com.washii.app;
 }

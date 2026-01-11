@@ -81,10 +81,10 @@ public abstract class Negocio extends Usuario {
     }
 
     public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial.trim();
+        this.razaoSocial = razaoSocial == null? "" : razaoSocial.trim();
     }
 
-        public LocalTime getDuracaoMediaServico() {
+    public LocalTime getDuracaoMediaServico() {
         return duracaoMediaServico;
     }
 

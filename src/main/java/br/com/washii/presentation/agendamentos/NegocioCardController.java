@@ -8,12 +8,15 @@ import br.com.washii.domain.enums.CategoriaVeiculo;
 import br.com.washii.presentation.core.BaseController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class NegocioCardController extends BaseController{
+
+    private LavaJato lavaJato;
 
     @FXML
     private Button btnAgendar;
@@ -41,12 +44,17 @@ public class NegocioCardController extends BaseController{
 
     @FXML
     void onAgendarAction(ActionEvent event) {
-        sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/cliente-agendamento.fxml");
+        FXMLLoader loader = sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/cliente-agendamento.fxml");
+
+        ClienteAgendamentoController controller = loader.getController();
+
+        controller.setLavaJato(lavaJato);
     }
 
     public void setDados(LavaJato lj) {
+        this.lavaJato = lj;
+
         lblNome.setText(lj.getNome());
-        // Exemplo de endereço formatado
 
         Endereco endereco = lj.getEndereco();
         lblEndereco.setText(endereco.getRua() + ", " + endereco.getNumero() + "\n" + endereco.getCidade() + "\n" + endereco.getEstado());
@@ -61,6 +69,7 @@ public class NegocioCardController extends BaseController{
         // Adiciona os serviços dinamicamente
         for (Servico s : lj.getServicosOferecidos()) {
             Label item = new Label("• " + s.getNome());
+            item.setWrapText(true);
             item.getStyleClass().add("item-lista");
             vboxServicos.getChildren().add(item);
         }
@@ -68,6 +77,7 @@ public class NegocioCardController extends BaseController{
         // Adiciona os veículos
         for (CategoriaVeiculo v : lj.getCategoriasAceitas()) {
             Label item = new Label("• " + v.toString().toLowerCase());
+            item.setWrapText(true);
             item.getStyleClass().add("item-lista");
             vboxVeiculos.getChildren().add(item);
         }

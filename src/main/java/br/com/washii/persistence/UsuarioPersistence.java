@@ -366,6 +366,42 @@ public class UsuarioPersistence implements UsuarioRepository {
         }
     }
 
+    @Override
+    public List<Negocio> listarTodosNegocios() {
+
+        String sql = """
+        SELECT id, cnpj, razao_social, inicio_expediente, fim_expediente
+        FROM negocio
+        ORDER BY id
+    """;
+
+        List<Negocio> negocios = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Negocio negocio = new Negocio() {}; // classe anônima
+
+                negocio.setId(rs.getLong("id"));
+                negocio.setCnpj(rs.getString("cnpj"));
+                negocio.setRazaoSocial(rs.getString("razao_social"));
+                if (negocio instanceof LavaJato lavajato) {
+                    stmt.setTime(4, Time.valueOf(lavajato.getInicioExpediente()));
+                    stmt.setTime(5, Time.valueOf(lavajato.getFimExpediente()));
+                }
+
+                negocios.add(negocio);
+            }
+
+            return negocios;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar negócios", e);
+        }
+    }
+
     // salvar o endereço
     public void salvarEndereco(Usuario usuario) {
         String sqlEndereco = """

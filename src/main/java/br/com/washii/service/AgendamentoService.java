@@ -5,16 +5,24 @@ import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.repository.AgendamentoRepository;
+import br.com.washii.domain.repository.UsuarioRepository;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
 public class AgendamentoService {
 
-    private AgendamentoRepository persistence;
+    private AgendamentoRepository agendamentoRepository;
 
-    public AgendamentoService(AgendamentoRepository persistence) {
-        this.persistence = persistence;
+    // Usará este repository para buscar um Usuario (Negocio) atrevés do ID
+    // e coletar os dados necessários para fazer o algoritmo de horarios possíveis.
+    // Será preciso fazer um cast de Usuario para Negocio
+    private UsuarioRepository usuarioRepository;
+
+    public AgendamentoService(AgendamentoRepository agendamentoRepository, UsuarioRepository usuarioRepository) {
+        this.agendamentoRepository = agendamentoRepository;
+        this.usuarioRepository= usuarioRepository;
     }
 
     public void solicitarAgendamento(Agendamento a) {

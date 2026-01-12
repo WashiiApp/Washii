@@ -6,6 +6,7 @@ module br.com.washii {
     requires io.github.cdimascio.dotenv.java;
     requires javafx.base;
     requires jbcrypt;
+    requires java.datatransfer;
 
     opens br.com.washii.domain.entities to javafx.base, javafx.fxml;
     opens br.com.washii.presentation.layout to javafx.fxml;

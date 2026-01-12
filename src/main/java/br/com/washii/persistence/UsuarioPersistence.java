@@ -382,17 +382,17 @@ public class UsuarioPersistence implements UsuarioRepository {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Negocio negocio = new Negocio() {}; // classe anônima
+                LavaJato lavaJato = new LavaJato();
 
-                negocio.setId(rs.getLong("id"));
-                negocio.setCnpj(rs.getString("cnpj"));
-                negocio.setRazaoSocial(rs.getString("razao_social"));
-                if (negocio instanceof LavaJato lavajato) {
+                lavaJato.setId(rs.getLong("id"));
+                lavaJato.setCnpj(rs.getString("cnpj"));
+                lavaJato.setRazaoSocial(rs.getString("razao_social"));
+                if (lavaJato instanceof LavaJato lavajato) {
                     stmt.setTime(4, Time.valueOf(lavajato.getInicioExpediente()));
                     stmt.setTime(5, Time.valueOf(lavajato.getFimExpediente()));
                 }
 
-                negocios.add(negocio);
+                negocios.add(lavaJato);
             }
 
             return negocios;

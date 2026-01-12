@@ -367,12 +367,30 @@ public class UsuarioPersistence implements UsuarioRepository {
     }
 
     @Override
-    public List<Negocio> listarTodosNegocios() {
+    public List<Negocio> listarTodosLavaJatos() {
 
         String sql = """
-        SELECT id, cnpj, razao_social, inicio_expediente, fim_expediente
-        FROM negocio
-        ORDER BY id
+        SELECT
+            n.id AS negocio_id,
+            n.cnpj,
+            n.razao_social,
+            n.inicio_expediente,
+            n.fim_expediente,
+
+            u.id AS usuario_id,
+            u.nome,
+            u.email,
+
+            e.id AS endereco_id,
+            e.cep,
+            e.estado,
+            e.bairro,
+            e.rua
+        FROM negocio n
+        JOIN usuario u ON u.id = n.id_usuario
+        JOIN endereco e ON e.id = u.id_endereco
+        WHERE u.tipo = 'NEGOCIO'
+        ORDER BY n.id
     """;
 
         List<Negocio> negocios = new ArrayList<>();
@@ -381,24 +399,47 @@ public class UsuarioPersistence implements UsuarioRepository {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
+            ServicoPersistence servicoRepo = new ServicoPersistence();
+
             while (rs.next()) {
-                LavaJato lavaJato = new LavaJato();
 
-                lavaJato.setId(rs.getLong("id"));
-                lavaJato.setCnpj(rs.getString("cnpj"));
-                lavaJato.setRazaoSocial(rs.getString("razao_social"));
-                if (lavaJato instanceof LavaJato lavajato) {
-                    stmt.setTime(4, Time.valueOf(lavajato.getInicioExpediente()));
-                    stmt.setTime(5, Time.valueOf(lavajato.getFimExpediente()));
-                }
+                LavaJato lavajato = new LavaJato();
 
-                negocios.add(lavaJato);
+                // ===== Usuario =====
+                lavajato.setId(rs.getLong("usuario_id"));
+                lavajato.setNome(rs.getString("nome"));
+                lavajato.setEmail(rs.getString("email"));
+
+                // ===== Negocio =====
+                lavajato.setId(rs.getLong("negocio_id"));
+                lavajato.setCnpj(rs.getString("cnpj"));
+                lavajato.setRazaoSocial(rs.getString("razao_social"));
+
+                lavajato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
+                lavajato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+
+                // endereco
+                Endereco endereco = new Endereco();
+                endereco.setId(rs.getLong("endereco_id"));
+                endereco.setCep(rs.getString("cep"));
+                endereco.setEstado(rs.getString("estado"));
+                endereco.setBairro(rs.getString("bairro"));
+                endereco.setRua(rs.getString("rua"));
+                lavajato.setEndereco(endereco);
+
+                // ===== Serviços (REUSO DO MÉTODO EXISTENTE) =====
+                List<Servico> servicos =
+                        servicoRepo.listarPorNegocio(lavajato.getId());
+
+                lavajato.setServicosOferecidos(servicos);
+
+                negocios.add(lavajato);
             }
 
             return negocios;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar negócios", e);
+            throw new RuntimeException("Erro ao listar lavajatos", e);
         }
     }
 

@@ -71,9 +71,9 @@ public class UsuarioService {
     }
 
     public List<Negocio> listarTodosNegocios(){
-        //return usuarioRepository.listarTodosNegocios();
-        addNegocios();
-        return negocios;
+        return usuarioRepository.listarTodosLavaJatos();
+        //addNegocios();
+        //return negocios;
     }
 
     private List<Negocio> negocios= new ArrayList<>();

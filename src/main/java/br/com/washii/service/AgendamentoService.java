@@ -33,6 +33,10 @@ public class AgendamentoService {
         // Lógica para cancelar agendamento
     }
 
+    public void concluirAgendamento(Agendamento a) {
+        // Lógica para concluit agendamento
+    }
+
     public List<Agendamento> listarPorData(LocalDate data, Negocio negocio) {
         // Lógica para listar agendamentos por data e negócio
         return null;

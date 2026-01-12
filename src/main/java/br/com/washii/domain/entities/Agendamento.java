@@ -26,7 +26,7 @@ public class Agendamento {
     // Construtor Padrão (Essencial para persistência e frameworks)
     public Agendamento() {
         this.servicos = new ArrayList<>();
-        this.status = StatusAgendamento.PENDENTE; // Status inicial padrão
+        this.status = StatusAgendamento.AGENDADO; // Status inicial padrão
     }
 
     // Construtor para novos agendamentos (antes de ir para o banco)

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fx:id="homeNegocio" fitToWidth="true" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.home.HomeNegocioController">
+   <content>
+      <VBox spacing="20.0" style="-fx-background-color: #F8F9FA;">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Fluxo do Dia" textFill="#2d3436">
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblDataAtual" text="12 de Janeiro, 2026" textFill="#636e72" />
+               </children>
+            </HBox>
+
+            <HBox spacing="15.0">
+               <children>
+                  <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-title" text="AGENDAMENTOS HOJE" />
+                        <Label fx:id="lblQtdAgendados" styleClass="kpi-value" text="5" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-title" text="EM ANDAMENTO" />
+                        <Label fx:id="lblQtdAndamento" text="1">
+                           <styleClass>
+                              <String fx:value="kpi-value" />
+                              <String fx:value="kpi-value-em-andamento" />
+                           </styleClass></Label>
+                     </children>
+                  </VBox>
+                  <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-title" text="FINALIZADOS" />
+                        <Label fx:id="lblQtdAndamento1" text="0">
+                           <styleClass>
+                              <String fx:value="kpi-value" />
+                              <String fx:value="kpi-value-finalizado" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-title" text="FATURAMENTO PREVISTO" />
+                        <Label fx:id="lblFaturamentoTotal" style="-fx-text-fill: #68B92E;" styleClass="kpi-value" text="R$ 120,00" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <Separator />
+
+            <VBox spacing="15.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                     <children>
+                        <Label styleClass="section-header" text="EM ANDAMENTO" />
+                        <Label fx:id="countAndamento" styleClass="count-badge" text="1" />
+                     </children>
+                  </HBox>
+                  <FlowPane fx:id="flowAndamento" hgap="15.0" prefWrapLength="1000.0" vgap="15.0">
+                     <styleClass>
+                        <String fx:value="flow-container" />
+                        <String fx:value="container-andamento" />
+                     </styleClass>
+                     <children>
+                        <Label text="Sem agendamentos" />
+                     </children></FlowPane>
+
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                     <children>
+                        <Label styleClass="section-header" text="PRÓXIMOS AGENDAMENTOS" />
+                        <Label fx:id="countAgendados" styleClass="count-badge" text="4" />
+                     </children>
+                  </HBox>
+                  <FlowPane fx:id="flowAgendados" hgap="15.0" prefWrapLength="1000.0" styleClass="flow-container" vgap="15.0">
+                     <children>
+                        <Label text="Sem agendamentos" />
+                     </children></FlowPane>
+
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                     <children>
+                        <Label styleClass="section-header" text="FINALIZADOS HOJE" />
+                        <Label fx:id="countFinalizado" styleClass="count-badge" text="2" />
+                     </children>
+                  </HBox>
+                  <FlowPane fx:id="flowFinalizados" hgap="15.0" prefWrapLength="1000.0" vgap="15.0">
+                     <styleClass>
+                        <String fx:value="flow-container" />
+                        <String fx:value="container-finalizado" />
+                     </styleClass>
+                     <children>
+                        <Label text="Sem agendamentos" />
+                     </children></FlowPane>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </content>
+</ScrollPane>

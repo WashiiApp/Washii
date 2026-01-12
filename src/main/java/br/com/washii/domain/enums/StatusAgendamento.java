@@ -1,7 +1,7 @@
 package br.com.washii.domain.enums;
 
 public enum StatusAgendamento {
-    PENDENTE,
+    EM_ANDAMENTO,
     CANCELADO,
     AGENDADO,
     CONCLUIDO,

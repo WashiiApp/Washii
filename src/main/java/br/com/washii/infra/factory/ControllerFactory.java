@@ -2,7 +2,9 @@ package br.com.washii.infra.factory;
 
 import br.com.washii.presentation.acesso.CadastroController;
 import br.com.washii.presentation.acesso.LoginController;
+import br.com.washii.presentation.agendamentos.ClienteAgendamentoController;
 import br.com.washii.presentation.home.HomeClienteController;
+import br.com.washii.presentation.home.HomeNegocioController;
 import br.com.washii.presentation.layout.ClienteLayoutController;
 import br.com.washii.presentation.layout.NegocioLayoutController;
 import br.com.washii.presentation.servico.GestaoServicosController;
@@ -48,6 +50,14 @@ public class ControllerFactory {
 
         if (clazz == HomeClienteController.class) {
             return new HomeClienteController(serviceFactory.criarUsuarioService());
+        }
+
+        if (clazz == HomeNegocioController.class) {
+            return new HomeNegocioController(serviceFactory.criarAgendamentoService());
+        }
+
+        if (clazz == ClienteAgendamentoController.class) {
+            return new ClienteAgendamentoController(serviceFactory.criarAgendamentoService());
         }
 
         // Se o controller não tiver dependências, usamos o construtor padrão

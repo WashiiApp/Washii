@@ -72,27 +72,5 @@ public class UsuarioService {
 
     public List<Negocio> listarTodosNegocios(){
         return usuarioRepository.listarTodosLavaJatos();
-        //addNegocios();
-        //return negocios;
-    }
-
-    private List<Negocio> negocios= new ArrayList<>();
-
-    private void addNegocios(){
-        for(int i = 0; i < 5; i++){
-            Endereco end = new Endereco();
-            end.setRua("Ruas dos Cavalos");
-            end.setEstado("Paraíba");
-            end.setCidade("Feijão");
-            LavaJato lj = new LavaJato("Washii", "washii@gmail.com", "234", end, TipoUsuario.NEGOCIO);
-
-            lj.addCategoriasAceitas(CategoriaVeiculo.CARRO);
-            lj.addCategoriasAceitas(CategoriaVeiculo.MOTO);
-
-            Servico ser= new Servico("Lavagem simples", "Lavagem com água e sabão", CategoriaServico.LAVAGEM_SIMPLES, 65, lj);
-            lj.addServicosOferecidos(ser);
-
-            negocios.add(lj);
-        }
     }
 }

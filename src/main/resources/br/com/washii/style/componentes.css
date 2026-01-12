@@ -366,7 +366,7 @@
     -fx-background-color: #fceaea;
     -fx-background-radius: 20;
     -fx-text-fill: #C15050;
-    -fx-border-color: #C15050;
+    -fx-border-color: -color-danger;
     -fx-border-radius: 20;
     -fx-font-weight: bold;
     -fx-cursor: hand;
@@ -380,4 +380,89 @@
 .btn-cancelar:pressed {
     -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+/* Cards de Resumo */
+.kpi-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+    -fx-alignment: center;
+}
+
+.kpi-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #95a5a6;
+}
+
+.kpi-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+}
+
+.kpi-value-em-andamento {
+    -fx-text-fill: -fx-color-pendente;
+}
+
+.kpi-value-finalizado {
+    -fx-text-fill: -fx-color-concluido;
+}
+
+/* Títulos de Seção */
+.section-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #636e72;
+}
+
+/* Badge de contagem ao lado do título */
+.count-badge {
+    -fx-background-color: #dfe6e9;
+    -fx-background-radius: 10;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+}
+
+.label-servico {
+    -fx-text-fill: #555555;
+    -fx-font-size: 13px;
+}
+
+.label-servico-preco {
+    -fx-text-fill: #2D82B7; /* Cor azul para destacar o valor */
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+/* Garante que o HBox ocupe a largura total do VBox */
+.vbox-servicos {
+    -fx-fill-width: true;
+}
+
+/* Área que envolve o FlowPane para dar profundidade */
+.flow-container {
+    -fx-background-color: #f1f3f4; /* Cinza um pouco mais escuro que o fundo */
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+    -fx-border-color: #dfe6e9;
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+    -fx-min-height: 10; /* Garante que a área apareça mesmo vazia */
+}
+
+/* Destaque específico para a coluna "Em Andamento" para chamar atenção */
+.container-andamento {
+    -fx-background-color: #e3f2fd; /* Azul bem clarinho */
+    -fx-border-color: #bbdefb;
+}
+
+/* Destaque para Finalizados */
+.container-finalizado {
+    -fx-background-color: #e8f5e9; /* Verde bem clarinho */
+    -fx-border-color: #c8e6c9;
 }

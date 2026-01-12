@@ -282,3 +282,102 @@
 .btn-agendar:pressed {
     -fx-background-color: #1E8449;
 }
+
+/* Card Principal */
+.agendamento-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+/* Badges (Etiquetas) superiores */
+.badge-id {
+    -fx-background-color: -color-brand;
+    -fx-background-radius: 15;
+    -fx-text-fill: white;
+    -fx-padding: 5 15 5 15;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+/* Estilo Base para todos os Status */
+.badge-status {
+    -fx-background-radius: 15;
+    -fx-text-fill: white;
+    -fx-padding: 5 15 5 15;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.status-pendente {
+    -fx-background-color: -fx-color-pendente;
+}
+
+.status-agendado {
+    -fx-background-color: -fx-color-agendado;
+}
+
+.status-concluido {
+    -fx-background-color: -fx-color-concluido;
+}
+
+.status-cancelado {
+    -fx-background-color: -fx-color-cancelado;
+}
+
+.status-nao-compareceu {
+    -fx-background-color: -fx-color-nao-compareceu;
+}
+
+/* Títulos de seção */
+.section-title {
+    -fx-text-fill: #777777;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+/* Informações do Veículo */
+.label-placa {
+    -fx-text-fill: #2D82B7;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Botões */
+.btn-iniciar {
+    -fx-background-color: #68B92E;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 2, 2);
+}
+
+.btn-iniciar:hover {
+    -fx-background-color: #5aa128;
+}
+
+.btn-iniciar:pressed {
+    -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.btn-cancelar {
+    -fx-background-color: #fceaea;
+    -fx-background-radius: 20;
+    -fx-text-fill: #C15050;
+    -fx-border-color: #C15050;
+    -fx-border-radius: 20;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 2, 2);
+}
+
+.btn-cancelar:hover {
+    -fx-background-color: #f7d5d5;
+}
+
+.btn-cancelar:pressed {
+    -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}

@@ -55,7 +55,7 @@ public class NegocioCardController extends BaseController{
         Endereco endereco = lj.getEndereco();
         lblEndereco.setText(endereco.getRua() + ", " + endereco.getNumero() + "\n" + endereco.getCidade() + "\n" + endereco.getEstado());
 
-        String star = "★";
+        String star = "★ ";
         lblAvaliacao.setText(star + " 0.0 (sem avaliações)");
         
         // Limpa as listas padrões do FXML

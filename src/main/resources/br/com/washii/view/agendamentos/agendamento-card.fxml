@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxWidth="350.0" minWidth="300.0" spacing="10.0" styleClass="agendamento-card" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seu.pacote.AgendamentoCardController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label fx:id="lblNumeroAgendamento" styleClass="badge-id" text="AGENDAMENTO #1" />
+            <Label fx:id="lblStatus" styleClass="badge-status-pendente" text="PENDENTE" />
+         </children>
+      </HBox>
+      <VBox alignment="CENTER">
+         <children>
+            <Label fx:id="lblDataHora" text="Hoje, 09:30" textFill="#444444">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Separator />
+      <Label styleClass="section-title" text="DADOS DO CLIENTE" />
+
+      <VBox spacing="3.0">
+         <children>
+            <Label fx:id="lblNomeCliente" text="Joao Pereira">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblPlacaVeiculo" styleClass="label-placa" text="ABC-1234" />
+            <Label fx:id="lblModeloVeiculo" text="Toyota Corolla (Sedan)" textFill="#666666">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets left="15.0" />
+         </padding>
+      </VBox>
+      <Separator />
+      <Label styleClass="section-title" text="SERVIÇO(S)" />
+
+      <VBox fx:id="vboxServicos" spacing="5.0">
+         <padding>
+            <Insets left="15.0" />
+         </padding>
+      </VBox>
+      <Separator />
+
+      <HBox alignment="CENTER" spacing="15.0">
+         <children>
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#handleCancelar" prefHeight="35.0" prefWidth="130.0" styleClass="btn-cancelar" text="CANCELAR" />
+            <Button fx:id="btnIniciar" mnemonicParsing="false" onAction="#handleIniciar" prefHeight="35.0" prefWidth="130.0" styleClass="btn-iniciar" text="INICIAR" />
+         </children>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

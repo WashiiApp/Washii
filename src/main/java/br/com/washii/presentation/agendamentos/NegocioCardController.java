@@ -4,7 +4,6 @@ package br.com.washii.presentation.agendamentos;
 import br.com.washii.domain.entities.Endereco;
 import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Servico;
-import br.com.washii.domain.enums.CategoriaVeiculo;
 import br.com.washii.presentation.core.BaseController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,9 +39,6 @@ public class NegocioCardController extends BaseController{
     private VBox vboxServicos;
 
     @FXML
-    private VBox vboxVeiculos;
-
-    @FXML
     void onAgendarAction(ActionEvent event) {
         FXMLLoader loader = sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/cliente-agendamento.fxml");
 
@@ -64,7 +60,6 @@ public class NegocioCardController extends BaseController{
         
         // Limpa as listas padrões do FXML
         vboxServicos.getChildren().clear();
-        vboxVeiculos.getChildren().clear();
 
         // Adiciona os serviços dinamicamente
         for (Servico s : lj.getServicosOferecidos()) {
@@ -72,14 +67,6 @@ public class NegocioCardController extends BaseController{
             item.setWrapText(true);
             item.getStyleClass().add("item-lista");
             vboxServicos.getChildren().add(item);
-        }
-        
-        // Adiciona os veículos
-        for (CategoriaVeiculo v : lj.getCategoriasAceitas()) {
-            Label item = new Label("• " + v.toString().toLowerCase());
-            item.setWrapText(true);
-            item.getStyleClass().add("item-lista");
-            vboxVeiculos.getChildren().add(item);
         }
     }
 }

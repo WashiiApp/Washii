@@ -49,23 +49,6 @@
                   </VBox>
                </children>
             </VBox>
-
-            <Separator orientation="VERTICAL" />
-
-            <VBox prefWidth="160.0" spacing="5.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Label styleClass="label-sessao" text="Veículos Atendidos" textFill="#2c3e50" wrapText="true">
-                     <font><Font name="System Bold" size="13.0" /></font>
-                  </Label>
-                  <VBox fx:id="vboxVeiculos" spacing="3.0">
-                     <children>
-                        <Label styleClass="item-lista" text="• Carros de Passeio" wrapText="true" />
-                        <Label styleClass="item-lista" text="• Motocicletas" wrapText="true" />
-                        <Label styleClass="item-lista" text="• SUVs e Picapes" wrapText="true" />
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
          </children>
          <padding>
             <Insets left="15.0" right="15.0" top="15.0" />

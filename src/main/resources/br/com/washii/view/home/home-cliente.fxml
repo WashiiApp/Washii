@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="homeCliente" fitToWidth="true" prefHeight="650.0" prefWidth="1000.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.home.HomeClienteController">
+<ScrollPane fx:id="homeCliente" fitToWidth="true" maxWidth="1.7976931348623157E308" prefHeight="650.0" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.home.HomeClienteController">
    <content>
       <VBox alignment="TOP_CENTER" styleClass="background-transparente">
          <children>
-            <VBox maxWidth="900.0" spacing="30.0" styleClass="background-transparente">
+            <VBox maxWidth="1.7976931348623157E308" spacing="30.0" styleClass="background-transparente">
                <children>
                   
                   <VBox spacing="5.0">
@@ -88,7 +88,7 @@
 
                   <VBox spacing="10.0">
                      <children>
-                        <FlowPane fx:id="gridCards" hgap="25.0" prefWrapLength="850.0" vgap="25.0" />
+                        <FlowPane fx:id="gridCards" alignment="TOP_CENTER" columnHalignment="CENTER" hgap="25.0" prefWrapLength="850.0" rowValignment="TOP" vgap="25.0" />
                      </children>
                   </VBox>
 
@@ -96,7 +96,7 @@
             </VBox>
          </children>
          <padding>
-            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            <Insets bottom="40.0" left="25.0" right="25.0" top="40.0" />
          </padding>
       </VBox>
    </content>

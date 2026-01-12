@@ -405,12 +405,12 @@ public class UsuarioPersistence implements UsuarioRepository {
 
                 LavaJato lavajato = new LavaJato();
 
-                // ===== Usuario =====
+                // setando usuario 
                 lavajato.setId(rs.getLong("usuario_id"));
                 lavajato.setNome(rs.getString("nome"));
                 lavajato.setEmail(rs.getString("email"));
 
-                // ===== Negocio =====
+                // setando o negocio
                 lavajato.setId(rs.getLong("negocio_id"));
                 lavajato.setCnpj(rs.getString("cnpj"));
                 lavajato.setRazaoSocial(rs.getString("razao_social"));
@@ -418,7 +418,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 lavajato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
                 lavajato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
 
-                // endereco
+                // setando o lavajato
                 Endereco endereco = new Endereco();
                 endereco.setId(rs.getLong("endereco_id"));
                 endereco.setCep(rs.getString("cep"));
@@ -427,7 +427,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 endereco.setRua(rs.getString("rua"));
                 lavajato.setEndereco(endereco);
 
-                // ===== Serviços (REUSO DO MÉTODO EXISTENTE) =====
+                // listando e adicionado todos serviços
                 List<Servico> servicos =
                         servicoRepo.listarPorNegocio(lavajato.getId());
 

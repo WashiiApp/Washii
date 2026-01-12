@@ -87,6 +87,36 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
     @Override
     public void atualizar(Agendamento entidade) {
+        String sqlAgendamento = """
+        UPDATE agendamento
+        SET data = ?,
+            hora = ?,
+            status = ?::status_agendamento,
+            id_cliente = ?,
+            id_veiculo = ?,
+            id_negocio = ?
+        WHERE id = ?
+    """;
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmtAg = conn.prepareStatement(sqlAgendamento);) {
+
+
+            stmtAg.setDate(1, Date.valueOf(entidade.getData()));
+            stmtAg.setTime(2, Time.valueOf(entidade.getHora()));
+            stmtAg.setString(3, entidade.getStatus().name());
+            stmtAg.setLong(4, entidade.getCliente().getId());
+            stmtAg.setLong(5, entidade.getVeiculo().getId());
+            stmtAg.setLong(6, entidade.getNegocio().getId());
+            stmtAg.setLong(7, entidade.getId());
+
+            stmtAg.executeUpdate();
+
+        }
+
+     catch (SQLException e) {
+        throw new RuntimeException("Erro ao atualizar agendamento", e);
+    }
 
     }
 

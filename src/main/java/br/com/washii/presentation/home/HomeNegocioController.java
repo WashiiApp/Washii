@@ -23,7 +23,7 @@ public class HomeNegocioController extends BaseController {
     private AgendamentoService agendamentoService;
 
     @FXML private Label countAgendados, countAndamento, countFinalizado, lblDataAtual;
-    @FXML private Label lblFaturamentoTotal, lblQtdAgendados, lblQtdAndamento;
+    @FXML private Label lblFaturamentoTotal, lblQtdAgendados, lblQtdAndamento, lblQtdFinalizados;
     @FXML private FlowPane flowAgendados, flowAndamento, flowFinalizados;
 
     public HomeNegocioController(AgendamentoService ag) {
@@ -68,6 +68,8 @@ public class HomeNegocioController extends BaseController {
                 qtdPendentes++;
             } else if (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO) { 
                 qtdAndamento++;
+            } else if (ag.getStatus() == StatusAgendamento.CONCLUIDO) {
+                qtdFinalizado ++;
             }
         }
 
@@ -76,9 +78,10 @@ public class HomeNegocioController extends BaseController {
         // Atualizar Labels de resumo
         lblQtdAgendados.setText(String.valueOf(qtdAgendados));
         lblQtdAndamento.setText(String.valueOf(qtdAndamento));
+        lblQtdFinalizados.setText(String.valueOf(qtdFinalizado));
         lblFaturamentoTotal.setText(String.format("R$ %.2f", faturamento));
         
-        countAgendados.setText(String.valueOf(qtdAgendados));
+        countAgendados.setText(String.valueOf(qtdPendentes));
         countAndamento.setText(String.valueOf(qtdAndamento));
         countFinalizado.setText(String.valueOf(qtdFinalizado));
     }

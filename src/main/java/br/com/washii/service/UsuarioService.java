@@ -1,17 +1,10 @@
 package br.com.washii.service;
-import br.com.washii.domain.entities.Endereco;
-import br.com.washii.domain.entities.LavaJato;
+
 import br.com.washii.domain.entities.Negocio;
-import br.com.washii.domain.entities.Servico;
 import br.com.washii.domain.entities.Usuario;
-import br.com.washii.domain.enums.CategoriaServico;
-import br.com.washii.domain.enums.CategoriaVeiculo;
-import br.com.washii.domain.enums.TipoUsuario;
 import br.com.washii.domain.exceptions.EmailJaCadastradoException;
 import br.com.washii.domain.repository.UsuarioRepository;
 import br.com.washii.infra.security.SenhaUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +24,6 @@ public class UsuarioService {
     /**
      * Salva um novo usuário no sistema
      */
-
     public void salvarNovoUsuario(Usuario user) {
         if (user == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");
@@ -68,6 +60,15 @@ public class UsuarioService {
         }
 
         usuarioRepository.remover(user.getId());
+    }
+
+    public Usuario buscarUsuarioPorId(Long id){
+        Optional<Usuario> userOpt = usuarioRepository.buscarPorId(id);
+
+        if (userOpt.isEmpty()){
+            throw new IllegalArgumentException("Esse usuario não existe");
+        }
+        return userOpt.get();
     }
 
     public List<Negocio> listarTodosNegocios(){

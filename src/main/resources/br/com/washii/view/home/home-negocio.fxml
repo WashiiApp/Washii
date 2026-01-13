@@ -46,7 +46,7 @@
                   <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
                      <children>
                         <Label styleClass="kpi-title" text="FINALIZADOS" />
-                        <Label fx:id="lblQtdAndamento1" text="0">
+                        <Label fx:id="lblQtdFinalizados" text="0">
                            <styleClass>
                               <String fx:value="kpi-value" />
                               <String fx:value="kpi-value-finalizado" />

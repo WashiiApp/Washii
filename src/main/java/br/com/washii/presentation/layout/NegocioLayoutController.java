@@ -66,7 +66,7 @@ public class NegocioLayoutController extends LayoutController {
         } else if (containerClicked == navServico) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/servico/gestao-servicos.fxml");
         } else if (containerClicked == navPerfil) {
-            sceneManager.loadCenterBorderPane(null);
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-negocio.fxml");
         }
     }
 }

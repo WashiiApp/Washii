@@ -371,26 +371,26 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         String sql = """
         SELECT
-            n.id AS negocio_id,
+            u.id AS usuario_id,
+        
             n.cnpj,
             n.razao_social,
             n.inicio_expediente,
             n.fim_expediente,
-
-            u.id AS usuario_id,
+        
             u.nome,
             u.email,
-
+        
             e.id AS endereco_id,
             e.cep,
             e.estado,
             e.bairro,
             e.rua
-        FROM negocio n
-        JOIN usuario u ON u.id = n.id_usuario
+        FROM usuario u
+        JOIN negocio n ON n.id_usuario = u.id
         JOIN endereco e ON e.id = u.id_endereco
         WHERE u.tipo = 'NEGOCIO'
-        ORDER BY n.id
+        ORDER BY u.id;
     """;
 
         List<Negocio> negocios = new ArrayList<>();
@@ -405,33 +405,35 @@ public class UsuarioPersistence implements UsuarioRepository {
 
                 LavaJato lavajato = new LavaJato();
 
-                // setando usuario 
+                // setando lavajato
                 lavajato.setId(rs.getLong("usuario_id"));
+
                 lavajato.setNome(rs.getString("nome"));
                 lavajato.setEmail(rs.getString("email"));
-
-                // setando o negocio
-                lavajato.setId(rs.getLong("negocio_id"));
                 lavajato.setCnpj(rs.getString("cnpj"));
                 lavajato.setRazaoSocial(rs.getString("razao_social"));
 
-                lavajato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
-                lavajato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+                lavajato.setInicioExpediente(
+                        rs.getTime("inicio_expediente").toLocalTime()
+                );
+                lavajato.setFimExpediente(
+                        rs.getTime("fim_expediente").toLocalTime()
+                );
 
-                // setando o lavajato
+                // setando endereço
                 Endereco endereco = new Endereco();
                 endereco.setId(rs.getLong("endereco_id"));
                 endereco.setCep(rs.getString("cep"));
                 endereco.setEstado(rs.getString("estado"));
                 endereco.setBairro(rs.getString("bairro"));
                 endereco.setRua(rs.getString("rua"));
+
                 lavajato.setEndereco(endereco);
 
-                // listando e adicionado todos serviços
-                List<Servico> servicos =
-                        servicoRepo.listarPorNegocio(lavajato.getId());
-
-                lavajato.setServicosOferecidos(servicos);
+                // buscando pelo os serviços pelo o id do lavajato
+                lavajato.setServicosOferecidos(
+                        servicoRepo.listarPorNegocio(lavajato.getId())
+                );
 
                 negocios.add(lavajato);
             }

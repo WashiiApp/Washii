@@ -15,6 +15,7 @@ public class LavaJato extends Negocio {
 
     private Set<CategoriaVeiculo> categoriasAceitas = new HashSet<>();
     private List<Servico> servicosOferecidos = new ArrayList<>();
+    private Long idNegocio;
 
     // Construtor padrão
     public LavaJato() {
@@ -47,6 +48,7 @@ public class LavaJato extends Negocio {
         this.servicosOferecidos = servicosOferecidos;
     }
 
+
     /**
      * Regra de Negócio: Verifica se o Lava-Jato tem estrutura para o veículo do cliente.
      */
@@ -62,6 +64,14 @@ public class LavaJato extends Negocio {
 
     public void setCategoriasAceitas(Set<CategoriaVeiculo> categoriasAceitas) {
         this.categoriasAceitas = categoriasAceitas;
+    }
+
+    public Long getIdNegocio() {
+        return idNegocio;
+    }
+
+    public void setIdNegocio(Long idNegocio) {
+        this.idNegocio = idNegocio;
     }
 
     public void addCategoriasAceitas(CategoriaVeiculo categoriaVeiculo){

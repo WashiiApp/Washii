@@ -29,7 +29,7 @@ public class AgendamentoCardController {
     @FXML private Label lblPlacaVeiculo;
     @FXML private Label lblStatus;
     @FXML private VBox vboxServicos;
-
+    @FXML private VBox cardRoot;
     private Agendamento agendamento;
 
     private boolean emAndamento = false;
@@ -116,14 +116,21 @@ public class AgendamentoCardController {
             "status-concluido", "status-nao-compareceu"
         );
 
+        cardRoot.getStyleClass().removeAll(
+            "agendamento-card-em-andamento", "agendamento-card-cancelado", "agendamento-card-agendado", "agendamento-card-concluido", "agendamento-card-nao-compareceu"
+        );  
+
         // Adiciona a classe base (se não houver no FXML) e a específica das variáveis CSS
         if (!lblStatus.getStyleClass().contains("badge-status")) {
             lblStatus.getStyleClass().add("badge-status");
         }
         
         // Mapeia o Enum para a classe CSS: status-nome-do-enum
-        String classeCss = "status-" + status.name().toLowerCase().replace("_", "-");
-        lblStatus.getStyleClass().add(classeCss);
+        String classeCssCard = "agendamento-card-" + status.name().toLowerCase().replace("_", "-");
+        String classeCssStatus = "status-" + status.name().toLowerCase().replace("_", "-");
+
+        cardRoot.getStyleClass().add(classeCssCard);
+        lblStatus.getStyleClass().add(classeCssStatus);
     }
 
     @FXML

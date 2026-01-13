@@ -89,7 +89,9 @@ public class Endereco {
     }
 
     public void setEstado(String estado) {
-        this.estado = estado.trim();
+        if (estado != null) {
+            this.estado = estado.trim();
+        }
     }
 
     public String getCidade() {
@@ -97,7 +99,7 @@ public class Endereco {
     }
 
     public void setCidade(String cidade) {
-        this.cidade = cidade.trim();
+        if (cidade != null) this.cidade = cidade.trim();
     }
 
     public String getRua() {

@@ -94,10 +94,6 @@
     -fx-transition-duration: 0.2s;
 }
 
-.button-primary:focus-within {
-    -fx-background-color: -color-brand-glow;
-}
-
 .button-primary:pressed {
     /* Uma versão levemente mais escura do seu azul */
     -fx-translate-y: 1px;                     /* Move o botão 2 pixels para baixo */
@@ -287,7 +283,30 @@
 .agendamento-card {
     -fx-background-color: white;
     -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.agendamento-card-em-andamento {
+    -fx-border-color: -fx-color-pendente;
+}
+
+.agendamento-card-cancelado {
+    -fx-border-color: -fx-color-cancelado;
+}
+
+.agendamento-card-agendado {
+    -fx-border-color: -fx-color-agendado;
+}
+
+.agendamento-card-concluido {
+    -fx-border-color: -fx-color-concluido;
+}
+
+.agendamento-card-nao-compareceu {
+    -fx-border-color: -fx-color-nao-compareceu;
 }
 
 /* Badges (Etiquetas) superiores */
@@ -465,4 +484,37 @@
 .container-finalizado {
     -fx-background-color: #e8f5e9; /* Verde bem clarinho */
     -fx-border-color: #c8e6c9;
+}
+
+/* ------- perfil negocio --------- */
+
+/* Estilo quando o campo NÃO é editável (parece um Label) */
+.field-dados:readonly, .field-titulo:readonly {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Estilo quando o campo é editável (ganha borda e fundo) */
+.field-dados {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 4;
+    -fx-padding: 5 10;
+}
+
+.section-header {
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-brand;
+    -fx-font-size: 15px;
+}
+
+.label-legenda {
+    -fx-text-fill: -color-text-muted;
+    -fx-font-size: 12px;
+}
+
+.btn-salvar {
+    -fx-background-color: #2ecc71; /* Verde para indicar salvamento */
+    -fx-text-fill: white;
 }

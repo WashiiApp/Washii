@@ -57,7 +57,7 @@ public class AgendamentoMock {
 
         Agendamento ag4 = new Agendamento(c4, washCenter, LocalDate.now(), LocalTime.now().plusHours(4), v4);
         ag4.setId(104L);
-        ag4.setStatus(StatusAgendamento.AGENDADO);
+        ag4.setStatus(StatusAgendamento.CONCLUIDO);
         ag4.addServico(new Servico("Higienização", "Ozônio", CategoriaServico.HIGIENIZACAO, 200.0, washCenter));
         lista.add(ag4);
 

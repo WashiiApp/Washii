@@ -19,7 +19,7 @@
                <children>
                   <ImageView fx:id="imgLogo" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../assets/icons/branding/sistem-icon/image.png" />
+                        <Image url="@../../assets/images/perfil/image.png" />
                      </image></ImageView>
                   <Label fx:id="lblNome" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Nome do Negócio" textAlignment="CENTER" wrapText="true">
                      <font><Font name="System Bold" size="15.0" /></font>

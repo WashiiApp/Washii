@@ -7,6 +7,8 @@ import br.com.washii.presentation.home.HomeClienteController;
 import br.com.washii.presentation.home.HomeNegocioController;
 import br.com.washii.presentation.layout.ClienteLayoutController;
 import br.com.washii.presentation.layout.NegocioLayoutController;
+import br.com.washii.presentation.perfil.PerfilClienteController;
+import br.com.washii.presentation.perfil.PerfilNegocioController;
 import br.com.washii.presentation.servico.GestaoServicosController;
 import br.com.washii.service.ServiceFactory;
 
@@ -58,6 +60,14 @@ public class ControllerFactory {
 
         if (clazz == ClienteAgendamentoController.class) {
             return new ClienteAgendamentoController(serviceFactory.criarAgendamentoService());
+        }
+
+        if (clazz == PerfilClienteController.class) {
+            return new PerfilClienteController(serviceFactory.criarUsuarioService());
+        }
+
+        if (clazz == PerfilNegocioController.class) {
+            return new PerfilNegocioController(serviceFactory.criarUsuarioService());
         }
 
         // Se o controller não tiver dependências, usamos o construtor padrão

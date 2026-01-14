@@ -133,6 +133,7 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.estado,
         e.bairro,
         e.rua,
+        e.cidade,
         e.referencia,
 
         c.telefone,
@@ -189,6 +190,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             endereco.setEstado(rs.getString("estado"));
             endereco.setBairro(rs.getString("bairro"));
             endereco.setRua(rs.getString("rua"));
+            endereco.setCidade(rs.getString("cidade"));
             endereco.setReferencia(rs.getString("referencia"));
             usuario.setEndereco(endereco);
 
@@ -216,6 +218,7 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.estado,
         e.bairro,
         e.rua,
+        e.cidade,
         e.referencia,
 
         c.telefone,
@@ -269,6 +272,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 endereco.setEstado(rs.getString("estado"));
                 endereco.setBairro(rs.getString("bairro"));
                 endereco.setRua(rs.getString("rua"));
+                endereco.setCidade(rs.getString("cidade"));
                 endereco.setReferencia(rs.getString("referencia"));
 
                 usuario.setEndereco(endereco);
@@ -300,6 +304,7 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.estado,
         e.bairro,
         e.rua,
+        e.cidade,
         e.referencia,
 
         c.telefone,
@@ -355,6 +360,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             endereco.setEstado(rs.getString("estado"));
             endereco.setBairro(rs.getString("bairro"));
             endereco.setRua(rs.getString("rua"));
+            endereco.setCidade(rs.getString("cidade"));
             endereco.setReferencia(rs.getString("referencia"));
 
             usuario.setEndereco(endereco);
@@ -385,7 +391,8 @@ public class UsuarioPersistence implements UsuarioRepository {
             e.cep,
             e.estado,
             e.bairro,
-            e.rua
+            e.rua,
+            e.cidade
         FROM usuario u
         JOIN negocio n ON n.id_usuario = u.id
         JOIN endereco e ON e.id = u.id_endereco
@@ -427,6 +434,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 endereco.setEstado(rs.getString("estado"));
                 endereco.setBairro(rs.getString("bairro"));
                 endereco.setRua(rs.getString("rua"));
+                endereco.setCidade(rs.getString("cidade"));
 
                 lavajato.setEndereco(endereco);
 
@@ -448,8 +456,8 @@ public class UsuarioPersistence implements UsuarioRepository {
     // salvar o endereço
     public void salvarEndereco(Usuario usuario) {
         String sqlEndereco = """
-        INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO endereco (cep, pais, estado, cidade, bairro, rua, referencia, rua)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         RETURNING id
     """;
 
@@ -470,6 +478,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                     stmtEndereco.setString(4, e.getBairro());
                     stmtEndereco.setString(5, e.getRua());
                     stmtEndereco.setString(6, e.getReferencia());
+                    stmtEndereco.setString(7, e.getRua());
 
                     ResultSet rs = stmtEndereco.executeQuery();
                     if (rs.next()) {

@@ -279,6 +279,7 @@
     -fx-background-color: #1E8449;
 }
 
+/* --- Card de agendamento para negocio --- */
 /* Card Principal */
 .agendamento-card {
     -fx-background-color: white;
@@ -328,7 +329,7 @@
     -fx-font-size: 11px;
 }
 
-.status-pendente {
+.status-em-andamento {
     -fx-background-color: -fx-color-pendente;
 }
 

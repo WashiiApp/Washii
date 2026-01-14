@@ -73,8 +73,9 @@
                                  </children>
                               </VBox>
                               
-                              <HBox alignment="CENTER_RIGHT" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+                              <HBox alignment="CENTER_RIGHT" spacing="30.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                                  <children>
+                                    <Button fx:id="btnLimparfiltro" mnemonicParsing="false" onAction="#handleLimparFiltro" prefHeight="37.0" prefWidth="150.0" styleClass="button-secondary" text="Limpar Filtro" />
                                     <Button fx:id="btnFiltrar" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" styleClass="button-primary" text="FILTRAR" />
                                  </children>
                               </HBox>

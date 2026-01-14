@@ -34,12 +34,12 @@
                   </StackPane>
                   <VBox alignment="CENTER_LEFT" spacing="5.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="txtNomeNegocio" editable="false" styleClass="field-titulo" text="Nome do Negócio">
+                        <TextField fx:id="txtNomeNegocio" editable="false" promptText="Nome do Negócio" styleClass="field-titulo">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="txtEmail" editable="false" styleClass="field-dados" text="contato@washii.com.br" />
+                        <TextField fx:id="txtEmail" editable="false" promptText="contato@washii.com.br" styleClass="field-dados" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" minWidth="-Infinity" spacing="20.0">
@@ -68,13 +68,13 @@
                         <VBox spacing="5.0">
                            <children>
                               <Label styleClass="label-legenda" text="CNPJ" />
-                              <TextField fx:id="txtCnpj" editable="false" styleClass="field-dados" text="00.000.000/0001-00" />
+                              <TextField fx:id="txtCnpj" editable="false" promptText="00.000.000/0000-00" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="1">
                            <children>
                               <Label styleClass="label-legenda" text="Razão Social" />
-                              <TextField fx:id="txtRazaoSocial" editable="false" styleClass="field-dados" text="Washii Estética Automotiva LTDA" />
+                              <TextField fx:id="txtRazaoSocial" editable="false" promptText="Washii Estética Automotiva LTDA" styleClass="field-dados" />
                            </children>
                         </VBox>
                     </children>
@@ -98,37 +98,37 @@
                         <VBox spacing="5.0">
                            <children>
                               <Label styleClass="label-legenda" text="CEP" />
-                              <TextField fx:id="txtCep" editable="false" styleClass="field-dados" text="00000-000" />
+                              <TextField fx:id="txtCep" editable="false" promptText="00000-000" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.rowIndex="1">
                            <children>
                               <Label styleClass="label-legenda" text="Estado" />
-                              <TextField fx:id="txtEstado" editable="false" styleClass="field-dados" text="Sao Paulo" />
+                              <TextField fx:id="txtEstado" editable="false" promptText="São Paulo" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <Label styleClass="label-legenda" text="Rua" />
-                              <TextField fx:id="txtRua" editable="false" styleClass="field-dados" text="Av. Das Lavagens" />
+                              <TextField fx:id="txtRua" editable="false" promptText="Av. Das Lavagens" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="1">
                            <children>
                               <Label styleClass="label-legenda" text="Cidade" />
-                              <TextField fx:id="txtCidade" editable="false" styleClass="field-dados" text="São Paulo" />
+                              <TextField fx:id="txtCidade" editable="false" promptText="São Paulo" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="2">
                            <children>
                               <Label styleClass="label-legenda" text="Bairro" />
-                              <TextField fx:id="txtBairro" editable="false" styleClass="field-dados" text="Centro" />
+                              <TextField fx:id="txtBairro" editable="false" promptText="São Paulo" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
                               <Label styleClass="label-legenda" text="Número" />
-                              <TextField fx:id="txtNumero" editable="false" styleClass="field-dados" text="123" />
+                              <TextField fx:id="txtNumero" editable="false" promptText="123" styleClass="field-dados" />
                            </children>
                         </VBox>
                     </children>
@@ -148,19 +148,19 @@
                         <VBox spacing="5.0">
                            <children>
                               <Label styleClass="label-legenda" text="Início Expediente" />
-                              <TextField fx:id="txtInicio" editable="false" prefWidth="120.0" styleClass="field-dados" text="08:00" />
+                              <TextField fx:id="txtInicio" editable="false" prefWidth="120.0" promptText="08:00" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0">
                            <children>
                               <Label styleClass="label-legenda" text="Fim Expediente" />
-                              <TextField fx:id="txtFim" editable="false" prefWidth="120.0" styleClass="field-dados" text="18:00" />
+                              <TextField fx:id="txtFim" editable="false" prefWidth="120.0" promptText="18:00" styleClass="field-dados" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0">
                            <children>
                               <Label styleClass="label-legenda" text="Capacidade de Atendimento Simultânea" />
-                              <TextField fx:id="txtCapacidade" editable="false" prefWidth="150.0" styleClass="field-dados" text="4 atendimentos" />
+                              <TextField fx:id="txtCapacidade" editable="false" prefWidth="150.0" promptText="4 atendimentos" styleClass="field-dados" />
                            </children>
                         </VBox>
                      </children>

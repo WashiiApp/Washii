@@ -27,6 +27,7 @@ public class AgendamentoMock {
         ag1.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
         ag1.addServico(new Servico("Pretinho", "Pneus brilhando", CategoriaServico.OUTROS, 10.0, washCenter));
         lista.add(ag1);
+
         return lista;
     }
 }

@@ -3,7 +3,6 @@ package br.com.washii.presentation.perfil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -14,14 +13,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
-
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.utils.AvisoUtils;
 import br.com.washii.service.UsuarioService;
-
 import java.io.File;
 import java.util.List;
 
@@ -29,53 +26,16 @@ public class PerfilNegocioController {
 
     private UsuarioService usuarioService;
 
-    @FXML private Button btnEditar;
-    @FXML private Button btnCancelar;
+    @FXML private Button btnEditar, btnCancelar;
     @FXML private Circle circleFoto;
     @FXML private FontIcon iconCamera;
     @FXML private StackPane paneFoto;
     @FXML private TextFlow containerAviso;
     
     // Campos de Texto
-    @FXML
-    private TextField txtBairro;
-
-    @FXML
-    private TextField txtCapacidade;
-
-    @FXML
-    private TextField txtCep;
-
-    @FXML
-    private TextField txtCidade;
-
-    @FXML
-    private TextField txtCnpj;
-
-    @FXML
-    private TextField txtEmail;
-
-    @FXML
-    private TextField txtEstado;
-
-    @FXML
-    private TextField txtFim;
-
-    @FXML
-    private TextField txtInicio;
-
-    @FXML
-    private TextField txtNomeNegocio;
-
-    @FXML
-    private TextField txtNumero;
-
-    @FXML
-    private TextField txtRazaoSocial;
-
-    @FXML
-    private TextField txtRua;
-
+    @FXML private TextField txtBairro, txtCapacidade, txtCep, txtCidade, 
+                            txtCnpj, txtEmail, txtEstado, txtFim, txtInicio, 
+                            txtNomeNegocio, txtNumero, txtRazaoSocial, txtRua;
 
     private List<TextField> todosCampos;
     private boolean modoEdicao = false;

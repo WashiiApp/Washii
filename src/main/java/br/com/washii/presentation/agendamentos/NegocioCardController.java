@@ -62,11 +62,23 @@ public class NegocioCardController extends BaseController{
         vboxServicos.getChildren().clear();
 
         // Adiciona os serviços dinamicamente
+        int cont = 0;
         for (Servico s : lj.getServicosOferecidos()) {
-            Label item = new Label("• " + s.getNome());
-            item.setWrapText(true);
-            item.getStyleClass().add("item-lista");
-            vboxServicos.getChildren().add(item);
+            if (cont >= 5){
+                Label fim = new Label("...");
+                fim.setWrapText(true);
+                fim.getStyleClass().add("item-lista");
+                vboxServicos.getChildren().add(fim);
+
+                break;
+            } else {
+                Label item = new Label("• " + s.getNome());
+                item.setWrapText(true);
+                item.getStyleClass().add("item-lista");
+                vboxServicos.getChildren().add(item);
+            }
+        
+            cont++;
         }
     }
 }

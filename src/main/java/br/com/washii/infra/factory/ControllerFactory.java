@@ -3,6 +3,7 @@ package br.com.washii.infra.factory;
 import br.com.washii.presentation.acesso.CadastroController;
 import br.com.washii.presentation.acesso.LoginController;
 import br.com.washii.presentation.agendamentos.ClienteAgendamentoController;
+import br.com.washii.presentation.agendamentos.MeusAgendamentosClienteController;
 import br.com.washii.presentation.home.HomeClienteController;
 import br.com.washii.presentation.home.HomeNegocioController;
 import br.com.washii.presentation.layout.ClienteLayoutController;
@@ -68,6 +69,10 @@ public class ControllerFactory {
 
         if (clazz == PerfilNegocioController.class) {
             return new PerfilNegocioController(serviceFactory.criarUsuarioService());
+        }
+
+        if (clazz == MeusAgendamentosClienteController.class) {
+            return new MeusAgendamentosClienteController(serviceFactory.criarAgendamentoService());
         }
 
         // Se o controller não tiver dependências, usamos o construtor padrão

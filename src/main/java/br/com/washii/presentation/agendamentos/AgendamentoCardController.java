@@ -37,8 +37,8 @@ public class AgendamentoCardController {
     private Runnable onUpdate;
 
     public void setOnUpdate(Runnable onUpdate) {
-    this.onUpdate = onUpdate;
-}
+        this.onUpdate = onUpdate;
+    }
 
     public void setService(AgendamentoService agendamentoService){
         this.agendamentoService = agendamentoService;

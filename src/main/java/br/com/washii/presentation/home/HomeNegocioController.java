@@ -110,7 +110,6 @@ public class HomeNegocioController extends BaseController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Erro ao carregar card de agendamento.");
         }
     }
 

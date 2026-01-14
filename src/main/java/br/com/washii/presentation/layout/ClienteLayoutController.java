@@ -2,6 +2,8 @@ package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
+
+import br.com.washii.presentation.agendamentos.MeusAgendamentosClienteController;
 import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.presentation.home.HomeClienteController;
 import br.com.washii.service.AutenticacaoService;
@@ -16,7 +18,7 @@ public class ClienteLayoutController extends LayoutController {
     @FXML private HomeClienteController homeClienteController;
 
     @FXML
-    private HBox navHome, navAgendamentos, navHistorico, navPerfil;
+    private HBox navHome, navAgendamentos, navPerfil;
 
     private List<HBox> allNavContainer;
 
@@ -40,7 +42,7 @@ public class ClienteLayoutController extends LayoutController {
     void initialize() {
         setBoasVindas();
 
-        allNavContainer = Arrays.asList(navHome, navAgendamentos, navHistorico, navPerfil);
+        allNavContainer = Arrays.asList(navHome, navAgendamentos, navPerfil);
     }
 
     @FXML
@@ -60,9 +62,8 @@ public class ClienteLayoutController extends LayoutController {
             controller.carregarNegocios();
 
         } else if (containerClicked == navAgendamentos) {
-            sceneManager.loadCenterBorderPane(null);
-        } else if (containerClicked == navHistorico) {
-            sceneManager.loadCenterBorderPane(null);
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/meus-agendamentos-cliente.fxml");
+
         } else if (containerClicked == navPerfil) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-usuario.fxml");
         }

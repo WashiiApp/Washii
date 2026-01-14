@@ -251,7 +251,7 @@ public class PerfilNegocioController {
             AvisoUtils.exibirAvisoErro(containerAviso, e.getMessage());
         } catch (Exception e) {
             AvisoUtils.exibirAvisoErro(containerAviso, "Ocorreu um erro inesperado: " + e.getMessage());
-            
+            e.printStackTrace();
         } finally {
             limparAvisos(5);
         }

@@ -1,7 +1,6 @@
 package br.com.washii.persistence;
 
-import br.com.washii.domain.entities.Agendamento;
-import br.com.washii.domain.entities.Servico;
+import br.com.washii.domain.entities.*;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.repository.AgendamentoRepository;
 import br.com.washii.infra.database.DatabaseConfig;
@@ -9,15 +8,63 @@ import br.com.washii.infra.database.DatabaseConfig;
 import java.awt.datatransfer.Clipboard;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.sql.*;
 
 public class AgendamentoPersistence implements AgendamentoRepository {
     @Override
-    public List<Agendamento> listarPorPeriodoENegocio(LocalDate inicio, LocalDate fim, Long negocioId) {
-        return List.of();
-    }
+        public List<Agendamento> listarPorPeriodoENegocio(
+                LocalDate inicio, LocalDate fim, Long negocioId) {
+
+            String sql = """
+        SELECT id, data, hora, status, id_cliente, id_veiculo
+        FROM agendamento
+        WHERE id_negocio = ?
+          AND data BETWEEN ? AND ?
+        ORDER BY data, hora
+    """;
+
+            List<Agendamento> agendamentos = new ArrayList<>();
+
+            try (Connection conn = DatabaseConfig.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setLong(1, negocioId);
+                stmt.setDate(2, Date.valueOf(inicio));
+                stmt.setDate(3, Date.valueOf(fim));
+
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    Agendamento ag = new Agendamento();
+                    ag.setId(rs.getLong("id"));
+                    ag.setData(rs.getDate("data").toLocalDate());
+                    ag.setHora(rs.getTime("hora").toLocalTime());
+                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status")));
+
+                    Cliente cliente = new Cliente();
+                    cliente.setId(rs.getLong("id_cliente"));
+                    ag.setCliente(cliente);
+
+                    Veiculo veiculo = new Veiculo();
+                    veiculo.setId(rs.getLong("id_veiculo"));
+                    ag.setVeiculo(veiculo);
+
+                    Negocio negocio = new Negocio() {};
+                    negocio.setId(negocioId);
+                    ag.setNegocio(negocio);
+
+                    agendamentos.add(ag);
+                }
+
+                return agendamentos;
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao listar agendamentos por período", e);
+            }
+        }
 
     @Override
     public List<Agendamento> listarPorCliente(Long clienteId) {

@@ -86,9 +86,9 @@ public class UsuarioPersistence implements UsuarioRepository {
         """;
 
         String sqlNegocio = """
-                    UPDATE negocio
-                    SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?
-                    WHERE id_usuario = ?
+                UPDATE negocio
+                SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?
+                WHERE id_usuario = ?
                 """;
 
         try (Connection conn = DatabaseConfig.getConnection()) {
@@ -97,7 +97,6 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             atualizarEndereco(conn, usuario.getEndereco());
 
-            // -------- atualiza usuario --------
             try (PreparedStatement stmtUsuario = conn.prepareStatement(sql)) {
 
                 stmtUsuario.setString(1, usuario.getEmail());
@@ -110,7 +109,6 @@ public class UsuarioPersistence implements UsuarioRepository {
                 stmtUsuario.executeUpdate();
             }
 
-            // -------- se for negócio, atualiza negócio --------
             if (usuario instanceof Negocio negocio) {
 
                 try (PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio)) {
@@ -164,9 +162,11 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.rua,
         e.cidade,
         e.referencia,
+        e.numero,
 
         c.telefone,
-        n.cnpj
+        n.cnpj,
+        n.razao_social
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -195,6 +195,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             } else if ("NEGOCIO".equals(tipo)) {
                 LavaJato lavaJato = new LavaJato();
                 lavaJato.setCnpj(rs.getString("cnpj"));
+                lavaJato.setRazaoSocial(rs.getString("razao_social"));
                 usuario = lavaJato;
 
 //                Negocio negocio = new Negocio();
@@ -221,6 +222,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             endereco.setRua(rs.getString("rua"));
             endereco.setCidade(rs.getString("cidade"));
             endereco.setReferencia(rs.getString("referencia"));
+            endereco.setNumero(rs.getString("numero"));
             usuario.setEndereco(endereco);
 
             return Optional.of(usuario);
@@ -249,9 +251,11 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.rua,
         e.cidade,
         e.referencia,
+        e.numero,
 
         c.telefone,
-        n.cnpj
+        n.cnpj,
+        n.razao_social
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -278,6 +282,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 } else if ("NEGOCIO".equals(tipoStr)) {
                     LavaJato lavaJato = new LavaJato();
                     lavaJato.setCnpj(rs.getString("cnpj"));
+                    lavaJato.setRazaoSocial(rs.getString("razao_social"));
                     usuario = lavaJato;
 
 //                    Negocio negocio = new Negocio();
@@ -302,6 +307,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 endereco.setBairro(rs.getString("bairro"));
                 endereco.setRua(rs.getString("rua"));
                 endereco.setCidade(rs.getString("cidade"));
+                endereco.setNumero(rs.getString("numero"));
                 endereco.setReferencia(rs.getString("referencia"));
 
                 usuario.setEndereco(endereco);
@@ -337,7 +343,10 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.referencia,
 
         c.telefone,
-        n.cnpj
+        n.cnpj,
+        n.razao_social,
+        n.inicio_expediente,
+        n.fim_expediente
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -367,6 +376,9 @@ public class UsuarioPersistence implements UsuarioRepository {
             } else if ("NEGOCIO".equals(tipoStr)) {
                 LavaJato lavaJato = new LavaJato();
                 lavaJato.setCnpj(rs.getString("cnpj"));
+                lavaJato.setRazaoSocial(rs.getString("razao_social"));
+                lavaJato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
+                lavaJato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
                 usuario = lavaJato;
 //                Negocio negocio = new Negocio();
 //                negocio.setCnpj(rs.getString("cnpj"));
@@ -421,7 +433,8 @@ public class UsuarioPersistence implements UsuarioRepository {
             e.estado,
             e.bairro,
             e.rua,
-            e.cidade
+            e.cidade,
+            e.numero,
         FROM usuario u
         JOIN negocio n ON n.id_usuario = u.id
         JOIN endereco e ON e.id = u.id_endereco
@@ -464,6 +477,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 endereco.setBairro(rs.getString("bairro"));
                 endereco.setRua(rs.getString("rua"));
                 endereco.setCidade(rs.getString("cidade"));
+                endereco.setNumero(rs.getString("numero"));
 
                 lavajato.setEndereco(endereco);
 
@@ -485,8 +499,8 @@ public class UsuarioPersistence implements UsuarioRepository {
     // salvar o endereço
     public void salvarEndereco(Usuario usuario) {
         String sqlEndereco = """
-        INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia, cidade)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia, cidade, numero)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         RETURNING id
     """;
 
@@ -508,6 +522,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                     stmtEndereco.setString(5, e.getRua());
                     stmtEndereco.setString(6, e.getReferencia());
                     stmtEndereco.setString(7, e.getCidade());
+                    stmtEndereco.setString(8, e.getNumero());
 
                     ResultSet rs = stmtEndereco.executeQuery();
                     if (rs.next()) {
@@ -523,7 +538,7 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         String sqlEndereco = """
         UPDATE endereco
-        SET cep = ?, pais = ?, estado = ?, bairro = ?, rua = ?, referencia = ?, cidade = ?
+        SET cep = ?, pais = ?, estado = ?, bairro = ?, rua = ?, referencia = ?, cidade = ?, numero = ?
         WHERE id = ?
     """;
 
@@ -536,7 +551,8 @@ public class UsuarioPersistence implements UsuarioRepository {
             stmt.setString(5, endereco.getRua());
             stmt.setString(6, endereco.getReferencia());
             stmt.setString(7, endereco.getCidade());
-            stmt.setLong(8, endereco.getId());
+            stmt.setString(8, endereco.getNumero());
+            stmt.setLong(9, endereco.getId());
 
 
             stmt.executeUpdate();

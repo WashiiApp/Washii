@@ -6,6 +6,8 @@ module br.com.washii {
     requires io.github.cdimascio.dotenv.java;
     requires javafx.base;
     requires jbcrypt;
+    requires java.datatransfer;
+    requires org.kordamp.ikonli.javafx;
 
     opens br.com.washii.domain.entities to javafx.base, javafx.fxml;
     opens br.com.washii.presentation.layout to javafx.fxml;
@@ -13,6 +15,7 @@ module br.com.washii {
     opens br.com.washii.presentation.servico to javafx.fxml;
     opens br.com.washii.presentation.agendamentos to javafx.fxml;
     opens br.com.washii.presentation.home to javafx.fxml;
+    opens br.com.washii.presentation.perfil to javafx.fxml;
     
     exports br.com.washii.app;
 }

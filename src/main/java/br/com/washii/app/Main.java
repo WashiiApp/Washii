@@ -26,7 +26,7 @@ public class Main extends Application {
 
         SceneManager sceneManager = new SceneManager(primaryStage, styleManager, controllerFactory);
 
-        primaryStage.setTitle("Tela de Login");
+        primaryStage.setTitle("WASHII");
         primaryStage.setMinHeight(450);
         primaryStage.setMinWidth(400);
         primaryStage.getIcons().addAll(

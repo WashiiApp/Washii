@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="cardRoot" maxWidth="-Infinity" prefWidth="300.0" spacing="15.0" styleClass="agendamento-card" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.AgendamentoCardClienteController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label fx:id="lblIdAgendamento" styleClass="badge-id" text="#12345" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblStatus" styleClass="badge-status" text="AGENDADO" />
+         </children>
+      </HBox>
+
+      <VBox spacing="5.0">
+         <children>
+            <Label fx:id="lblNomeNegocio" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="NOME DO LAVA-JATO" />
+            <Label fx:id="lblEndereco" text="Endereço Completo do Local" textFill="#777777" />
+         </children>
+      </VBox>
+
+      <Separator />
+
+      <HBox spacing="25.0">
+         <children>
+            <VBox spacing="2.0">
+               <Label styleClass="section-title" text="DATA" />
+               <Label fx:id="lblData" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="15/05/2024" />
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <VBox spacing="2.0">
+               <Label styleClass="section-title" text="HORA" />
+               <Label fx:id="lblHora" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="10:30" />
+            </VBox>
+         </children>
+      </HBox>
+
+      <Separator />
+
+      <VBox spacing="10.0">
+         <children>
+            <Label styleClass="section-title" text="SERVIÇOS" />
+            <VBox fx:id="containerServicos" spacing="5.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label text="Lavagem Simples" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="R$ 50,00" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </VBox>
+            <HBox style="-fx-padding: 5 0 0 0;">
+               <children>
+                  <Label style="-fx-font-weight: bold;" text="TOTAL" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label fx:id="lblTotal" style="-fx-font-weight: bold; -fx-font-size: 15px;" text="R$ 50,00" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+
+      <HBox alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+         <children>
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#onCancelarAgendamento" styleClass="btn-cancelar" text="CANCELAR AGENDAMENTO" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

@@ -85,18 +85,47 @@ public class UsuarioPersistence implements UsuarioRepository {
             WHERE id = ?
         """;
 
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sqlNegocio = """
+                    UPDATE negocio
+                    SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?
+                    WHERE id_usuario = ?
+                """;
 
-            stmt.setString(1, usuario.getEmail());
-            stmt.setString(2, usuario.getSenha());
-            stmt.setString(3, usuario.getNome());
-            stmt.setString(4, usuario.getTipoUsuario().name());
-            stmt.setLong(5, usuario.getEndereco().getId());
-            stmt.setLong(6, usuario.getId());
+        try (Connection conn = DatabaseConfig.getConnection()) {
 
-            stmt.executeUpdate();
+            conn.setAutoCommit(false);
 
+            atualizarEndereco(conn, usuario.getEndereco());
+
+            // -------- atualiza usuario --------
+            try (PreparedStatement stmtUsuario = conn.prepareStatement(sql)) {
+
+                stmtUsuario.setString(1, usuario.getEmail());
+                stmtUsuario.setString(2, usuario.getSenha());
+                stmtUsuario.setString(3, usuario.getNome());
+                stmtUsuario.setString(4, usuario.getTipoUsuario().name());
+                stmtUsuario.setLong(5, usuario.getEndereco().getId());
+                stmtUsuario.setLong(6, usuario.getId());
+
+                stmtUsuario.executeUpdate();
+            }
+
+            // -------- se for negócio, atualiza negócio --------
+            if (usuario instanceof Negocio negocio) {
+
+                try (PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio)) {
+
+                    stmtNegocio.setString(1, negocio.getCnpj());
+                    stmtNegocio.setString(2, negocio.getRazaoSocial());
+                    stmtNegocio.setTime(3, Time.valueOf(negocio.getInicioExpediente()));
+                    stmtNegocio.setTime(4, Time.valueOf(negocio.getFimExpediente()));
+                    stmtNegocio.setLong(5, usuario.getId()); // id_usuario
+
+                    stmtNegocio.executeUpdate();
+                }
+            }
+
+            conn.commit();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar usuário", e);
         }
@@ -133,6 +162,7 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.estado,
         e.bairro,
         e.rua,
+        e.cidade,
         e.referencia,
 
         c.telefone,
@@ -189,6 +219,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             endereco.setEstado(rs.getString("estado"));
             endereco.setBairro(rs.getString("bairro"));
             endereco.setRua(rs.getString("rua"));
+            endereco.setCidade(rs.getString("cidade"));
             endereco.setReferencia(rs.getString("referencia"));
             usuario.setEndereco(endereco);
 
@@ -216,6 +247,7 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.estado,
         e.bairro,
         e.rua,
+        e.cidade,
         e.referencia,
 
         c.telefone,
@@ -269,6 +301,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 endereco.setEstado(rs.getString("estado"));
                 endereco.setBairro(rs.getString("bairro"));
                 endereco.setRua(rs.getString("rua"));
+                endereco.setCidade(rs.getString("cidade"));
                 endereco.setReferencia(rs.getString("referencia"));
 
                 usuario.setEndereco(endereco);
@@ -300,6 +333,7 @@ public class UsuarioPersistence implements UsuarioRepository {
         e.estado,
         e.bairro,
         e.rua,
+        e.cidade,
         e.referencia,
 
         c.telefone,
@@ -355,6 +389,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             endereco.setEstado(rs.getString("estado"));
             endereco.setBairro(rs.getString("bairro"));
             endereco.setRua(rs.getString("rua"));
+            endereco.setCidade(rs.getString("cidade"));
             endereco.setReferencia(rs.getString("referencia"));
 
             usuario.setEndereco(endereco);
@@ -367,12 +402,31 @@ public class UsuarioPersistence implements UsuarioRepository {
     }
 
     @Override
-    public List<Negocio> listarTodosNegocios() {
+    public List<Negocio> listarTodosLavaJatos() {
 
         String sql = """
-        SELECT id, cnpj, razao_social, inicio_expediente, fim_expediente
-        FROM negocio
-        ORDER BY id
+        SELECT
+            u.id AS usuario_id,
+        
+            n.cnpj,
+            n.razao_social,
+            n.inicio_expediente,
+            n.fim_expediente,
+        
+            u.nome,
+            u.email,
+        
+            e.id AS endereco_id,
+            e.cep,
+            e.estado,
+            e.bairro,
+            e.rua,
+            e.cidade
+        FROM usuario u
+        JOIN negocio n ON n.id_usuario = u.id
+        JOIN endereco e ON e.id = u.id_endereco
+        WHERE u.tipo = 'NEGOCIO'
+        ORDER BY u.id;
     """;
 
         List<Negocio> negocios = new ArrayList<>();
@@ -381,32 +435,58 @@ public class UsuarioPersistence implements UsuarioRepository {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
+            ServicoPersistence servicoRepo = new ServicoPersistence();
+
             while (rs.next()) {
-                Negocio negocio = new Negocio() {}; // classe anônima
 
-                negocio.setId(rs.getLong("id"));
-                negocio.setCnpj(rs.getString("cnpj"));
-                negocio.setRazaoSocial(rs.getString("razao_social"));
-                if (negocio instanceof LavaJato lavajato) {
-                    stmt.setTime(4, Time.valueOf(lavajato.getInicioExpediente()));
-                    stmt.setTime(5, Time.valueOf(lavajato.getFimExpediente()));
-                }
+                LavaJato lavajato = new LavaJato();
 
-                negocios.add(negocio);
+                // setando lavajato
+                lavajato.setId(rs.getLong("usuario_id"));
+
+                lavajato.setNome(rs.getString("nome"));
+                lavajato.setEmail(rs.getString("email"));
+                lavajato.setCnpj(rs.getString("cnpj"));
+                lavajato.setRazaoSocial(rs.getString("razao_social"));
+
+                lavajato.setInicioExpediente(
+                        rs.getTime("inicio_expediente").toLocalTime()
+                );
+                lavajato.setFimExpediente(
+                        rs.getTime("fim_expediente").toLocalTime()
+                );
+
+                // setando endereço
+                Endereco endereco = new Endereco();
+                endereco.setId(rs.getLong("endereco_id"));
+                endereco.setCep(rs.getString("cep"));
+                endereco.setEstado(rs.getString("estado"));
+                endereco.setBairro(rs.getString("bairro"));
+                endereco.setRua(rs.getString("rua"));
+                endereco.setCidade(rs.getString("cidade"));
+
+                lavajato.setEndereco(endereco);
+
+                // buscando pelo os serviços pelo o id do lavajato
+                lavajato.setServicosOferecidos(
+                        servicoRepo.listarPorNegocio(lavajato.getId())
+                );
+
+                negocios.add(lavajato);
             }
 
             return negocios;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar negócios", e);
+            throw new RuntimeException("Erro ao listar lavajatos", e);
         }
     }
 
     // salvar o endereço
     public void salvarEndereco(Usuario usuario) {
         String sqlEndereco = """
-        INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia, cidade)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         RETURNING id
     """;
 
@@ -427,6 +507,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                     stmtEndereco.setString(4, e.getBairro());
                     stmtEndereco.setString(5, e.getRua());
                     stmtEndereco.setString(6, e.getReferencia());
+                    stmtEndereco.setString(7, e.getCidade());
 
                     ResultSet rs = stmtEndereco.executeQuery();
                     if (rs.next()) {
@@ -435,6 +516,30 @@ public class UsuarioPersistence implements UsuarioRepository {
                 }
             } catch (SQLException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    private void atualizarEndereco(Connection conn, Endereco endereco) throws SQLException {
+
+        String sqlEndereco = """
+        UPDATE endereco
+        SET cep = ?, pais = ?, estado = ?, bairro = ?, rua = ?, referencia = ?, cidade = ?
+        WHERE id = ?
+    """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sqlEndereco)) {
+
+            stmt.setString(1, endereco.getCep());
+            stmt.setString(2, endereco.getPais());
+            stmt.setString(3, endereco.getEstado());
+            stmt.setString(4, endereco.getBairro());
+            stmt.setString(5, endereco.getRua());
+            stmt.setString(6, endereco.getReferencia());
+            stmt.setString(7, endereco.getCidade());
+            stmt.setLong(8, endereco.getId());
+
+
+            stmt.executeUpdate();
         }
     }
 }

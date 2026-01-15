@@ -22,4 +22,11 @@
     -color-success: #4CAF50;
     -color-warning: #FFB74D;
     -color-danger: #EF5350;
+
+    /* Cores de Status Agendamento*/
+    -fx-color-pendente: #2D82B7;        /* Azul */
+    -fx-color-agendado: #00A896;        /* Turquesa */
+    -fx-color-concluido: #68B92E;       /* Verde */
+    -fx-color-cancelado: #7f8c8d;       /* Cinza */
+    -fx-color-nao-compareceu: #E67E22;  /* Laranja */
 }

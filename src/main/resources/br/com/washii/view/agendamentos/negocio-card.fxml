@@ -11,20 +11,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="cardRoot" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="card-negocio" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.NegocioCardController">
+<VBox fx:id="cardRoot" styleClass="card-negocio" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.NegocioCardController">
    <children>
       <HBox spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox alignment="TOP_CENTER" prefWidth="140.0" spacing="8.0" HBox.hgrow="SOMETIMES">
+            <VBox alignment="TOP_CENTER" maxWidth="200.0" spacing="8.0" HBox.hgrow="ALWAYS">
                <children>
                   <ImageView fx:id="imgLogo" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../assets/icons/branding/sistem-icon/image.png" />
+                        <Image url="@../../assets/images/perfil/image.png" />
                      </image></ImageView>
-                  <Label fx:id="lblNome" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Nome do Negócio" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="lblNome" alignment="CENTER" text="Nome do Negócio" textAlignment="CENTER" wrapText="true">
                      <font><Font name="System Bold" size="15.0" /></font>
                   </Label>
-                  <Label fx:id="lblEndereco" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" text="Rua das Flores, 123&#10;Bairro Centro&#10;Cidade - UF" textAlignment="CENTER" textFill="#666666" wrapText="true">
+                  <Label fx:id="lblEndereco" alignment="TOP_CENTER" text="Rua das Flores, 123&#10;Bairro Centro&#10;Cidade - UF" textAlignment="CENTER" textFill="#666666" wrapText="true">
                      <font><Font size="12.0" /></font>
                   </Label>
                </children>
@@ -32,12 +32,12 @@
             
             <Separator orientation="VERTICAL" />
 
-            <VBox prefWidth="160.0" spacing="5.0" HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="ALWAYS">
                <children>
                   <Label styleClass="label-sessao" text="Serviços Oferecidos" textFill="#2c3e50" wrapText="true">
-                     <font><Font name="System Bold" size="13.0" /></font>
+                     <font><Font name="System Bold" size="14.0" /></font>
                   </Label>
-                  <VBox fx:id="vboxServicos" spacing="3.0">
+                  <VBox fx:id="vboxServicos" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label styleClass="item-lista" text="• Lavagem Completa" wrapText="true">
                            <font>
@@ -49,30 +49,13 @@
                   </VBox>
                </children>
             </VBox>
-
-            <Separator orientation="VERTICAL" />
-
-            <VBox prefWidth="160.0" spacing="5.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Label styleClass="label-sessao" text="Veículos Atendidos" textFill="#2c3e50" wrapText="true">
-                     <font><Font name="System Bold" size="13.0" /></font>
-                  </Label>
-                  <VBox fx:id="vboxVeiculos" spacing="3.0">
-                     <children>
-                        <Label styleClass="item-lista" text="• Carros de Passeio" wrapText="true" />
-                        <Label styleClass="item-lista" text="• Motocicletas" wrapText="true" />
-                        <Label styleClass="item-lista" text="• SUVs e Picapes" wrapText="true" />
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
          </children>
          <padding>
             <Insets left="15.0" right="15.0" top="15.0" />
          </padding>
       </HBox>
 
-      <HBox alignment="CENTER" spacing="10.0">
+      <HBox alignment="CENTER" spacing="20.0">
          <children>
             <Label fx:id="lblAvaliacao" styleClass="label-avaliacao" text="★ 4.8 (120 avaliações)" wrapText="true" />
             <Region HBox.hgrow="ALWAYS" />

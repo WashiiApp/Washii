@@ -7,6 +7,8 @@ import br.com.washii.presentation.core.BaseController;
 import br.com.washii.service.AutenticacaoService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
@@ -51,12 +53,16 @@ public class LoginController extends BaseController{
         }
 
         btnEntrar.setDisable(true);
+        Scene secen = btnEntrar.getScene();
+        secen.setCursor(Cursor.WAIT);
 
         String email = txtEmail.getText();
         String senha = pwdSenha.getText();
 
         try {
             Usuario user = autenticacaoService.realizarLogin(email, senha);
+
+            Thread.sleep(1000);
 
             // Escolhe a tela com base no TipoUsuario
             if (user.getTipoUsuario() == TipoUsuario.CLIENTE){
@@ -74,6 +80,7 @@ public class LoginController extends BaseController{
             exibirErro("Ocorreu um erro inesperado.");
         } finally {
             btnEntrar.setDisable(false);
+            secen.setCursor(Cursor.DEFAULT);
         }
     }
 

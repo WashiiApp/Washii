@@ -18,9 +18,8 @@ public class AgendamentoService {
     public AgendamentoService(AgendamentoRepository repository) {
         this.repository = repository;
     }
-    /**
-     * Solicita um novo agendamento após validar disponibilidade.
-     */
+     //Solicita um novo agendamento após validar disponibilidade.
+
     public void solicitarAgendamento(Agendamento agendamento) {
         Objects.requireNonNull(agendamento, "Agendamento não pode ser nulo");
 
@@ -30,34 +29,31 @@ public class AgendamentoService {
             throw new IllegalStateException("Horário indisponível para agendamento.");
         }
 
-        agendamento.setStatus(StatusAgendamento.PENDENTE);
+        agendamento.setStatus(StatusAgendamento.EM_ANDAMENTO);
         repository.salvar(agendamento);
     }
+     //Cancela um agendamento existente.
 
-    /**
-     * Cancela um agendamento existente.
-     */
     public void cancelarAgendamento(Agendamento agendamento) {
         Objects.requireNonNull(agendamento, "Agendamento não pode ser nulo");
         agendamento.setStatus(StatusAgendamento.CANCELADO);
         repository.atualizarStatus(agendamento.getId(), StatusAgendamento.CANCELADO);
     }
-
-    /**
-     * Lista agendamentos por período e negócio.
-     */
+     //Lista agendamentos por período e negócio.
     public List<Agendamento> listarPorData(LocalDate data, Long negocioId) {
         return repository.listarPorPeriodoENegocio(data, data, negocioId);
     }
-    /**
-     * Lista o histórico de agendamentos de um cliente.
-     */
+
+     //Lista o histórico de agendamentos de um cliente.
+
     public List<Agendamento> listarHistoricoUsuario(Long clienteId) {
         return repository.listarPorCliente(clienteId);
     }
-////algortimo parar gerar os horarios com base nos horarios fornecidos pelo cliente negocio, horario de incio, horario de almoço e horario de fim
-    //criar um metodo privado que recebe por atributo negocio, e a partir disso gerar uma lista de horarios possíveis, seria uma lista do local time;
-    //METODO LISTAR HORARIO DISPONIVEIS, a partir de uma variável
+
+    public List<Agendamento> listarAgendamentosDoUsuario(Long clienteId) {
+        Objects.requireNonNull(clienteId, "ID do usuário não pode ser nulo");
+        return repository.listarPorCliente(clienteId);
+    }
 
 // recebe o objeto negocio que contém horario de inicio, fim duração do serviço;
     private List<LocalTime> gerarHorariosPossiveis(Negocio negocio) {
@@ -96,4 +92,6 @@ public class AgendamentoService {
         agendamento.setStatus(novoStatus);
         repository.atualizarStatus(agendamento.getId(), novoStatus);
     }
+
+
 }

@@ -48,6 +48,9 @@
                            <graphic>
                               <FontIcon iconColor="WHITE" iconLiteral="mdi2p-pencil" />
                            </graphic>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
                         </Button>
                         <Button fx:id="btnCancelar" cancelButton="true" mnemonicParsing="false" onAction="#handleCancelarEdicao" prefWidth="100.0" styleClass="button-secondary" text="Cancelar" visible="false" />
                      </children>

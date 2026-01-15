@@ -39,8 +39,9 @@ public class PerfilNegocioController {
     
     // Campos de Texto
     @FXML private TextField txtBairro, txtCapacidade, txtCep, txtCidade, 
-                            txtCnpj, txtEmail, txtEstado, txtFim, txtInicio, 
-                            txtNomeNegocio, txtNumero, txtRazaoSocial, txtRua;
+                            txtCnpj, txtEmail, txtEstado, txtHoraFim, txtHoraInicio, 
+                            txtNomeNegocio, txtNumero, txtRazaoSocial, 
+                            txtRua, txtDuracaoServico;
 
     private List<TextField> todosCampos;
     private boolean modoEdicao = false;
@@ -56,8 +57,8 @@ public class PerfilNegocioController {
         // Agrupamos os campos para facilitar a manipulação em massa
         todosCampos = List.of(
             txtBairro, txtCapacidade, txtCep, txtCidade, txtCnpj, 
-            txtEmail, txtEstado, txtFim, txtInicio, txtNomeNegocio, 
-            txtNumero, txtRazaoSocial, txtRua
+            txtEmail, txtEstado, txtHoraFim, txtHoraInicio, txtNomeNegocio, 
+            txtNumero, txtRazaoSocial, txtRua, txtDuracaoServico
         );
 
         // Estado inicial: Apenas leitura
@@ -160,8 +161,9 @@ public class PerfilNegocioController {
 
             // Carrega hora formatada
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            txtInicio.setText(negocio.getInicioExpediente().format(formatter));
-            txtFim.setText(negocio.getFimExpediente().format(formatter));
+            txtHoraInicio.setText(negocio.getInicioExpediente().format(formatter));
+            txtHoraFim.setText(negocio.getFimExpediente().format(formatter));
+            txtDuracaoServico.setText(negocio.getDuracaoMediaServico().format(formatter));
 
             txtCapacidade.setText(String.valueOf(negocio.getCapacidadeAtendimentoSimultaneo()));
 
@@ -199,8 +201,10 @@ public class PerfilNegocioController {
 
             // Converte e adiciona o horario no objeto
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            negocio.setInicioExpediente(LocalTime.parse(txtInicio.getText(), formatter));
-            negocio.setFimExpediente(LocalTime.parse(txtFim.getText(), formatter));
+            negocio.setInicioExpediente(LocalTime.parse(txtHoraInicio.getText(), formatter));
+            negocio.setFimExpediente(LocalTime.parse(txtHoraFim.getText(), formatter));
+            negocio.setDuracaoMediaServico(LocalTime.parse(txtDuracaoServico.getText(), formatter));
+
             
             // Atualiza o Endereço (se houver objeto de endereço)
             if (negocio.getEndereco() != null) {
@@ -262,13 +266,15 @@ public class PerfilNegocioController {
         // Valida o horario
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         try {
-            LocalTime horaInicio = LocalTime.parse(txtInicio.getText(), formatter);
-            LocalTime horaFim = LocalTime.parse(txtFim.getText(), formatter);
+            LocalTime horaInicio = LocalTime.parse(txtHoraInicio.getText(), formatter);
+            LocalTime horaFim = LocalTime.parse(txtHoraFim.getText(), formatter);
 
             // Valida se o fim é depois do início
             if (!horaFim.isAfter(horaInicio)) {
                 throw new IllegalArgumentException("O horário de fechamento deve ser após o horário de abertura.");
             }
+
+            LocalTime.parse(txtDuracaoServico.getText(), formatter);
 
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Horário inválido! Use o formato 00:00 (ex: 08:30)");

@@ -43,7 +43,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
 
     @Override
     public AgendamentoService criarAgendamentoService() {
-        return new AgendamentoService(AGENDAMENTO_PERSISTENCE, USUARIO_PERSISTENCE);
+        return new AgendamentoService(AGENDAMENTO_PERSISTENCE);
     }
 
     @Override

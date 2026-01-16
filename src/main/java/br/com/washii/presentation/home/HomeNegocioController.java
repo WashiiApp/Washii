@@ -58,19 +58,22 @@ public class HomeNegocioController extends BaseController {
 
         for (Agendamento ag : agendamentos) {
             adicionarCardAoFluxo(ag);
-            qtdAgendados ++;
 
             // Lógica dos contadores e faturamento
             if (ag.getStatus() == StatusAgendamento.CONCLUIDO) {
                 qtdFinalizado ++;
                 faturamento += ag.calcularValorTotal();
+
+                qtdAgendados ++;
             } else if (ag.getStatus() == StatusAgendamento.AGENDADO) {
                 qtdPendentes++;
+
+                qtdAgendados ++;
             } else if (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO) { 
                 qtdAndamento++;
-            } else if (ag.getStatus() == StatusAgendamento.CONCLUIDO) {
-                qtdFinalizado ++;
-            }
+
+                qtdAgendados ++;
+            } 
         }
 
         verificarFlowsVazios();

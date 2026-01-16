@@ -92,11 +92,7 @@ public class Agendamento {
             throw new IllegalArgumentException("A data não pode ser nula");
         }
         if (data.isBefore(LocalDate.now())){
-<<<<<<< HEAD
-            // throw new DataRetroativaException();
-=======
             //throw new DataRetroativaException();
->>>>>>> d65510279cf5e84b0705b058029d5bc8f1c0bd50
         }
         this.data = data; 
     }
@@ -107,11 +103,7 @@ public class Agendamento {
             throw new IllegalArgumentException("O horario não pode ser nulo");
         }
         if (hora.isBefore(LocalTime.now())){
-<<<<<<< HEAD
-          //  throw new DataRetroativaException();
-=======
             //throw new DataRetroativaException();
->>>>>>> d65510279cf5e84b0705b058029d5bc8f1c0bd50
         }
         this.hora = hora; 
     }

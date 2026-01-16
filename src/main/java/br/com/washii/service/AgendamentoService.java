@@ -75,9 +75,20 @@ public class AgendamentoService {
         //verifica se o horário + a duração são menores que o fim do expediente;
     }
     public List<LocalTime> listarHorariosDisponiveis(LocalDate data, Negocio negocio) {
+        Objects.requireNonNull(data, "Data não pode ser nula");
+        Objects.requireNonNull(negocio, "Negócio não pode ser nulo");
+
         List<LocalTime> horariosPossiveis = gerarHorariosPossiveis(negocio);
-//retorna apenas os horarios que estão disponiveis e chama o método anteior
-        return horariosPossiveis.stream().filter(hora -> validarDisponibilidade(data, hora, negocio)).toList();
+
+        LocalDate hoje = LocalDate.now();
+        LocalTime agora = LocalTime.now();
+
+        return horariosPossiveis.stream()
+                // se for hoje, só horários depois do horário atual
+                .filter(hora -> !data.isEqual(hoje) || hora.isAfter(agora))
+                // valida disponibilidade no banco
+                .filter(hora -> validarDisponibilidade(data, hora, negocio))
+                .toList();
     }
 
     private boolean validarDisponibilidade(LocalDate data, LocalTime hora, Negocio negocio) {

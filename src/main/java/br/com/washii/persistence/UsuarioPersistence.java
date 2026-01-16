@@ -434,7 +434,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             e.bairro,
             e.rua,
             e.cidade,
-            e.numero,
+            e.numero
         FROM usuario u
         JOIN negocio n ON n.id_usuario = u.id
         JOIN endereco e ON e.id = u.id_endereco

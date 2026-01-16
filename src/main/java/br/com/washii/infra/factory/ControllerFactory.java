@@ -60,7 +60,7 @@ public class ControllerFactory {
         }
 
         if (clazz == ClienteAgendamentoController.class) {
-            return new ClienteAgendamentoController(serviceFactory.criarAgendamentoService(), serviceFactory.criarUsuarioService());
+            return new ClienteAgendamentoController(serviceFactory.criarAgendamentoService());
         }
 
         if (clazz == PerfilClienteController.class) {

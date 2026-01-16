@@ -73,7 +73,7 @@
             <HBox fx:id="navAgendamentos" alignment="CENTER_LEFT" focusTraversable="true" onMouseClicked="#handleNavClick" spacing="10.0" styleClass="nav-container">
                <children>
                   <FontIcon iconLiteral="mdi2c-calendar-blank" iconSize="18" styleClass="icon" />
-                  <Label text="Meus Agendamentos" />
+                  <Label text="Meus Agendamentos" wrapText="true" />
                </children>
                <padding>
                   <Insets bottom="10.0" top="10.0" />
@@ -99,6 +99,6 @@
          </children></VBox>
    </left>
    <center>
-      <fx:include fx:id="homeCliente" source="../home/home-cliente.fxml"/>
+      <fx:include fx:id="homeCliente" source="../home/home-cliente.fxml" />
    </center>
 </BorderPane>

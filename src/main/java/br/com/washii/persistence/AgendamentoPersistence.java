@@ -74,7 +74,25 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     @Override
     public void atualizarStatus(Long agendamentoId, StatusAgendamento novoStatus) {
 
+        String sql = """
+        UPDATE agendamento
+        SET status = ?::status_agendamento
+        WHERE id = ?
+    """;
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, novoStatus.name());
+            stmt.setLong(2, agendamentoId);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar status do agendamento", e);
+        }
     }
+
 
     @Override
     public int contarAgendamento(Long negocioId, LocalDate data, LocalTime hora) {

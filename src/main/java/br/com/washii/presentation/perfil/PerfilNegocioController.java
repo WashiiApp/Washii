@@ -13,6 +13,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.javafx.FontIcon;
+
+import br.com.washii.domain.entities.Endereco;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.exceptions.NegocioException;
@@ -20,6 +22,9 @@ import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.utils.AvisoUtils;
 import br.com.washii.service.UsuarioService;
 import java.io.File;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class PerfilNegocioController {
@@ -34,11 +39,13 @@ public class PerfilNegocioController {
     
     // Campos de Texto
     @FXML private TextField txtBairro, txtCapacidade, txtCep, txtCidade, 
-                            txtCnpj, txtEmail, txtEstado, txtFim, txtInicio, 
-                            txtNomeNegocio, txtNumero, txtRazaoSocial, txtRua;
+                            txtCnpj, txtEmail, txtEstado, txtHoraFim, txtHoraInicio, 
+                            txtNomeNegocio, txtNumero, txtRazaoSocial, 
+                            txtRua, txtDuracaoServico;
 
     private List<TextField> todosCampos;
     private boolean modoEdicao = false;
+    private Usuario usuarioLogado;
 
     public PerfilNegocioController(UsuarioService usuarioService){
         this.usuarioService = usuarioService;
@@ -50,12 +57,12 @@ public class PerfilNegocioController {
         // Agrupamos os campos para facilitar a manipulação em massa
         todosCampos = List.of(
             txtBairro, txtCapacidade, txtCep, txtCidade, txtCnpj, 
-            txtEmail, txtEstado, txtFim, txtInicio, txtNomeNegocio, 
-            txtNumero, txtRazaoSocial, txtRua
+            txtEmail, txtEstado, txtHoraFim, txtHoraInicio, txtNomeNegocio, 
+            txtNumero, txtRazaoSocial, txtRua, txtDuracaoServico
         );
 
         // Estado inicial: Apenas leitura
-        configurarEstado(false);
+        configurarModoEdicao(false);
         carregarDados(buscarUsuarioLogado());
     }
 
@@ -66,13 +73,15 @@ public class PerfilNegocioController {
     void handleAlternarEdicao(ActionEvent event) {
         if (modoEdicao) {
             // Se já estava editando, a ação agora é SALVAR
-            salvarAlteracoes();
+            boolean sucesso = salvarAlteracoes();
+            
             // Se salvou com sucesso:
-            configurarEstado(false);
-            modoEdicao = false;
+            configurarModoEdicao(!sucesso);
+            modoEdicao = !sucesso;
+            
         } else {
             // Se estava visualizando, a ação agora é EDITAR
-            configurarEstado(true);
+            configurarModoEdicao(true);
             modoEdicao = true;
         }
     }
@@ -80,8 +89,8 @@ public class PerfilNegocioController {
     @FXML
     void handleCancelarEdicao(ActionEvent event) {
         carregarDados(buscarUsuarioLogado());
-        configurarEstado(false);
-        modoEdicao = !modoEdicao;
+        configurarModoEdicao(false);
+        modoEdicao = false;
     }
 
     /**
@@ -105,21 +114,20 @@ public class PerfilNegocioController {
         }
     }
 
-    private void configurarEstado(boolean editavel) {
+    private void configurarModoEdicao(boolean editavel) {
         // 1. Alterna a propriedade editable de todos os campos
         todosCampos.forEach(tf -> tf.setEditable(editavel));
 
         // 2. Atualiza o texto e estilo do botão
         if (editavel) {
             btnEditar.setText("Salvar");
-            btnEditar.getStyleClass().remove("button-primary");
             btnEditar.getStyleClass().add("btn-salvar");
             iconCamera.setVisible(true);
             paneFoto.setCursor(Cursor.HAND);
             circleFoto.setOpacity(0.7);
         } else {
             btnEditar.setText("Editar");
-            btnEditar.getStyleClass().remove("btn-salvar");
+            btnEditar.getStyleClass().removeAll("btn-salvar", "button-primary");
             btnEditar.getStyleClass().add("button-primary");
             iconCamera.setVisible(false);
             paneFoto.setCursor(Cursor.DEFAULT);
@@ -141,19 +149,22 @@ public class PerfilNegocioController {
             txtEmail.setText(negocio.getEmail());
             
             // Endereço
-            // Assumindo que seu objeto Negocio tem um objeto Endereco interno
-            if (negocio.getEndereco() != null) {
-                txtCep.setText(negocio.getEndereco().getCep());
-                txtRua.setText(negocio.getEndereco().getRua());
-                txtNumero.setText(negocio.getEndereco().getNumero());
-                txtBairro.setText(negocio.getEndereco().getBairro());
-                txtCidade.setText(negocio.getEndereco().getCidade());
-                txtEstado.setText(negocio.getEndereco().getEstado()); // Nome por extenso
-            }
+            // Se negocio não tiver nenhum endereço (null) então é criado um novo
+            if (negocio.getEndereco() == null) { negocio.setEndereco(new Endereco()); }
 
-            // Configurações Operacionais
-            txtInicio.setText(negocio.getInicioExpediente().toString());
-            txtFim.setText(negocio.getFimExpediente().toString());
+            txtCep.setText(negocio.getEndereco().getCep());
+            txtRua.setText(negocio.getEndereco().getRua());
+            txtNumero.setText(negocio.getEndereco().getNumero());
+            txtBairro.setText(negocio.getEndereco().getBairro());
+            txtCidade.setText(negocio.getEndereco().getCidade());
+            txtEstado.setText(negocio.getEndereco().getEstado());
+
+            // Carrega hora formatada
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            txtHoraInicio.setText(negocio.getInicioExpediente().format(formatter));
+            txtHoraFim.setText(negocio.getFimExpediente().format(formatter));
+            txtDuracaoServico.setText(negocio.getDuracaoMediaServico().format(formatter));
+
             txtCapacidade.setText(String.valueOf(negocio.getCapacidadeAtendimentoSimultaneo()));
 
             // Dados Jurídicos
@@ -172,9 +183,9 @@ public class PerfilNegocioController {
         }
     }
 
-    private void salvarAlteracoes() {
+    private boolean salvarAlteracoes() {
         try {
-            // 1. Valida os dados da UI
+            // 1. Valida os dados da UI e lança uma exceção caso tenha dados invalidos
             validarCampos();
 
             // 2. Pega o objeto para atualizar
@@ -186,6 +197,14 @@ public class PerfilNegocioController {
             negocio.setCnpj(txtCnpj.getText());
             negocio.setRazaoSocial(txtRazaoSocial.getText());
             negocio.setCapacidadeAtendimentoSimultaneo(Integer.parseInt(txtCapacidade.getText()));
+
+
+            // Converte e adiciona o horario no objeto
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            negocio.setInicioExpediente(LocalTime.parse(txtHoraInicio.getText(), formatter));
+            negocio.setFimExpediente(LocalTime.parse(txtHoraFim.getText(), formatter));
+            negocio.setDuracaoMediaServico(LocalTime.parse(txtDuracaoServico.getText(), formatter));
+
             
             // Atualiza o Endereço (se houver objeto de endereço)
             if (negocio.getEndereco() != null) {
@@ -199,28 +218,35 @@ public class PerfilNegocioController {
 
             usuarioService.atualizarUsuario(negocio);
 
+            // Se salvar no banco, então salva localmente
+            this.usuarioLogado = negocio;
             
             AvisoUtils.exibirAvisoSucesso(containerAviso, "Usuario atualizado com sucesso!");
+            return true;
 
         } catch (IllegalArgumentException e) {
             AvisoUtils.exibirAvisoAlerta(containerAviso, e.getMessage());
-            // Se deu erro de validação, forçamos o modo edição a continuar aberto
-            configurarEstado(true); 
-            modoEdicao = true;
+          
         } catch (NegocioException e) {
             AvisoUtils.exibirAvisoErro(containerAviso, e.getMessage());
+            
         } catch (Exception e) {
             AvisoUtils.exibirAvisoErro(containerAviso, "Ocorreu um erro inesperado: " + e.getMessage());
             e.printStackTrace();
+            
         } finally {
-            limparAvisos(5);
+            limparAvisos(10);
         }
+
+        return false;
     }
         
     private void validarCampos() throws IllegalArgumentException {
+        // Valida o nome
         if (txtNomeNegocio.getText().isBlank()) throw new IllegalArgumentException("O nome do negócio é obrigatório.");
 
-        if (txtCnpj.getText() != null) {
+        // Valida o CNPJ
+        if (!txtCnpj.getText().isBlank()) {
             String apenasNumerosCnpj = txtCnpj.getText().replaceAll("[.\\-/]", "");
 
             if (!apenasNumerosCnpj.matches("\\d+")) { 
@@ -232,18 +258,40 @@ public class PerfilNegocioController {
             }
         }
         
-
+        // Valida o email
         if (txtEmail.getText().isBlank() || !txtEmail.getText().contains("@")) {
             throw new IllegalArgumentException("E-mail inválido ou vazio.");
         }
 
+        // Valida o horario
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        try {
+            LocalTime horaInicio = LocalTime.parse(txtHoraInicio.getText(), formatter);
+            LocalTime horaFim = LocalTime.parse(txtHoraFim.getText(), formatter);
+
+            // Valida se o fim é depois do início
+            if (!horaFim.isAfter(horaInicio)) {
+                throw new IllegalArgumentException("O horário de fechamento deve ser após o horário de abertura.");
+            }
+
+            LocalTime.parse(txtDuracaoServico.getText(), formatter);
+
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Horário inválido! Use o formato 00:00 (ex: 08:30)");
+        }
+
+        // Valida a capacidade (inteiro)
         String capText = txtCapacidade.getText();
         if (capText == null || capText.isBlank()) {
             throw new IllegalArgumentException("A capacidade de atendimento deve ser informada.");
         }
         
         try {
-            Integer.parseInt(txtCapacidade.getText());
+            Integer n = Integer.parseInt(txtCapacidade.getText());
+
+            if (n <= 0) {
+                throw new IllegalArgumentException("A capacidade deve ser um número maior que 0");
+            }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("A capacidade deve ser um número inteiro.");
         }
@@ -254,8 +302,12 @@ public class PerfilNegocioController {
     }
 
     private Usuario buscarUsuarioLogado(){
-        long id = Sessao.getInstance().getUsuarioLogado().getId();
+        if (usuarioLogado == null){
+            long id = Sessao.getInstance().getUsuarioLogado().getId();
 
-        return usuarioService.buscarUsuarioPorId(id);
+            this.usuarioLogado = usuarioService.buscarUsuarioPorId(id);
+        }
+
+        return usuarioLogado;
     }
 }

@@ -101,6 +101,15 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
     @Override
     public void salvar(Agendamento entidade) {
+        String sqlBuscarVeiculo = """
+        SELECT id FROM veiculo WHERE placa = ?
+    """;
+
+        String sqlInserirVeiculo = """
+        INSERT INTO veiculo (placa, categoria, id_cliente)
+        VALUES (?, ?::CategoriaVeiculo, ? )
+    """;
+
         String sqlAgendamento = """
         INSERT INTO agendamento (data, hora, status, id_cliente, id_veiculo, id_negocio)
         VALUES (?, ?, ?::status_agendamento, ?, ?, ?)
@@ -114,6 +123,38 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         try (Connection conn = DatabaseConfig.getConnection()) {
 
             conn.setAutoCommit(false);
+
+            Veiculo veiculo = entidade.getVeiculo();
+            Long idVeiculo = null;
+
+            try (PreparedStatement stmtBusca = conn.prepareStatement(sqlBuscarVeiculo)) {
+                stmtBusca.setString(1, veiculo.getPlaca());
+
+
+                ResultSet rs = stmtBusca.executeQuery();
+                if (rs.next()) {
+                    idVeiculo = rs.getLong("id");
+                }
+            }
+
+            if (idVeiculo == null) {
+                try (PreparedStatement stmtInsertVeiculo =
+                             conn.prepareStatement(sqlInserirVeiculo, Statement.RETURN_GENERATED_KEYS)) {
+
+                    stmtInsertVeiculo.setString(1, veiculo.getPlaca());
+                    stmtInsertVeiculo.setString(2, veiculo.getCategoriaVeiculo().name());
+                    stmtInsertVeiculo.setLong(3, entidade.getCliente().getId());
+
+                    stmtInsertVeiculo.executeUpdate();
+
+                    ResultSet rs = stmtInsertVeiculo.getGeneratedKeys();
+                    if (rs.next()) {
+                        idVeiculo = rs.getLong(1);
+                    }
+                }
+            }
+
+            veiculo.setId(idVeiculo);
 
             PreparedStatement stmtAg = conn.prepareStatement(
                     sqlAgendamento, Statement.RETURN_GENERATED_KEYS

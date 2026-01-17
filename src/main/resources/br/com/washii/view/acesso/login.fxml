@@ -72,7 +72,7 @@
       <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
          <children>
             <TextFlow fx:id="errorContainer" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
-            <Hyperlink fx:id="lnkEsqueciSenha1" layoutX="269.0" layoutY="10.0" minWidth="-Infinity" text="Esqueci a senha" />
+            <Hyperlink fx:id="lnkEsqueciSenha" layoutX="269.0" layoutY="10.0" minWidth="-Infinity" onAction="#onEsqueciSenha" text="Esqueci a senha" />
          </children>
       </HBox>
       <Button fx:id="btnEntrar" defaultButton="true" mnemonicParsing="false" onAction="#onEntrar" styleClass="button-primary" text="ENTRAR" textFill="WHITE">

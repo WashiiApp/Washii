@@ -52,6 +52,11 @@ public class LoginController extends BaseController{
             return;
         }
 
+        if (!txtEmail.getText().isBlank() && !txtEmail.getText().contains("@")){
+            exibirErro("E-mail inválido");
+            return;
+        }
+
         btnEntrar.setDisable(true);
         Scene secen = btnEntrar.getScene();
         secen.setCursor(Cursor.WAIT);
@@ -87,6 +92,12 @@ public class LoginController extends BaseController{
     @FXML
     void irParaCadastro(ActionEvent event){
         sceneManager.loadCenterBorderPane("/br/com/washii/view/acesso/cadastro.fxml");
+    }
+
+    @FXML
+    void onEsqueciSenha(ActionEvent event) {
+        limparCampoErro();
+        exibirErro("Entre em contato com o suporte para resetar sua senha");
     }
 
     private void exibirErro(String msg){

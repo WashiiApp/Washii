@@ -518,3 +518,14 @@
 .btn-salvar {
     -fx-background-color: #2ecc71; /* Verde para indicar salvamento */
 }
+
+/* Estilização dos graficos */
+.chart-title {
+    -fx-text-fill: -color-text-header;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.chart-pie-label {
+    -fx-fill: -color-text-body;
+}

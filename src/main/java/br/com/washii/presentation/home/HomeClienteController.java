@@ -44,8 +44,8 @@ public class HomeClienteController extends BaseController{
     @FXML
     public void initialize() {
         configurarChoiceBox();
-        
     }
+
     @FXML
     private void configurarChoiceBox() {
         if (cmbServico != null) {

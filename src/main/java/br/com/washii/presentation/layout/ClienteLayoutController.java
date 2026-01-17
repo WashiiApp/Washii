@@ -56,8 +56,8 @@ public class ClienteLayoutController extends LayoutController {
         if (containerClicked == navHome) {
             FXMLLoader loader =sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-cliente.fxml");
 
-           // HomeClienteController controller = loader.getController();
-            // controller.carregarNegocios();
+            HomeClienteController controller = loader.getController();
+            controller.carregarNegocios();
 
         } else if (containerClicked == navAgendamentos) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/meus-agendamentos-cliente.fxml");

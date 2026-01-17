@@ -42,10 +42,15 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     ag.setId(rs.getLong("id"));
                     ag.setData(rs.getDate("data").toLocalDate());
                     ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status")));
+                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
 
                     Cliente cliente = new Cliente();
-                    cliente.setId(rs.getLong("id_cliente"));
+                    Long idCliente = buscarIdClientePorIdUsuario(
+                            conn,
+                            rs.getLong("id_cliente")
+                    );
+
+                    cliente.setId(idCliente);
                     ag.setCliente(cliente);
 
                     Veiculo veiculo = new Veiculo();
@@ -88,10 +93,14 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     ag.setId(rs.getLong("id"));
                     ag.setData(rs.getDate("data").toLocalDate());
                     ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status")));
+                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
 
                     Cliente cliente = new Cliente();
-                    cliente.setId(clienteId);
+                    Long idCliente = buscarIdClientePorIdUsuario(
+                            conn,
+                            rs.getLong("id_cliente")
+                    );
+                    cliente.setId(idCliente);
                     ag.setCliente(cliente);
 
                     Veiculo veiculo = new Veiculo();

@@ -91,7 +91,15 @@ public class UsuarioPersistence implements UsuarioRepository {
                 WHERE id_usuario = ?
                 """;
 
+        String sqlCliente = """
+                UPDATE cliente
+                SET telefone = ?
+                WHERE id_usuario = ?
+                """;
+
         try (Connection conn = DatabaseConfig.getConnection()) {
+
+            TipoUsuario tipoUsuario = usuario.getTipoUsuario();
 
             conn.setAutoCommit(false);
 
@@ -108,18 +116,27 @@ public class UsuarioPersistence implements UsuarioRepository {
 
                 stmtUsuario.executeUpdate();
             }
+            if (tipoUsuario.equals(TipoUsuario.NEGOCIO)) {
+                if (usuario instanceof Negocio negocio) {
 
-            if (usuario instanceof Negocio negocio) {
+                    try (PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio)) {
 
-                try (PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio)) {
+                        stmtNegocio.setString(1, negocio.getCnpj());
+                        stmtNegocio.setString(2, negocio.getRazaoSocial());
+                        stmtNegocio.setTime(3, Time.valueOf(negocio.getInicioExpediente()));
+                        stmtNegocio.setTime(4, Time.valueOf(negocio.getFimExpediente()));
+                        stmtNegocio.setLong(5, usuario.getId()); // id_usuario
 
-                    stmtNegocio.setString(1, negocio.getCnpj());
-                    stmtNegocio.setString(2, negocio.getRazaoSocial());
-                    stmtNegocio.setTime(3, Time.valueOf(negocio.getInicioExpediente()));
-                    stmtNegocio.setTime(4, Time.valueOf(negocio.getFimExpediente()));
-                    stmtNegocio.setLong(5, usuario.getId()); // id_usuario
-
-                    stmtNegocio.executeUpdate();
+                        stmtNegocio.executeUpdate();
+                    }
+                }
+            }
+            if (tipoUsuario.equals(TipoUsuario.CLIENTE)) {
+                if (usuario instanceof Cliente cliente) {
+                    try (PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
+                        stmtCliente.setString(1, cliente.getTelefone());
+                        stmtCliente.setLong(2, usuario.getId());
+                    }
                 }
             }
 

@@ -144,7 +144,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         WHERE id_negocio = ?
           AND data = ?
           AND hora = ?
-          AND status <> 'CANCELADO'
+          AND status_agendamento IN ('EM_ANDAMENTO', 'CONCLUIDO', 'CANCELADO', 'AGENDADO','NAO_COMPARECEU')
     """;
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -176,7 +176,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     """;
 
         String sqlAgendamento = """
-        INSERT INTO agendamento (data, hora, status, id_cliente, id_veiculo, id_negocio)
+        INSERT INTO agendamento (data, hora, status_agendamento, id_cliente, id_veiculo, id_negocio)
         VALUES (?, ?, ?::status_agendamento, ?, ?, ?)
     """;
 
@@ -202,13 +202,19 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 }
             }
 
+            // buscando id
+            Long idCliente = buscarIdClientePorIdUsuario(
+                    conn,
+                    entidade.getCliente().getId()
+            );
+
             if (idVeiculo == null) {
                 try (PreparedStatement stmtInsertVeiculo =
                              conn.prepareStatement(sqlInserirVeiculo, Statement.RETURN_GENERATED_KEYS)) {
 
                     stmtInsertVeiculo.setString(1, veiculo.getPlaca());
                     stmtInsertVeiculo.setString(2, veiculo.getCategoriaVeiculo().name());
-                    stmtInsertVeiculo.setLong(3, entidade.getCliente().getId());
+                    stmtInsertVeiculo.setLong(3, idCliente);
 
                     stmtInsertVeiculo.executeUpdate();
 
@@ -228,7 +234,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             stmtAg.setDate(1, Date.valueOf(entidade.getData()));
             stmtAg.setTime(2, Time.valueOf(entidade.getHora()));
             stmtAg.setString(3, entidade.getStatus().name());
-            stmtAg.setLong(4, entidade.getCliente().getId());
+            stmtAg.setLong(4, idCliente);
             stmtAg.setLong(5, entidade.getVeiculo().getId());
             stmtAg.setLong(6, entidade.getNegocio().getId());
 
@@ -352,5 +358,20 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar agendamentos", e);
         }
+    }
+
+    // buscar o id correto (usuario)
+    private Long buscarIdClientePorIdUsuario(Connection conn, Long idUsuario) throws SQLException {
+        String sql = "SELECT id FROM cliente WHERE id_usuario = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idUsuario);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("id");
+            }
+        }
+        return null;
     }
 }

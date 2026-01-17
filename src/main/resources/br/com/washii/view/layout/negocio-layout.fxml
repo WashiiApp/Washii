@@ -79,15 +79,6 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="navHistorico" alignment="CENTER_LEFT" focusTraversable="true" onMouseClicked="#handleNavClick" spacing="10.0" styleClass="nav-container">
-               <children>
-                  <FontIcon iconLiteral="mdi2l-list-box" iconSize="18" styleClass="icon" />
-                  <Label text="Historico" />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" top="10.0" />
-               </padding>
-            </HBox>
             <HBox fx:id="navServico" alignment="CENTER_LEFT" focusTraversable="true" onMouseClicked="#handleNavClick" spacing="10.0" styleClass="nav-container">
                <children>
                   <FontIcon iconLiteral="mdi2t-toolbox" iconSize="18" styleClass="icon" />

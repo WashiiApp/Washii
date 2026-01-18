@@ -15,10 +15,10 @@ import java.sql.*;
 
 public class AgendamentoPersistence implements AgendamentoRepository {
     @Override
-        public List<Agendamento> listarPorPeriodoENegocio(
-                LocalDate inicio, LocalDate fim, Long negocioId) {
+    public List<Agendamento> listarPorPeriodoENegocio(
+            LocalDate inicio, LocalDate fim, Long negocioId) {
 
-            String sql = """
+        String sql = """
         SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo
         FROM agendamento
         WHERE id_negocio = ?
@@ -26,101 +26,125 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         ORDER BY data, hora
     """;
 
-            List<Agendamento> agendamentos = new ArrayList<>();
+        List<Agendamento> agendamentos = new ArrayList<>();
 
-            try (Connection conn = DatabaseConfig.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-                stmt.setLong(1, negocioId);
-                stmt.setDate(2, Date.valueOf(inicio));
-                stmt.setDate(3, Date.valueOf(fim));
+            stmt.setLong(1, negocioId);
+            stmt.setDate(2, Date.valueOf(inicio));
+            stmt.setDate(3, Date.valueOf(fim));
 
-                ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
-                while (rs.next()) {
-                    Agendamento ag = new Agendamento();
-                    ag.setId(rs.getLong("id"));
-                    ag.setData(rs.getDate("data").toLocalDate());
-                    ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
+            while (rs.next()) {
+                Agendamento ag = new Agendamento();
+                ag.setId(rs.getLong("id"));
+                ag.setData(rs.getDate("data").toLocalDate());
+                ag.setHora(rs.getTime("hora").toLocalTime());
+                ag.setStatus(
+                        StatusAgendamento.valueOf(rs.getString("status_agendamento"))
+                );
 
-                    Cliente cliente = new Cliente();
-                    Long idCliente = buscarIdClientePorIdUsuario(
-                            conn,
-                            rs.getLong("id_cliente")
-                    );
 
-                    cliente.setId(idCliente);
-                    ag.setCliente(cliente);
+                Cliente cliente = new Cliente();
+                cliente.setId(rs.getLong("id_cliente"));
+                ag.setCliente(cliente);
 
-                    Veiculo veiculo = new Veiculo();
-                    veiculo.setId(rs.getLong("id_veiculo"));
-                    ag.setVeiculo(veiculo);
+                Veiculo veiculo = new Veiculo();
+                veiculo.setId(rs.getLong("id_veiculo"));
+                ag.setVeiculo(veiculo);
 
-                    Negocio negocio = new Negocio() {};
-                    negocio.setId(negocioId);
-                    ag.setNegocio(negocio);
+                Negocio negocio = new Negocio() {};
+                negocio.setId(rs.getLong("id_negocio"));
+                ag.setNegocio(negocio);
 
-                    agendamentos.add(ag);
-                }
-
-                return agendamentos;
-
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro ao listar agendamentos por período", e);
+                agendamentos.add(ag);
             }
+
+            return agendamentos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Erro ao listar agendamentos por período e negócio", e
+            );
         }
+    }
+
 
     @Override
-    public List<Agendamento> listarPorCliente(Long clienteId) {
-            String sql = """
-        SELECT id, data, hora, status_agendamento, id_veiculo, id_negocio
-        FROM agendamento
-        WHERE id_cliente = ?
-        ORDER BY data DESC, hora DESC
+    public List<Agendamento> listarPorCliente(Long idUsuario) {
+
+        String sql = """
+        SELECT 
+            a.id,
+            a.data,
+            a.hora,
+            a.status_agendamento,
+            a.id_cliente,
+            a.id_veiculo,
+            a.id_negocio
+        FROM agendamento a
+        WHERE a.id_cliente = ?
+        ORDER BY a.data DESC, a.hora DESC
     """;
 
-            List<Agendamento> agendamentos = new ArrayList<>();
+        List<Agendamento> agendamentos = new ArrayList<>();
 
-            try (Connection conn = DatabaseConfig.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection()) {
 
-                stmt.setLong(1, clienteId);
+            Long idCliente = buscarIdClientePorIdUsuario(conn, idUsuario);
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setLong(1, idCliente);
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
                     Agendamento ag = new Agendamento();
+
                     ag.setId(rs.getLong("id"));
                     ag.setData(rs.getDate("data").toLocalDate());
                     ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
-
-                    Cliente cliente = new Cliente();
-                    Long idCliente = buscarIdClientePorIdUsuario(
-                            conn,
-                            rs.getLong("id_cliente")
+                    ag.setStatus(
+                            StatusAgendamento.valueOf(
+                                    rs.getString("status_agendamento")
+                            )
                     );
+
+                    // Cliente
+                    Cliente cliente = new Cliente();
                     cliente.setId(idCliente);
                     ag.setCliente(cliente);
 
-                    Veiculo veiculo = new Veiculo();
-                    veiculo.setId(rs.getLong("id_veiculo"));
-                    ag.setVeiculo(veiculo);
-
-                    Negocio negocio = new Negocio() {
-                    };
+                    // Negócio
+                    Negocio negocio = new Negocio() {};
                     negocio.setId(rs.getLong("id_negocio"));
                     ag.setNegocio(negocio);
 
+
+                    // Veículo
+                    Veiculo veiculo = new Veiculo();
+                    veiculo.setId(rs.getLong("id_veiculo"));
+                    ag.setVeiculo(veiculo);
+
+                    // Serviço
+                    ag.setServicos(
+                            buscarServicosDoAgendamento(conn, ag.getId())
+                    );
+
                     agendamentos.add(ag);
                 }
-
-                return agendamentos;
-
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro ao listar agendamentos do cliente", e);
             }
+
+            return agendamentos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Erro ao listar agendamentos do cliente", e
+            );
         }
+    }
+
 
     @Override
     public void atualizarStatus(Long agendamentoId, StatusAgendamento novoStatus) {
@@ -383,4 +407,35 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         }
         return null;
     }
+
+    private List<Servico> buscarServicosDoAgendamento(
+            Connection conn, Long idAgendamento
+    ) throws SQLException {
+
+        String sql = """
+        SELECT s.id, s.nome, s.precobase
+        FROM servico s
+        JOIN agendamento_servico ags
+          ON s.id = ags.id_servico
+        WHERE ags.id_agendamento = ?
+    """;
+
+        List<Servico> servicos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idAgendamento);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Servico s = new Servico();
+                s.setId(rs.getLong("id"));
+                s.setNome(rs.getString("nome"));
+                s.setPrecoBase(rs.getFloat("precobase"));
+                servicos.add(s);
+            }
+        }
+
+        return servicos;
+    }
+
 }

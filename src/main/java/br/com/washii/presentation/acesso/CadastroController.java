@@ -96,6 +96,11 @@ public class CadastroController extends BaseController {
         return;
     }
 
+    if (!email.isBlank() && !email.contains("@")){
+        exibirAvisoErro("E-mail inválido");
+        return;
+    }
+
     if (!senha.equals(senha2)) {
         exibirAvisoErro("As senhas não conferem.");
         return;

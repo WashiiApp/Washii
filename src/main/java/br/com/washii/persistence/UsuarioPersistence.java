@@ -517,7 +517,7 @@ public class UsuarioPersistence implements UsuarioRepository {
     public void salvarEndereco(Usuario usuario) {
         String sqlEndereco = """
         INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia, cidade, numero)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         RETURNING id
     """;
 

@@ -206,6 +206,10 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             if ("CLIENTE".equals(tipo)) {
                 Cliente cliente = new Cliente();
+                Optional<Long> idClienteOpt = buscarIdClientePorIdUsuario(rs.getLong("id"));
+
+                idClienteOpt.ifPresent(cliente::setId);
+
                 cliente.setTelefone(rs.getString("telefone"));
                 usuario = cliente;
 
@@ -248,6 +252,31 @@ public class UsuarioPersistence implements UsuarioRepository {
             throw new RuntimeException("Erro ao buscar usuário", e);
         }
     }
+
+    public Optional<Long> buscarIdClientePorIdUsuario(Long idUsuario) {
+        String sql = """
+        SELECT id
+        FROM cliente
+        WHERE id_usuario = ?
+    """;
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(rs.getLong("id"));
+            }
+
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar id do cliente", e);
+        }
+    }
+
 
 
     @Override

@@ -1,6 +1,7 @@
 package br.com.washii.persistence;
 
 import br.com.washii.domain.entities.*;
+import br.com.washii.domain.enums.CategoriaVeiculo;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.repository.AgendamentoRepository;
 import br.com.washii.infra.database.DatabaseConfig;
@@ -38,20 +39,25 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Agendamento ag = montarAgendamentoBasico(rs);
+        Agendamento ag = montarAgendamentoBasico(rs);
 
-                Long idNegocio = rs.getLong("id_negocio");
+        // Cliente
+        Long idCliente = rs.getLong("id_cliente");
+        ag.setCliente(buscarCliente(conn, idCliente));
 
-                ag.setNegocio(
-                        buscarNegocioCompleto(conn, idNegocio)
-                );
+        // Negócio
+        Long idNegocio = rs.getLong("id_negocio");
+        ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
 
-                ag.setServicos(
-                        buscarServicosDoAgendamento(conn, ag.getId())
-                );
+        // VEÍCULO (CORRIGIDO AQUI)
+        Long idVeiculo = rs.getLong("id_veiculo");
+        ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
 
-                agendamentos.add(ag);
-            }
+        // Serviços
+        ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
+
+        agendamentos.add(ag);
+    }
 
             return agendamentos;
 
@@ -468,6 +474,70 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         return null;
     }
 
+
+//    while (rs.next()) {
+//        Agendamento ag = montarAgendamentoBasico(rs);
+//
+//        // Cliente
+//        Long idCliente = rs.getLong("id_cliente");
+//        ag.setCliente(buscarCliente(conn, idCliente));
+//
+//        // Negócio
+//        Long idNegocio = rs.getLong("id_negocio");
+//        ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
+//
+//        // VEÍCULO (CORRIGIDO AQUI)
+//        Long idVeiculo = rs.getLong("id_veiculo");
+//        ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
+//
+//        // Serviços
+//        ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
+//
+//        agendamentos.add(ag);
+//    }
+    private Veiculo buscarVeiculo(Connection conn, Long idVeiculo) throws SQLException {
+        String sql = "SELECT id, placa, categoria, id_cliente FROM veiculo WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idVeiculo);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Veiculo v = new Veiculo();
+                v.setId(rs.getLong("id"));
+                v.setPlaca(rs.getString("placa"));
+
+                // Tratamento do Enum CategoriaVeiculo
+                String categoriaStr = rs.getString("categoria");
+                if (categoriaStr != null) {
+                    v.setCategoriaVeiculo(CategoriaVeiculo.valueOf(categoriaStr));
+                }
+                return v;
+            }
+        }
+        return null;
+    }
+
+    private Cliente buscarCliente(Connection conn, Long idCliente) throws SQLException {
+        String sql = """
+            SELECT u.nome
+            FROM cliente c
+            JOIN usuario u ON c.id_usuario = u.id
+            WHERE c.id = ?
+        """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+            Cliente c = new Cliente();
+            c.setId(idCliente);
+            if (rs.next()) {
+                c.setNome(rs.getString("nome"));
+            } else {
+                c.setNome("Cliente não encontrado");
+            }
+            return c;
+        }
+    }
 
     private Agendamento montarAgendamentoBasico(ResultSet rs) throws SQLException {
         Agendamento ag = new Agendamento();

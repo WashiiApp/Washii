@@ -419,11 +419,11 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     }
 
 
-    private Negocio buscarNegocioCompleto(Connection conn, Long idNegocio) throws SQLException {
+    private Negocio buscarNegocioCompleto(Connection conn, Long idUsuarioNegocio) throws SQLException {
         String sql = """
         SELECT 
-            n.id_negocio,
-            n.nome,
+            n.id_usuario,
+            n.razao_social,
             e.rua,
             e.numero,
             e.cidade,
@@ -431,11 +431,11 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         FROM negocio n
         JOIN usuario u ON u.id = n.id_usuario
         JOIN endereco e ON e.id = u.id_endereco
-        WHERE n.id_negocio = ?
+        WHERE n.id_usuario = ?
     """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, idNegocio);
+            stmt.setLong(1, idUsuarioNegocio);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -446,8 +446,8 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 end.setEstado(rs.getString("estado"));
 
                 Negocio neg = new Negocio() {};
-                neg.setId(rs.getLong("id_negocio")); // 🔴 AQUI ERA O ERRO
-                neg.setNome(rs.getString("nome"));
+                neg.setId(rs.getLong("id_usuario")); // ✅ PK correta
+                neg.setRazaoSocial(rs.getString("razao_social"));
                 neg.setEndereco(end);
 
                 return neg;
@@ -455,6 +455,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         }
         return null;
     }
+
 
 
 

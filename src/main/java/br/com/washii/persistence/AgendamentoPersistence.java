@@ -395,7 +395,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
     private List<Servico> buscarServicosDoAgendamento(Connection conn, Long idAgendamento) throws SQLException {
         String sql = """
-        SELECT s.id, s.nome, s.preco_base
+        SELECT s.id, s.nome, s.precobase
         FROM servico s
         JOIN agendamento_servico a ON a.id_servico = s.id
         WHERE a.id_agendamento = ?
@@ -411,7 +411,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 Servico s = new Servico();
                 s.setId(rs.getLong("id"));
                 s.setNome(rs.getString("nome"));
-                s.setPrecoBase(rs.getDouble("preco_base"));
+                s.setPrecoBase(rs.getDouble("precobase"));
                 servicos.add(s);
             }
         }
@@ -420,10 +420,11 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
 
     private Negocio buscarNegocioCompleto(Connection conn, Long idUsuarioNegocio) throws SQLException {
+
         String sql = """
         SELECT 
-            n.id_usuario,
-            n.razao_social,
+            u.id AS id_usuario,
+            u.nome AS nome_usuario,
             e.rua,
             e.numero,
             e.cidade,
@@ -439,6 +440,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+
                 Endereco end = new Endereco();
                 end.setRua(rs.getString("rua"));
                 end.setNumero(rs.getString("numero"));
@@ -446,15 +448,17 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 end.setEstado(rs.getString("estado"));
 
                 Negocio neg = new Negocio() {};
-                neg.setId(rs.getLong("id_usuario")); // ✅ PK correta
-                neg.setRazaoSocial(rs.getString("razao_social"));
+                neg.setId(rs.getLong("id_usuario")); // id_usuario
+                neg.setNome(rs.getString("nome_usuario")); // vem do USUARIO
                 neg.setEndereco(end);
 
                 return neg;
             }
         }
+
         return null;
     }
+
 
 
 

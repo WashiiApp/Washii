@@ -15,10 +15,10 @@ import java.sql.*;
 
 public class AgendamentoPersistence implements AgendamentoRepository {
     @Override
-        public List<Agendamento> listarPorPeriodoENegocio(
-                LocalDate inicio, LocalDate fim, Long negocioId) {
+    public List<Agendamento> listarPorPeriodoENegocio(
+            LocalDate inicio, LocalDate fim, Long negocioId) {
 
-            String sql = """
+        String sql = """
         SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo
         FROM agendamento
         WHERE id_negocio = ?
@@ -26,50 +26,51 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         ORDER BY data, hora
     """;
 
-            List<Agendamento> agendamentos = new ArrayList<>();
+        List<Agendamento> agendamentos = new ArrayList<>();
 
-            try (Connection conn = DatabaseConfig.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-                stmt.setLong(1, negocioId);
-                stmt.setDate(2, Date.valueOf(inicio));
-                stmt.setDate(3, Date.valueOf(fim));
+            stmt.setLong(1, negocioId);
+            stmt.setDate(2, Date.valueOf(inicio));
+            stmt.setDate(3, Date.valueOf(fim));
 
-                ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
-                while (rs.next()) {
-                    Agendamento ag = new Agendamento();
-                    ag.setId(rs.getLong("id"));
-                    ag.setData(rs.getDate("data").toLocalDate());
-                    ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
+            while (rs.next()) {
+                Agendamento ag = new Agendamento();
+                ag.setId(rs.getLong("id"));
+                ag.setData(rs.getDate("data").toLocalDate());
+                ag.setHora(rs.getTime("hora").toLocalTime());
+                ag.setStatus(
+                        StatusAgendamento.valueOf(rs.getString("status_agendamento"))
+                );
 
-                    Cliente cliente = new Cliente();
-                    Long idCliente = buscarIdClientePorIdUsuario(
-                            conn,
-                            rs.getLong("id_cliente")
-                    );
 
-                    cliente.setId(idCliente);
-                    ag.setCliente(cliente);
+                Cliente cliente = new Cliente();
+                cliente.setId(rs.getLong("id_cliente"));
+                ag.setCliente(cliente);
 
-                    Veiculo veiculo = new Veiculo();
-                    veiculo.setId(rs.getLong("id_veiculo"));
-                    ag.setVeiculo(veiculo);
+                Veiculo veiculo = new Veiculo();
+                veiculo.setId(rs.getLong("id_veiculo"));
+                ag.setVeiculo(veiculo);
 
-                    Negocio negocio = new Negocio() {};
-                    negocio.setId(negocioId);
-                    ag.setNegocio(negocio);
+                Negocio negocio = new Negocio() {};
+                negocio.setId(rs.getLong("id_negocio"));
+                ag.setNegocio(negocio);
 
-                    agendamentos.add(ag);
-                }
-
-                return agendamentos;
-
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro ao listar agendamentos por período", e);
+                agendamentos.add(ag);
             }
+
+            return agendamentos;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Erro ao listar agendamentos por período e negócio", e
+            );
         }
+    }
+
 
     @Override
     public List<Agendamento> listarPorCliente(Long idUsuario) {
@@ -92,7 +93,6 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
         try (Connection conn = DatabaseConfig.getConnection()) {
 
-            // 1️⃣ id_usuario → id_cliente (uma única vez)
             Long idCliente = buscarIdClientePorIdUsuario(conn, idUsuario);
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -127,7 +127,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     veiculo.setId(rs.getLong("id_veiculo"));
                     ag.setVeiculo(veiculo);
 
-                    // Serviços (OBRIGATÓRIO pela entidade)
+                    // Serviço
                     ag.setServicos(
                             buscarServicosDoAgendamento(conn, ag.getId())
                     );

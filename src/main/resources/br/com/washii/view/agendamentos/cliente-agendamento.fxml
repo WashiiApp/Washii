@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<ScrollPane fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.ClienteAgendamentoController">
+<ScrollPane fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.screens.agendamentos.ClienteAgendamentoController">
    <content>
       <VBox alignment="TOP_CENTER" spacing="25.0" styleClass="background-transparente">
          <padding>

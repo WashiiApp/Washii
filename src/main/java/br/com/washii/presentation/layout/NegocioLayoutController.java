@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.washii.presentation.core.SceneManager;
-import br.com.washii.presentation.home.HomeNegocioController;
+import br.com.washii.presentation.screens.home.HomeNegocioController;
 import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;

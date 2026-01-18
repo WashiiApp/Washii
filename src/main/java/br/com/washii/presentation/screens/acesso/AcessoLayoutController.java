@@ -1,4 +1,4 @@
-package br.com.washii.presentation.acesso;
+package br.com.washii.presentation.screens.acesso;
 
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.presentation.core.SceneManager;

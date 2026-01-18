@@ -1,4 +1,4 @@
-package br.com.washii.presentation.agendamentos;
+package br.com.washii.presentation.components.cards;
 
 import java.time.format.DateTimeFormatter;
 import br.com.washii.domain.entities.Agendamento;

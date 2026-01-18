@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<ScrollPane fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.relatorio.RelatorioNegocioController">
+<ScrollPane fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.screens.relatorio.RelatorioNegocioController">
    <content>
       <VBox alignment="TOP_CENTER" styleClass="background-transparente">
          <children>

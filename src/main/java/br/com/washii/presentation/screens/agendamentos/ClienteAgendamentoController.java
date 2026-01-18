@@ -1,4 +1,4 @@
-package br.com.washii.presentation.agendamentos;
+package br.com.washii.presentation.screens.agendamentos;
 
 import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Servico;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.presentation.core.BaseController;
-import br.com.washii.presentation.home.HomeClienteController;
+import br.com.washii.presentation.screens.home.HomeClienteController;
 
 public class ClienteAgendamentoController extends BaseController {
 
@@ -145,7 +145,6 @@ public class ClienteAgendamentoController extends BaseController {
     // --- NOVO: Botão Cancelar ---
     btnCancelar.setOnAction(e -> {
         try {
-            // Obtém o Stage (Janela) atual a partir do próprio botão
             FXMLLoader loader =sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-cliente.fxml");
 
             HomeClienteController controller = loader.getController();

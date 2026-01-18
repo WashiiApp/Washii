@@ -1,8 +1,8 @@
-package br.com.washii.presentation.home;
+package br.com.washii.presentation.screens.home;
 
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
-import br.com.washii.presentation.agendamentos.AgendamentoCardController;
+import br.com.washii.presentation.components.cards.AgendamentoCardController;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.service.AgendamentoMock;
 import br.com.washii.service.AgendamentoService;
@@ -92,7 +92,7 @@ public class HomeNegocioController extends BaseController {
     private void adicionarCardAoFluxo(Agendamento ag) {
         try {
             // Caminho para o FXML do Card que criamos antes
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/agendamentos/agendamento-card.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/agendamento-card.fxml"));
             Parent card = loader.load();
 
             // Pegar o controller do card e passar os dados e o service

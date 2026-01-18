@@ -1,4 +1,4 @@
-package br.com.washii.presentation.relatorio;
+package br.com.washii.presentation.screens.relatorio;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;

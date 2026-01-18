@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="cardRoot" maxWidth="-Infinity" prefWidth="300.0" spacing="15.0" styleClass="agendamento-card" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.AgendamentoCardClienteController">
+<VBox fx:id="cardRoot" maxWidth="-Infinity" prefWidth="300.0" spacing="15.0" styleClass="agendamento-card" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.components.cards.AgendamentoCardClienteController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>

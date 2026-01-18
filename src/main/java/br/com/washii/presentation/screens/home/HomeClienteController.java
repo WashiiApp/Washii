@@ -1,11 +1,11 @@
-package br.com.washii.presentation.home;
+package br.com.washii.presentation.screens.home;
 
 import java.io.IOException;
 import java.util.List;
 import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.enums.CategoriaServico;
-import br.com.washii.presentation.agendamentos.NegocioCardController;
+import br.com.washii.presentation.components.cards.NegocioCardController;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.service.UsuarioService;
 import javafx.collections.FXCollections;
@@ -81,7 +81,7 @@ public class HomeClienteController extends BaseController{
         for (Negocio negocio : negocios) {
             if (negocio instanceof LavaJato lavaJato){
                 try{
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/agendamentos/negocio-card.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/negocio-card.fxml"));
                     VBox card = loader.load();
 
                     // 2. Obtém o Controller do Card que acabou de ser carregado

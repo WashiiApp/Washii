@@ -1,4 +1,4 @@
-package br.com.washii.presentation.servico;
+package br.com.washii.presentation.screens.servico;
 
 import java.util.List;
 

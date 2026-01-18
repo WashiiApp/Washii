@@ -1,16 +1,16 @@
 package br.com.washii.infra.factory;
 
-import br.com.washii.presentation.acesso.CadastroController;
-import br.com.washii.presentation.acesso.LoginController;
-import br.com.washii.presentation.agendamentos.ClienteAgendamentoController;
-import br.com.washii.presentation.agendamentos.MeusAgendamentosClienteController;
-import br.com.washii.presentation.home.HomeClienteController;
-import br.com.washii.presentation.home.HomeNegocioController;
 import br.com.washii.presentation.layout.ClienteLayoutController;
 import br.com.washii.presentation.layout.NegocioLayoutController;
-import br.com.washii.presentation.perfil.PerfilClienteController;
-import br.com.washii.presentation.perfil.PerfilNegocioController;
-import br.com.washii.presentation.servico.GestaoServicosController;
+import br.com.washii.presentation.screens.acesso.CadastroController;
+import br.com.washii.presentation.screens.acesso.LoginController;
+import br.com.washii.presentation.screens.agendamentos.ClienteAgendamentoController;
+import br.com.washii.presentation.screens.agendamentos.MeusAgendamentosClienteController;
+import br.com.washii.presentation.screens.home.HomeClienteController;
+import br.com.washii.presentation.screens.home.HomeNegocioController;
+import br.com.washii.presentation.screens.perfil.PerfilClienteController;
+import br.com.washii.presentation.screens.perfil.PerfilNegocioController;
+import br.com.washii.presentation.screens.servico.GestaoServicosController;
 import br.com.washii.service.ServiceFactory;
 
 public class ControllerFactory {

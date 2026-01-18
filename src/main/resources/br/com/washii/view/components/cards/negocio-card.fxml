@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="cardRoot" styleClass="card-negocio" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.agendamentos.NegocioCardController">
+<VBox fx:id="cardRoot" styleClass="card-negocio" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.components.cards.NegocioCardController">
    <children>
       <HBox spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
@@ -19,7 +19,7 @@
                <children>
                   <ImageView fx:id="imgLogo" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../assets/images/perfil/image.png" />
+                        <Image url="@../../../assets/images/perfil/profile-placeholder.png" />
                      </image></ImageView>
                   <Label fx:id="lblNome" alignment="CENTER" text="Nome do Negócio" textAlignment="CENTER" wrapText="true">
                      <font><Font name="System Bold" size="15.0" /></font>

@@ -1,4 +1,4 @@
-package br.com.washii.presentation.acesso;
+package br.com.washii.presentation.screens.acesso;
 
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.TipoUsuario;

@@ -11,12 +11,13 @@ module br.com.washii {
 
     opens br.com.washii.domain.entities to javafx.base, javafx.fxml;
     opens br.com.washii.presentation.layout to javafx.fxml;
-    opens br.com.washii.presentation.acesso to javafx.fxml;
-    opens br.com.washii.presentation.servico to javafx.fxml;
-    opens br.com.washii.presentation.agendamentos to javafx.fxml;
-    opens br.com.washii.presentation.home to javafx.fxml;
-    opens br.com.washii.presentation.perfil to javafx.fxml;
-    opens br.com.washii.presentation.relatorio to javafx.fxml;
+    opens br.com.washii.presentation.screens.acesso to javafx.fxml;
+    opens br.com.washii.presentation.screens.servico to javafx.fxml;
+    opens br.com.washii.presentation.screens.agendamentos to javafx.fxml;
+    opens br.com.washii.presentation.screens.home to javafx.fxml;
+    opens br.com.washii.presentation.screens.perfil to javafx.fxml;
+    opens br.com.washii.presentation.screens.relatorio to javafx.fxml;
+    opens br.com.washii.presentation.components.cards to javafx.fxml;
     
     exports br.com.washii.app;
 }

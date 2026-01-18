@@ -1,4 +1,4 @@
-package br.com.washii.presentation.perfil;
+package br.com.washii.presentation.screens.perfil;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -142,7 +142,7 @@ public class PerfilClienteController {
             }
 
             try {
-                Image img = new Image(getClass().getResourceAsStream("/br/com/washii/assets/images/perfil/image.png"));
+                Image img = new Image(getClass().getResourceAsStream("/br/com/washii/assets/images/perfil/profile-placeholder.png"));
                 circleFoto.setFill(new ImagePattern(img));
             } catch (Exception e) {
                 System.err.println("Erro ao carregar imagem: " + e.getMessage());

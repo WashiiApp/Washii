@@ -1,10 +1,11 @@
-package br.com.washii.presentation.agendamentos;
+package br.com.washii.presentation.components.cards;
 
 
 import br.com.washii.domain.entities.Endereco;
 import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Servico;
 import br.com.washii.presentation.core.BaseController;
+import br.com.washii.presentation.screens.agendamentos.ClienteAgendamentoController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

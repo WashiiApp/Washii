@@ -1,4 +1,4 @@
-package br.com.washii.presentation.agendamentos;
+package br.com.washii.presentation.components.cards;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

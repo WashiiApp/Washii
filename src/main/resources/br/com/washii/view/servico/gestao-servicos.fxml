@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<ScrollPane fx:id="scrollPrincipal" fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.servico.GestaoServicosController">
+<ScrollPane fx:id="scrollPrincipal" fitToWidth="true" styleClass="background-transparente" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.screens.servico.GestaoServicosController">
    <content>
       <VBox alignment="TOP_CENTER" styleClass="background-transparente">
          <children>

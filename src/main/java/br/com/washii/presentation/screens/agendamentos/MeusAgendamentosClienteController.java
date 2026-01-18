@@ -1,9 +1,10 @@
-package br.com.washii.presentation.agendamentos;
+package br.com.washii.presentation.screens.agendamentos;
 
 import java.io.IOException;
 import java.util.List;
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.presentation.components.cards.AgendamentoCardClienteController;
 import br.com.washii.service.AgendamentoMock;
 import br.com.washii.service.AgendamentoService;
 import javafx.collections.FXCollections;
@@ -81,7 +82,7 @@ public class MeusAgendamentosClienteController {
 
     private void adicionarCardAoFluxo(Agendamento ag){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/agendamentos/agendamento-card-cliente.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/agendamento-card-cliente.fxml"));
             Parent card = loader.load();
             
             AgendamentoCardClienteController controller = loader.getController();

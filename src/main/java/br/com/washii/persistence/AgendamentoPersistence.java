@@ -1,6 +1,7 @@
 package br.com.washii.persistence;
 
 import br.com.washii.domain.entities.*;
+import br.com.washii.domain.enums.CategoriaVeiculo;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.repository.AgendamentoRepository;
 import br.com.washii.infra.database.DatabaseConfig;
@@ -38,20 +39,25 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Agendamento ag = montarAgendamentoBasico(rs);
+        Agendamento ag = montarAgendamentoBasico(rs);
 
-                Long idNegocio = rs.getLong("id_negocio");
+        // buscando Cliente
+        Long idCliente = rs.getLong("id_cliente");
+        ag.setCliente(buscarCliente(conn, idCliente));
 
-                ag.setNegocio(
-                        buscarNegocioCompleto(conn, idNegocio)
-                );
+        // buscando Negócio
+        Long idNegocio = rs.getLong("id_negocio");
+        ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
 
-                ag.setServicos(
-                        buscarServicosDoAgendamento(conn, ag.getId())
-                );
+        // buscando o veiculo
+        Long idVeiculo = rs.getLong("id_veiculo");
+        ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
 
-                agendamentos.add(ag);
-            }
+        // buscnado Serviços
+        ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
+
+        agendamentos.add(ag);
+    }
 
             return agendamentos;
 
@@ -93,23 +99,19 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 while (rs.next()) {
                     Agendamento ag = montarAgendamentoBasico(rs);
 
-                    // Cliente
                     Cliente cliente = new Cliente();
                     cliente.setId(idCliente);
                     ag.setCliente(cliente);
 
-                    // Negócio
                     Long idNegocio = rs.getLong("id_negocio");
                     ag.setNegocio(
                             buscarNegocioCompleto(conn, idNegocio)
                     );
 
-                    // Veículo
                     Veiculo veiculo = new Veiculo();
                     veiculo.setId(rs.getLong("id_veiculo"));
                     ag.setVeiculo(veiculo);
 
-                    // Serviços
                     ag.setServicos(
                             buscarServicosDoAgendamento(conn, ag.getId())
                     );
@@ -393,9 +395,16 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         return null;
     }
 
-    private List<Servico> buscarServicosDoAgendamento(Connection conn, Long idAgendamento) throws SQLException {
+    private List<Servico> buscarServicosDoAgendamento(
+            Connection conn,
+            Long idAgendamento
+    ) throws SQLException {
+
         String sql = """
-        SELECT s.id, s.nome, s.precobase
+        SELECT 
+            s.id,
+            s.nome,
+            s.precobase
         FROM servico s
         JOIN agendamento_servico a ON a.id_servico = s.id
         WHERE a.id_agendamento = ?
@@ -415,8 +424,10 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 servicos.add(s);
             }
         }
+
         return servicos;
     }
+
 
 
     private Negocio buscarNegocioCompleto(Connection conn, Long idUsuarioNegocio) throws SQLException {
@@ -448,8 +459,8 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 end.setEstado(rs.getString("estado"));
 
                 Negocio neg = new Negocio() {};
-                neg.setId(rs.getLong("id_usuario")); // id_usuario
-                neg.setNome(rs.getString("nome_usuario")); // vem do USUARIO
+                neg.setId(rs.getLong("id_usuario"));
+                neg.setNome(rs.getString("nome_usuario")); // TO PEGANDO O NOME DE USUARIO E COLOCANDO EM NEGOCIO
                 neg.setEndereco(end);
 
                 return neg;
@@ -460,8 +471,48 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     }
 
 
+    private Veiculo buscarVeiculo(Connection conn, Long idVeiculo) throws SQLException {
+        String sql = "SELECT id, placa, categoria, id_cliente FROM veiculo WHERE id = ?";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idVeiculo);
+            ResultSet rs = stmt.executeQuery();
 
+            if (rs.next()) {
+                Veiculo v = new Veiculo();
+                v.setId(rs.getLong("id"));
+                v.setPlaca(rs.getString("placa"));
+
+                String categoriaStr = rs.getString("categoria");
+                if (categoriaStr != null) {
+                    v.setCategoriaVeiculo(CategoriaVeiculo.valueOf(categoriaStr));
+                }
+                return v;
+            }
+        }
+        return null;
+    }
+
+    private Cliente buscarCliente(Connection conn, Long idCliente) throws SQLException {
+        String sql = """
+            SELECT u.nome
+            FROM cliente c
+            JOIN usuario u ON c.id_usuario = u.id
+            WHERE c.id = ?
+        """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+            Cliente c = new Cliente();
+            c.setId(idCliente);
+            if (rs.next()) {
+                c.setNome(rs.getString("nome"));
+            } else {
+                c.setNome("Cliente não encontrado");
+            }
+            return c;
+        }
+    }
 
     private Agendamento montarAgendamentoBasico(ResultSet rs) throws SQLException {
         Agendamento ag = new Agendamento();

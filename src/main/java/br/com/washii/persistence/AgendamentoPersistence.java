@@ -393,9 +393,16 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         return null;
     }
 
-    private List<Servico> buscarServicosDoAgendamento(Connection conn, Long idAgendamento) throws SQLException {
+    private List<Servico> buscarServicosDoAgendamento(
+            Connection conn,
+            Long idAgendamento
+    ) throws SQLException {
+
         String sql = """
-        SELECT s.id, s.nome, s.precobase
+        SELECT 
+            s.id,
+            s.nome,
+            s.precobase
         FROM servico s
         JOIN agendamento_servico a ON a.id_servico = s.id
         WHERE a.id_agendamento = ?
@@ -415,8 +422,10 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 servicos.add(s);
             }
         }
+
         return servicos;
     }
+
 
 
     private Negocio buscarNegocioCompleto(Connection conn, Long idUsuarioNegocio) throws SQLException {
@@ -448,8 +457,8 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 end.setEstado(rs.getString("estado"));
 
                 Negocio neg = new Negocio() {};
-                neg.setId(rs.getLong("id_usuario")); // id_usuario
-                neg.setNome(rs.getString("nome_usuario")); // vem do USUARIO
+                neg.setId(rs.getLong("id_usuario"));
+                neg.setNome(rs.getString("nome_usuario")); // TO PEGANDO O NOME DE USUARIO E COLOCANDO EM NEGOCIO
                 neg.setEndereco(end);
 
                 return neg;
@@ -458,9 +467,6 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
         return null;
     }
-
-
-
 
 
     private Agendamento montarAgendamentoBasico(ResultSet rs) throws SQLException {

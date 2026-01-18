@@ -19,7 +19,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             LocalDate inicio, LocalDate fim, Long negocioId) {
 
         String sql = """
-        SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo
+        SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo, id_negocio
         FROM agendamento
         WHERE id_negocio = ?
           AND data BETWEEN ? AND ?
@@ -38,26 +38,17 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Agendamento ag = new Agendamento();
-                ag.setId(rs.getLong("id"));
-                ag.setData(rs.getDate("data").toLocalDate());
-                ag.setHora(rs.getTime("hora").toLocalTime());
-                ag.setStatus(
-                        StatusAgendamento.valueOf(rs.getString("status_agendamento"))
+                Agendamento ag = montarAgendamentoBasico(rs);
+
+                Long idNegocio = rs.getLong("id_negocio");
+
+                ag.setNegocio(
+                        buscarNegocioCompleto(conn, idNegocio)
                 );
 
-
-                Cliente cliente = new Cliente();
-                cliente.setId(rs.getLong("id_cliente"));
-                ag.setCliente(cliente);
-
-                Veiculo veiculo = new Veiculo();
-                veiculo.setId(rs.getLong("id_veiculo"));
-                ag.setVeiculo(veiculo);
-
-                Negocio negocio = new Negocio() {};
-                negocio.setId(rs.getLong("id_negocio"));
-                ag.setNegocio(negocio);
+                ag.setServicos(
+                        buscarServicosDoAgendamento(conn, ag.getId())
+                );
 
                 agendamentos.add(ag);
             }
@@ -100,16 +91,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
-                    Agendamento ag = new Agendamento();
-
-                    ag.setId(rs.getLong("id"));
-                    ag.setData(rs.getDate("data").toLocalDate());
-                    ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(
-                            StatusAgendamento.valueOf(
-                                    rs.getString("status_agendamento")
-                            )
-                    );
+                    Agendamento ag = montarAgendamentoBasico(rs);
 
                     // Cliente
                     Cliente cliente = new Cliente();
@@ -117,23 +99,24 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     ag.setCliente(cliente);
 
                     // Negócio
-                    Negocio negocio = new Negocio() {};
-                    negocio.setId(rs.getLong("id_negocio"));
-                    ag.setNegocio(negocio);
-
+                    Long idNegocio = rs.getLong("id_negocio");
+                    ag.setNegocio(
+                            buscarNegocioCompleto(conn, idNegocio)
+                    );
 
                     // Veículo
                     Veiculo veiculo = new Veiculo();
                     veiculo.setId(rs.getLong("id_veiculo"));
                     ag.setVeiculo(veiculo);
 
-                    // Serviço
+                    // Serviços
                     ag.setServicos(
                             buscarServicosDoAgendamento(conn, ag.getId())
                     );
 
                     agendamentos.add(ag);
                 }
+
             }
 
             return agendamentos;
@@ -352,6 +335,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
     @Override
     public List<Agendamento> listarTodos() {
+
         String sql = """
         SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo, id_negocio
         FROM agendamento
@@ -365,23 +349,24 @@ public class AgendamentoPersistence implements AgendamentoRepository {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Agendamento ag = new Agendamento();
-                ag.setId(rs.getLong("id"));
-                ag.setData(rs.getDate("data").toLocalDate());
-                ag.setHora(rs.getTime("hora").toLocalTime());
-                ag.setStatus(StatusAgendamento.valueOf(rs.getString("status")));
+                Agendamento ag = montarAgendamentoBasico(rs);
 
                 Cliente c = new Cliente();
                 c.setId(rs.getLong("id_cliente"));
                 ag.setCliente(c);
 
+                Long idNegocio = rs.getLong("id_negocio");
+                ag.setNegocio(
+                        buscarNegocioCompleto(conn, idNegocio)
+                );
+
                 Veiculo v = new Veiculo();
                 v.setId(rs.getLong("id_veiculo"));
                 ag.setVeiculo(v);
 
-                Negocio n = new Negocio() {};
-                n.setId(rs.getLong("id_negocio"));
-                ag.setNegocio(n);
+                ag.setServicos(
+                        buscarServicosDoAgendamento(conn, ag.getId())
+                );
 
                 agendamentos.add(ag);
             }
@@ -408,16 +393,12 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         return null;
     }
 
-    private List<Servico> buscarServicosDoAgendamento(
-            Connection conn, Long idAgendamento
-    ) throws SQLException {
-
+    private List<Servico> buscarServicosDoAgendamento(Connection conn, Long idAgendamento) throws SQLException {
         String sql = """
-        SELECT s.id, s.nome, s.precobase
+        SELECT s.id, s.nome, s.preco_base
         FROM servico s
-        JOIN agendamento_servico ags
-          ON s.id = ags.id_servico
-        WHERE ags.id_agendamento = ?
+        JOIN agendamento_servico a ON a.id_servico = s.id
+        WHERE a.id_agendamento = ?
     """;
 
         List<Servico> servicos = new ArrayList<>();
@@ -430,12 +411,64 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 Servico s = new Servico();
                 s.setId(rs.getLong("id"));
                 s.setNome(rs.getString("nome"));
-                s.setPrecoBase(rs.getFloat("precobase"));
+                s.setPrecoBase(rs.getDouble("preco_base"));
                 servicos.add(s);
             }
         }
-
         return servicos;
     }
 
-}
+
+    private Negocio buscarNegocioCompleto(Connection conn, Long idUsuarioNegocio) throws SQLException {
+        String sql = """
+        SELECT 
+            n.id_usuario,
+            n.razao_social,
+            e.rua,
+            e.numero,
+            e.cidade,
+            e.estado
+        FROM negocio n
+        JOIN usuario u ON u.id = n.id_usuario
+        JOIN endereco e ON e.id = u.id_endereco
+        WHERE n.id_usuario = ?
+    """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idUsuarioNegocio);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Endereco end = new Endereco();
+                end.setRua(rs.getString("rua"));
+                end.setNumero(rs.getString("numero"));
+                end.setCidade(rs.getString("cidade"));
+                end.setEstado(rs.getString("estado"));
+
+                Negocio neg = new Negocio() {};
+                neg.setId(rs.getLong("id_usuario")); // ✅ PK correta
+                neg.setRazaoSocial(rs.getString("razao_social"));
+                neg.setEndereco(end);
+
+                return neg;
+            }
+        }
+        return null;
+    }
+
+
+
+
+    private Agendamento montarAgendamentoBasico(ResultSet rs) throws SQLException {
+        Agendamento ag = new Agendamento();
+        ag.setId(rs.getLong("id"));
+        ag.setData(rs.getDate("data").toLocalDate());
+        ag.setHora(rs.getTime("hora").toLocalTime());
+        ag.setStatus(
+                StatusAgendamento.valueOf(
+                        rs.getString("status_agendamento")
+                )
+        );
+        return ag;
+    }
+    }

@@ -136,7 +136,9 @@ public class UsuarioPersistence implements UsuarioRepository {
                     try (PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
                         stmtCliente.setString(1, cliente.getTelefone());
                         stmtCliente.setLong(2, usuario.getId());
-                    }
+
+                        stmtCliente.executeUpdate();
+                        }
                 }
             }
 

@@ -331,9 +331,47 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     }
 
     @Override
-    public Optional<Agendamento> buscarPorId(Long aLong) {
-        return Optional.empty();
+    public Optional<Agendamento> buscarPorId(Long idAgendamento) {
+        String sql = """
+        SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo, id_negocio
+        FROM agendamento
+        WHERE id = ?
+    """;
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idAgendamento);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Agendamento ag = montarAgendamentoBasico(rs);
+
+                // Cliente
+                Long idCliente = rs.getLong("id_cliente");
+                ag.setCliente(buscarCliente(conn, idCliente));
+
+                // Negócio
+                Long idNegocio = rs.getLong("id_negocio");
+                ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
+
+                // Veículo
+                Long idVeiculo = rs.getLong("id_veiculo");
+                ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
+
+                // Serviços
+                ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
+
+                return Optional.of(ag);
+            }
+
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar agendamento por ID", e);
+        }
     }
+
 
     @Override
     public List<Agendamento> listarTodos() {

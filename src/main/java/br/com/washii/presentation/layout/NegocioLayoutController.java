@@ -7,7 +7,6 @@ import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.presentation.home.HomeNegocioController;
 import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
@@ -17,7 +16,7 @@ public class NegocioLayoutController extends LayoutController {
     private HomeNegocioController homeNegocioController;
 
     @FXML
-    private HBox navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil;
+    private HBox navHome, navAgendamentos, navServico, navRelatorio, navPerfil;
 
     private List<HBox> allNavContainer;
 
@@ -40,7 +39,7 @@ public class NegocioLayoutController extends LayoutController {
     void initialize() {
         setBoasVindas();
 
-        allNavContainer = Arrays.asList(navHome, navAgendamentos, navHistorico, navServico, navRelatorio, navPerfil);
+        allNavContainer = Arrays.asList(navHome, navAgendamentos, navServico, navRelatorio, navPerfil);
     }
 
     @FXML
@@ -55,16 +54,17 @@ public class NegocioLayoutController extends LayoutController {
         containerClicked.getStyleClass().add("nav-container-active");
 
         if (containerClicked == navHome) {
-            FXMLLoader loader = sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-negocio.fxml");
-            HomeNegocioController controller = loader.getController();
-            controller.carregarDados();
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-negocio.fxml");
 
         } else if (containerClicked == navAgendamentos) {
             sceneManager.loadCenterBorderPane(null);
-        } else if (containerClicked == navHistorico) {
-            sceneManager.loadCenterBorderPane(null);
+            
         } else if (containerClicked == navServico) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/servico/gestao-servicos.fxml");
+
+        } else if (containerClicked == navRelatorio) {
+            sceneManager.loadCenterBorderPane("/br/com/washii/view/relatorio/relatorio-negocio.fxml");
+            
         } else if (containerClicked == navPerfil) {
             sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-negocio.fxml");
         }

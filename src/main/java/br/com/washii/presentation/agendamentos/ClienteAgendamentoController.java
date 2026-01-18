@@ -5,6 +5,7 @@ import br.com.washii.domain.entities.Servico;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.entities.Veiculo;
 import br.com.washii.domain.enums.CategoriaVeiculo;
+import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.domain.entities.Cliente;
@@ -14,6 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.util.StringConverter;
@@ -26,8 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import br.com.washii.domain.entities.Agendamento;
+import br.com.washii.presentation.core.BaseController;
+import br.com.washii.presentation.home.HomeClienteController;
 
-public class ClienteAgendamentoController {
+public class ClienteAgendamentoController extends BaseController {
 
     // --- Componentes FXML ---
     @FXML private Button btnCancelar;
@@ -127,18 +131,32 @@ public class ClienteAgendamentoController {
     }
 
     private void configurarBotoesAcao() {
-        // Botão Adicionar (+)
-        btnAdicionar.setOnAction(e -> adicionarServico());
+    // Botão Adicionar (+)
+    btnAdicionar.setOnAction(e -> adicionarServico());
 
-        // Botão Remover (Lixeira)
-        btnRemover.setOnAction(e -> removerServico());
-        
-        // Desabilitar botão remover se nada estiver selecionado na tabela (UX)
-        btnRemover.disableProperty().bind(tblServicos.getSelectionModel().selectedItemProperty().isNull());
-        
-        // Botão Confirmar
-        btnConfirmar.setOnAction(e -> onConfirmarAction());
-    }
+    // Botão Remover (Lixeira)
+    btnRemover.setOnAction(e -> removerServico());
+    
+    btnRemover.disableProperty().bind(tblServicos.getSelectionModel().selectedItemProperty().isNull());
+    
+    // Botão Confirmar
+    btnConfirmar.setOnAction(e -> onConfirmarAction());
+
+    // --- NOVO: Botão Cancelar ---
+    btnCancelar.setOnAction(e -> {
+        try {
+            // Obtém o Stage (Janela) atual a partir do próprio botão
+            FXMLLoader loader =sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-cliente.fxml");
+
+            HomeClienteController controller = loader.getController();
+            controller.carregarNegocios();
+            
+        } catch (Exception ex) {
+            exibirAlerta("Erro", "Não foi possível voltar para a Home: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    });
+}
 
     private void adicionarServico() {
         Servico servicoSelecionado = cmbTipoServico.getValue();
@@ -245,36 +263,67 @@ public class ClienteAgendamentoController {
             });
         }
     }
+    private void limparCampos() {
+    // 1. Limpa campos de texto e seleções
+    txtPlaca.clear();
+    cmbModeloCarro.getSelectionModel().clearSelection();
+    cmbTipoServico.getSelectionModel().clearSelection();
+    
+    // 2. Limpa a lista de serviços da tabela
+    servicosSelecionados.clear();
+    atualizarValorTotal();
+    
+    // 3. Reseta a seleção de horário
+    horarioSelecionado = null;
+    
+    // 4. Recarrega os horários da data atual. 
+    // Como o agendamento foi salvo no banco, o horário ocupado NÃO voltará nesta lista,
+    // fazendo o botão "sumir" visualmente.
+    if (dateData.getValue() != null) {
+        renderizarHorarios(dateData.getValue());
+    }
+}
 
     private void onConfirmarAction() {
-        if (horarioSelecionado == null || dateData.getValue() == null || servicosSelecionados.isEmpty()) {
-            exibirAlerta("Erro de Validação", "Preencha a data, horário e adicione pelo menos um serviço.");
-            return;
-        }
-        
-        if (cmbModeloCarro.getValue() == null || txtPlaca.getText().trim().isEmpty()) {
-            exibirAlerta("Erro de Validação", "Preencha o modelo do carro e a placa.");
-            return;
-        }
-        
-        try {
-            Agendamento agendamento = new Agendamento();
-            Veiculo veiculo = new Veiculo();
-            veiculo.setCategoriaVeiculo(cmbModeloCarro.getValue());
-            veiculo.setPlaca(txtPlaca.getText().trim());
-            agendamento.setData(dateData.getValue());
-            agendamento.setHora(horarioSelecionado);
-            agendamento.setVeiculo(veiculo);
-            agendamento.setNegocio(lavaJato);
-            agendamento.setServicos(new ArrayList<>(servicosSelecionados));
-            agendamento.setCliente(buscarUsuarioLogado());
-            
-            agendamentoService.solicitarAgendamento(agendamento);
-            exibirAlerta("Sucesso", "Agendamento confirmado com sucesso!");
-        } catch (NegocioException e) {
-            exibirAlerta("Erro", "Não foi possível confirmar o agendamento: " + e.getMessage());
-        }
+    if (horarioSelecionado == null || dateData.getValue() == null || servicosSelecionados.isEmpty()) {
+        exibirAlerta("Erro de Validação", "Preencha a data, horário e adicione pelo menos um serviço.");
+        return;
     }
+    
+    if (cmbModeloCarro.getValue() == null || txtPlaca.getText().trim().isEmpty()) {
+        exibirAlerta("Erro de Validação", "Preencha o modelo do carro e a placa.");
+        return;
+    }
+    
+    try {
+        Agendamento agendamento = new Agendamento();
+        Veiculo veiculo = new Veiculo();
+        veiculo.setCategoriaVeiculo(cmbModeloCarro.getValue());
+        veiculo.setPlaca(txtPlaca.getText().trim());
+        
+        agendamento.setData(dateData.getValue());
+        agendamento.setHora(horarioSelecionado);
+        agendamento.setVeiculo(veiculo); // OBS: Certifique-se que o Service salva o veículo antes do agendamento
+        agendamento.setNegocio(lavaJato);
+        agendamento.setServicos(new ArrayList<>(servicosSelecionados));
+        agendamento.setCliente(buscarUsuarioLogado());
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
+        
+        agendamentoService.solicitarAgendamento(agendamento);
+        
+        exibirAlerta("Sucesso", "Agendamento confirmado com sucesso!");
+        
+        // --- AQUI ESTA A MUDANÇA ---
+        limparCampos(); // Limpa tudo e remove o botão do horário usado
+        
+    } catch (NegocioException e) {
+        exibirAlerta("Erro", "Não foi possível confirmar: " + e.getMessage());
+    } catch (Exception e) {
+        // Captura erros genéricos (como aquele NullPointerException do ID)
+        e.printStackTrace();
+        exibirAlerta("Erro Crítico", "Ocorreu um erro interno: " + e.getMessage());
+    }
+}
     
     // Método auxiliar para alertas simples
     private void exibirAlerta(String titulo, String mensagem) {

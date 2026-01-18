@@ -2,8 +2,6 @@ package br.com.washii.presentation.layout;
 
 import java.util.Arrays;
 import java.util.List;
-
-import br.com.washii.presentation.agendamentos.MeusAgendamentosClienteController;
 import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.presentation.home.HomeClienteController;
 import br.com.washii.service.AutenticacaoService;

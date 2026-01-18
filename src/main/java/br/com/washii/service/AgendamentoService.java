@@ -29,7 +29,7 @@ public class AgendamentoService {
             throw new IllegalStateException("Horário indisponível para agendamento.");
         }
 
-        agendamento.setStatus(StatusAgendamento.EM_ANDAMENTO);
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
         repository.salvar(agendamento);
     }
     //Cancela um agendamento existente.

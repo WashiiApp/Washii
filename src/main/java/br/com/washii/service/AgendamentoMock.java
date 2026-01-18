@@ -31,7 +31,7 @@ public class AgendamentoMock {
         ag1.addServico(new Servico("Pretinho", "Pneus brilhando", CategoriaServico.OUTROS, 10.0, washCenter));
         lista.add(ag1);
 
-        Agendamento ag2 = new Agendamento(c1, washCenter, LocalDate.now(), LocalTime.now().plusMinutes(40), v1);
+        Agendamento ag2 = new Agendamento(c1, washCenter, LocalDate.now().minusDays(1), LocalTime.now().plusMinutes(40), v1);
         ag2.setId(101L);
         ag2.setStatus(StatusAgendamento.CONCLUIDO);
         ag2.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
@@ -44,7 +44,7 @@ public class AgendamentoMock {
         ag3.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
         lista.add(ag3);
 
-        Agendamento ag4 = new Agendamento(c1, washCenter, LocalDate.now(), LocalTime.now().plusMinutes(40), v1);
+        Agendamento ag4 = new Agendamento(c1, washCenter, LocalDate.now().minusDays(3), LocalTime.now().plusMinutes(40), v1);
         ag4.setId(101L);
         ag4.setStatus(StatusAgendamento.CANCELADO);
         ag4.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
@@ -56,6 +56,19 @@ public class AgendamentoMock {
         ag5.setStatus(StatusAgendamento.NAO_COMPARECEU);
         ag5.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
         lista.add(ag5);
+
+        Agendamento ag6 = new Agendamento(c1, washCenter, LocalDate.now().minusDays(5), LocalTime.now().plusMinutes(40), v1);
+        ag5.setId(101L);
+        ag5.setStatus(StatusAgendamento.NAO_COMPARECEU);
+        ag5.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
+        lista.add(ag6);
+
+        Agendamento ag7 = new Agendamento(c1, washCenter, LocalDate.now().minusDays(5), LocalTime.now().plusMinutes(40), v1);
+        ag5.setId(101L);
+        ag5.setStatus(StatusAgendamento.NAO_COMPARECEU);
+        ag5.addServico(new Servico("Lavagem Completa", "Interna e externa", CategoriaServico.LAVAGEM_DETALHADA, 80.0, washCenter));
+        lista.add(ag7);
+
 
         return lista;
     }

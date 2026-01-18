@@ -2,6 +2,7 @@ package br.com.washii.presentation.screens.home;
 
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.components.cards.AgendamentoCardController;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.service.AgendamentoMock;
@@ -43,7 +44,9 @@ public class HomeNegocioController extends BaseController {
     }
 
     public void carregarDados() {
-        List<Agendamento> agendamentos = AgendamentoMock.gerarListaMock();
+        Long userId = Sessao.getInstance().getUsuarioLogado().getId();
+        LocalDate dataHoje = LocalDate.now();
+        List<Agendamento> agendamentos = agendamentoService.listarPorPeriodoENegocio(dataHoje, dataHoje, userId);
         
         // Limpar painéis para evitar duplicidade
         flowAgendados.getChildren().clear();
@@ -136,4 +139,4 @@ public class HomeNegocioController extends BaseController {
             flow.getChildren().add(lblVazio);
         }
     }
-    }
+}

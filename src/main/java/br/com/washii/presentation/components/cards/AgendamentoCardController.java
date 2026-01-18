@@ -151,15 +151,12 @@ public class AgendamentoCardController {
     @FXML
     void handleIniciar(ActionEvent event) {
         if(emAndamento) {
-            System.out.println("Concluido a lavagem: " + agendamento.getVeiculo().getPlaca());
             
-            //agendamentoService.concluirAgendamento(agendamento);
+            agendamentoService.atualizarStatus(StatusAgendamento.CONCLUIDO, agendamento);
         
-        } else{
-            //agendamentoService.atualizarStatus(StatusAgendamento.EM_ANDAMENTO, agendamento);
+        } else {
+            agendamentoService.atualizarStatus(StatusAgendamento.EM_ANDAMENTO, agendamento);
 
-            System.out.println("Iniciando lavagem: " + agendamento.getVeiculo().getPlaca());
-            // Lógica para mudar status para EM_ANDAMENTO (se você tiver esse status)
         }
 
         if (onUpdate != null) {

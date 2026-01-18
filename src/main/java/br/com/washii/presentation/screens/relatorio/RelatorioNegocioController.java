@@ -73,18 +73,20 @@ public class RelatorioNegocioController {
         dpFim.setDayCellFactory(dayCellFactory);
 
         // Para carregar dados reais, você usaria o idNegocio abaixo:
-        // Long idNegocio = Sessao.getInstance().getUsuarioLogado().getId();
+        Long idNegocio = Sessao.getInstance().getUsuarioLogado().getId();
         
-        List<Agendamento> dados = AgendamentoMock.gerarListaMock();
+        List<Agendamento> dados = agendamentoService.listarPorPeriodoENegocio(dpInicio.getValue(), dpFim.getValue(), idNegocio);
         carregarDados(dados);
     }
 
     @FXML
     void onFiltrar(ActionEvent event) {
         // Se precisar buscar dados novos baseados nas datas dos DatePickers:
-        // List<Agendamento> dados = agendamentoService.listarPorPeriodoENegocio(dpInicio.getValue(), dpFim.getValue(), idNegocio);
         
-        List<Agendamento> dados = AgendamentoMock.gerarListaMock();
+        Long idNegocio = Sessao.getInstance().getUsuarioLogado().getId();
+
+        List<Agendamento> dados = agendamentoService.listarPorPeriodoENegocio(dpInicio.getValue(), dpFim.getValue(), idNegocio);
+
         carregarDados(dados);
     }
 

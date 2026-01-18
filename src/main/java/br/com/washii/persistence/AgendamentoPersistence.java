@@ -19,7 +19,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 LocalDate inicio, LocalDate fim, Long negocioId) {
 
             String sql = """
-        SELECT id, data, hora, status, id_cliente, id_veiculo
+        SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo
         FROM agendamento
         WHERE id_negocio = ?
           AND data BETWEEN ? AND ?
@@ -42,10 +42,15 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     ag.setId(rs.getLong("id"));
                     ag.setData(rs.getDate("data").toLocalDate());
                     ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status")));
+                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
 
                     Cliente cliente = new Cliente();
-                    cliente.setId(rs.getLong("id_cliente"));
+                    Long idCliente = buscarIdClientePorIdUsuario(
+                            conn,
+                            rs.getLong("id_cliente")
+                    );
+
+                    cliente.setId(idCliente);
                     ag.setCliente(cliente);
 
                     Veiculo veiculo = new Veiculo();
@@ -69,7 +74,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     @Override
     public List<Agendamento> listarPorCliente(Long clienteId) {
             String sql = """
-        SELECT id, data, hora, status, id_veiculo, id_negocio
+        SELECT id, data, hora, status_agendamento, id_veiculo, id_negocio
         FROM agendamento
         WHERE id_cliente = ?
         ORDER BY data DESC, hora DESC
@@ -88,10 +93,14 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     ag.setId(rs.getLong("id"));
                     ag.setData(rs.getDate("data").toLocalDate());
                     ag.setHora(rs.getTime("hora").toLocalTime());
-                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status")));
+                    ag.setStatus(StatusAgendamento.valueOf(rs.getString("status_agendamento")));
 
                     Cliente cliente = new Cliente();
-                    cliente.setId(clienteId);
+                    Long idCliente = buscarIdClientePorIdUsuario(
+                            conn,
+                            rs.getLong("id_cliente")
+                    );
+                    cliente.setId(idCliente);
                     ag.setCliente(cliente);
 
                     Veiculo veiculo = new Veiculo();
@@ -118,7 +127,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
         String sql = """
         UPDATE agendamento
-        SET status = ?::status_agendamento
+        SET status_agendamento = ?::status_agendamento
         WHERE id = ?
     """;
 
@@ -268,7 +277,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         UPDATE agendamento
         SET data = ?,
             hora = ?,
-            status = ?::status_agendamento,
+            status_agendamento = ?::status_agendamento,
             id_cliente = ?,
             id_veiculo = ?,
             id_negocio = ?
@@ -320,7 +329,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     @Override
     public List<Agendamento> listarTodos() {
         String sql = """
-        SELECT id, data, hora, status, id_cliente, id_veiculo, id_negocio
+        SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo, id_negocio
         FROM agendamento
         ORDER BY data, hora
     """;

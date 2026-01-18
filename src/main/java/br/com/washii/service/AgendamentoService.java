@@ -50,9 +50,9 @@ public class AgendamentoService {
         return repository.listarPorCliente(clienteId);
     }
 
-    public List<Agendamento> listarAgendamentosDoUsuario(Long clienteId) {
-        Objects.requireNonNull(clienteId, "ID do usuário não pode ser nulo");
-        return repository.listarPorCliente(clienteId);
+    public List<Agendamento> listarAgendamentosDoUsuario(Long userId) {
+        Objects.requireNonNull(userId, "ID do usuário não pode ser nulo");
+        return repository.listarPorCliente(userId);
     }
 
     // recebe o objeto negocio que contém horario de inicio, fim duração do serviço;
@@ -102,6 +102,14 @@ public class AgendamentoService {
         Objects.requireNonNull(agendamento, "Agendamento não pode ser nulo");
         agendamento.setStatus(novoStatus);
         repository.atualizarStatus(agendamento.getId(), novoStatus);
+    }
+
+    public List<Agendamento> listarPorPeriodoENegocio(LocalDate inicio, LocalDate fim, Long negocioId){
+        if (inicio == null || fim == null || negocioId == null){
+            throw new IllegalArgumentException("Data de inicio e fim e id não podem ser null");
+        }
+
+        return repository.listarPorPeriodoENegocio(inicio, fim, negocioId);
     }
 
 

@@ -37,7 +37,7 @@
                                  </children>
                               </VBox>
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" prefHeight="35.0" styleClass="button-primary" text="GERAR RELATÓRIO" />
+                              <Button fx:id="btnGerarRelatorio" mnemonicParsing="false" onAction="#onFiltrar" prefHeight="35.0" styleClass="button-primary" text="GERAR RELATÓRIO" />
                            </children>
                         </HBox>
                         <TextFlow fx:id="containerAvisos" managed="false" visible="false" />

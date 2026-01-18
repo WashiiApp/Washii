@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.components.cards.AgendamentoCardClienteController;
 import br.com.washii.service.AgendamentoMock;
 import br.com.washii.service.AgendamentoService;
@@ -53,7 +54,7 @@ public class MeusAgendamentosClienteController {
 
         // Aqui você filtraria sua lista original. 
         // Exemplo simples filtrando o Mock:
-        List<Agendamento> filtrados = AgendamentoMock.gerarListaMock().stream()
+        List<Agendamento> filtrados = agendamentoService.listarAgendamentosDoUsuario(Sessao.getInstance().getUsuarioLogado().getId()).stream()
             .filter(ag -> status == null || ag.getStatus() == status)
             .filter(ag -> data == null || ag.getData().equals(data))
             .toList();
@@ -73,7 +74,7 @@ public class MeusAgendamentosClienteController {
     public void carregarAgendamentos(){
         flowCards.getChildren().clear();
         // criar metodo no service para listar todos os agendamentos por usuario.
-        List<Agendamento> agendamentos = AgendamentoMock.gerarListaMock();
+        List<Agendamento> agendamentos = agendamentoService.listarAgendamentosDoUsuario(Sessao.getInstance().getUsuarioLogado().getId());
 
         for (Agendamento ag : agendamentos) {
             adicionarCardAoFluxo(ag);

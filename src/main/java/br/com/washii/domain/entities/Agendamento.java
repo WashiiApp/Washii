@@ -91,9 +91,6 @@ public class Agendamento {
         if (data == null){
             throw new IllegalArgumentException("A data não pode ser nula");
         }
-        if (data.isBefore(LocalDate.now())){
-            //throw new DataRetroativaException();
-        }
         this.data = data; 
     }
 
@@ -101,9 +98,6 @@ public class Agendamento {
     public void setHora(LocalTime hora) {
         if (hora == null){
             throw new IllegalArgumentException("O horario não pode ser nulo");
-        }
-        if (hora.isBefore(LocalTime.now())){
-            //throw new DataRetroativaException();
         }
         this.hora = hora; 
     }

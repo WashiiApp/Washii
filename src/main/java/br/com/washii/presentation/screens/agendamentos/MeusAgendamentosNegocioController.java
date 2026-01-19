@@ -1,13 +1,13 @@
-package br.com.washii.presentation.agendamentos;
+package br.com.washii.presentation.screens.agendamentos;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.infra.session.Sessao;
+import br.com.washii.presentation.components.cards.AgendamentoCardController; 
 import br.com.washii.service.AgendamentoService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -29,50 +29,99 @@ public class MeusAgendamentosNegocioController {
     @FXML private FlowPane flowCards;
 
     private AgendamentoService agendamentoService;
-    
-    // Armazena a lista completa vinda do banco para filtrar localmente sem nova consulta
-    private List<Agendamento> ;
+    private List<Agendamento> listaCompletaCache;
 
-    // Construtor padrão (Se usar fábrica de controllers) ou Injeção
     public MeusAgendamentosNegocioController(AgendamentoService service) {
-        this.agendamentoService = service;
-    }
-    
-    // Setter caso o construtor não seja usado pelo FXMLLoader padrão
-    public void setService(AgendamentoService service) {
         this.agendamentoService = service;
     }
 
     @FXML
     public void initialize() {
-        // Popula o combo box com os status
+        
         cmbStatus.setItems(FXCollections.observableArrayList(StatusAgendamento.values()));
+        carregarAgendamentos();
     }
 
-    /**
-     * Método principal chamado pela tela pai para iniciar os dados
-     */
     public void carregarAgendamentos() {
-        if (agendamentoService == null) {
-            System.err.println("ERRO: AgendamentoService não foi injetado no Controller.");
-            return;
-        }
-
+        flowCards.getChildren().clear(); // Limpa a tela antes de adicionar
+        
         try {
             Long idNegocio = Sessao.getInstance().getUsuarioLogado().getId();
-            
-            // Busca TODOS os agendamentos do banco
-            this.listaCompletaCache = agendamentoService.listarAgendamentosDoUsuario(idNegocio);
-            
-            // Aplica os filtros atuais (ou mostra tudo se não tiver filtro)
-            aplicarFiltros();
+
+            // Intervalo de busca amplo para garantir que venha tudo
+            LocalDate inicio = LocalDate.now().minusYears(2);
+            LocalDate fim = LocalDate.now().plusYears(2);
+
+            // Busca no banco
+            this.listaCompletaCache = agendamentoService.listarPorPeriodoENegocio(inicio, fim, idNegocio);
+
+            if (listaCompletaCache == null || listaCompletaCache.isEmpty()) {
+                mostrarMensagemVazio("Nenhum agendamento encontrado no banco de dados.");
+            } else {
+                aplicarFiltros(); 
+            }
             
         } catch (Exception e) {
             e.printStackTrace();
-            flowCards.getChildren().add(new Label("Erro ao carregar agendamentos: " + e.getMessage()));
+            mostrarMensagemVazio("Erro ao buscar dados: " + e.getMessage());
         }
     }
 
+    private void aplicarFiltros() {
+        flowCards.getChildren().clear();
+
+        if (listaCompletaCache == null) return;
+
+        StatusAgendamento statusFiltro = cmbStatus.getValue();
+        LocalDate dataFiltro = dtpData.getValue();
+
+        System.out.println("Filtrando... Status: " + statusFiltro + " | Data: " + dataFiltro);
+
+        List<Agendamento> filtrados = listaCompletaCache.stream()
+            .filter(ag -> {
+                if (statusFiltro != null && ag.getStatus() != statusFiltro) return false;
+                if (dataFiltro != null && !ag.getData().equals(dataFiltro)) return false;
+                
+                return true;
+            })
+            .collect(Collectors.toList());
+
+        if (filtrados.isEmpty()) {
+            mostrarMensagemVazio("Nenhum agendamento com esses filtros.");
+        } else {
+            for (Agendamento ag : filtrados) {
+                adicionarCardAoFluxo(ag);
+            }
+        }
+    }
+
+    private void adicionarCardAoFluxo(Agendamento ag) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/agendamento-card.fxml"));
+            Parent card = loader.load();
+
+            AgendamentoCardController controller = loader.getController();
+            
+            controller.setService(this.agendamentoService);
+            controller.setDados(ag); 
+
+            controller.setOnUpdate(() -> {
+                this.carregarAgendamentos(); 
+            });
+
+            flowCards.getChildren().add(card);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void mostrarMensagemVazio(String msg) {
+        Label lbl = new Label(msg);
+        lbl.setStyle("-fx-font-size: 16px; -fx-text-fill: #999; -fx-padding: 20;");
+        flowCards.getChildren().add(lbl);
+    }
+    
     @FXML
     void onFiltrar(ActionEvent event) {
         aplicarFiltros();
@@ -82,73 +131,6 @@ public class MeusAgendamentosNegocioController {
     void onLimparFiltro(ActionEvent event) {
         cmbStatus.setValue(null);
         dtpData.setValue(null);
-        aplicarFiltros();
-    }
-
-    private void aplicarFiltros() {
-        flowCards.getChildren().clear();
-
-        if (listaCompletaCache == null || listaCompletaCache.isEmpty()) {
-            mostrarMensagemVazio("Nenhum agendamento encontrado.");
-            return;
-        }
-
-        StatusAgendamento statusFiltro = cmbStatus.getValue();
-        LocalDate dataFiltro = dtpData.getValue();
-
-        // Filtra a lista usando Stream API
-        List<Agendamento> filtrados = listaCompletaCache.stream()
-            .filter(ag -> {
-                // Se status selecionado, deve bater. Se null, passa.
-                if (statusFiltro != null && ag.getStatus() != statusFiltro) return false;
-                
-                // Se data selecionada, deve bater. Se null, passa.
-                if (dataFiltro != null && !ag.getData().equals(dataFiltro)) return false;
-                
-                return true;
-            })
-            .collect(Collectors.toList());
-
-        if (filtrados.isEmpty()) {
-            mostrarMensagemVazio("Nenhum agendamento corresponde aos filtros.");
-        } else {
-            // Ordena: Mais recentes primeiro (opcional)
-            // filtrados.sort((a1, a2) -> a2.getData().compareTo(a1.getData()));
-            
-            for (Agendamento ag : filtrados) {
-                adicionarCardAoFluxo(ag);
-            }
-        }
-    }
-
-    private void adicionarCardAoFluxo(Agendamento ag) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/agendamentos/agendamento-card.fxml"));
-            Parent card = loader.load();
-
-            AgendamentoCardNegocioController controller = loader.getController();
-            
-            // Injeta dependências no card
-            controller.setService(this.agendamentoService);
-            controller.setDados(ag);
-
-            // Callback: Se o usuário cancelar/concluir no card, recarregamos a lista inteira
-            controller.setOnUpdate(() -> {
-                System.out.println("Atualizando lista após ação no card...");
-                this.carregarAgendamentos(); 
-            });
-
-            flowCards.getChildren().add(card);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Erro ao carregar FXML do card: " + e.getMessage());
-        }
-    }
-    
-    private void mostrarMensagemVazio(String msg) {
-        Label lbl = new Label(msg);
-        lbl.setStyle("-fx-font-size: 14px; -fx-text-fill: #888; -fx-padding: 20;");
-        flowCards.getChildren().add(lbl);
+        aplicarFiltros(); 
     }
 }

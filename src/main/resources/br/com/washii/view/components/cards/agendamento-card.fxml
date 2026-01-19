@@ -48,7 +48,7 @@
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label fx:id="lbltelefoneLabel" text="Numero" />
+            <Label fx:id="lbltelefoneLabel" text="Numero" textFill="#666666" />
          </children>
          <padding>
             <Insets left="15.0" />

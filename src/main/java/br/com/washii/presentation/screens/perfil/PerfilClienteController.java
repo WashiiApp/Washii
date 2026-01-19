@@ -34,9 +34,7 @@ public class PerfilClienteController {
     @FXML private FontIcon iconCamera;
     @FXML private StackPane paneFoto;
     @FXML private TextFlow containerAviso;
-    
-    // Campos de Texto vinculados ao novo FXML
-    @FXML private TextField txtNomeCliente; // ID corrigido conforme FXML
+    @FXML private TextField txtNomeCliente; 
     @FXML private TextField txtEmail;
     @FXML private TextField txtTelefone;
     @FXML private TextField txtCep;

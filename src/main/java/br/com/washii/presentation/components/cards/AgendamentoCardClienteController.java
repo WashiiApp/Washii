@@ -61,17 +61,18 @@ public class AgendamentoCardClienteController {
         lblIdAgendamento.setText("id #" + ag.getId().toString());
         lblNomeNegocio.setText(ag.getNegocio().getNome());
 
-        // Endereço
+        
         Endereco end = ag.getNegocio().getEndereco();
         lblEndereco.setText(end.getRua() + ", " + end.getNumero() + "\n" + end.getCidade() + "\n" + end.getEstado());
 
-        // Data e Hora
+        
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         lblData.setText(ag.getData().format(dateFormatter));
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         lblHora.setText(ag.getHora().format(timeFormatter));
 
+        
         containerServicos.getChildren().clear();
 
         // Serviços e valores
@@ -83,7 +84,6 @@ public class AgendamentoCardClienteController {
     }
 
     private void configurarStatus(StatusAgendamento status) {
-        // Define o texto formatado (Ex: NAO_COMPARECEU -> Não Compareceu)
         lblStatus.setText(status.toString().replace("_", " ")); 
 
         // Limpa classes de cores antigas
@@ -96,19 +96,17 @@ public class AgendamentoCardClienteController {
             "agendamento-card-em-andamento", "agendamento-card-cancelado", "agendamento-card-agendado", "agendamento-card-concluido", "agendamento-card-nao-compareceu"
         );  
 
-        // Adiciona a classe base (se não houver no FXML) e a específica das variáveis CSS
         if (!lblStatus.getStyleClass().contains("badge-status")) {
             lblStatus.getStyleClass().add("badge-status");
         }
         
-        // Mapeia o Enum para a classe CSS: status-nome-do-enum
         String classeCssCard = "agendamento-card-" + status.name().toLowerCase().replace("_", "-");
         String classeCssStatus = "status-" + status.name().toLowerCase().replace("_", "-");
 
         cardRoot.getStyleClass().add(classeCssCard);
         lblStatus.getStyleClass().add(classeCssStatus);
 
-        // configura o botão cancelar
+        // configuração do botão cancelar
         if (status != StatusAgendamento.AGENDADO){
             btnCancelar.setVisible(false);
             btnCancelar.setManaged(false);
@@ -119,22 +117,12 @@ public class AgendamentoCardClienteController {
     }
 
     private void adicionarServicoAoContainer(String nome, double valor) {
-        // 1. Cria o HBox da linha
         HBox linha = new HBox();
-        
         Label lblNome = new Label(nome);
-        
-        // 3. Cria a Region para empurrar o valor para a direita
         Region espacador = new Region();
         HBox.setHgrow(espacador, Priority.ALWAYS); // Isso faz o efeito do "ALWAYS" no FXML
-        
-        // 4. Cria o Label do Valor formatado
         Label lblValor = new Label(String.format("R$ %.2f", valor));
-        
-        // 5. Adiciona os filhos ao HBox
         linha.getChildren().addAll(lblNome, espacador, lblValor);
-        
-        // 6. Adiciona a linha ao seu VBox (containerServicos)
         containerServicos.getChildren().add(linha);
     }
 }

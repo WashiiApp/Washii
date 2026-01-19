@@ -2,7 +2,6 @@ package br.com.washii.presentation.screens.agendamentos;
 
 import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Servico;
-import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.entities.Veiculo;
 import br.com.washii.domain.enums.CategoriaVeiculo;
 import br.com.washii.domain.enums.StatusAgendamento;
@@ -11,6 +10,7 @@ import br.com.washii.infra.session.Sessao;
 import br.com.washii.domain.entities.Cliente;
 import br.com.washii.service.AgendamentoService;
 import br.com.washii.service.UsuarioService;
+import br.com.washii.presentation.utils.AvisoUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,8 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
-
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,37 +33,28 @@ import br.com.washii.presentation.screens.home.HomeClienteController;
 
 public class ClienteAgendamentoController extends BaseController {
 
-    // --- Componentes FXML ---
     @FXML private Button btnCancelar;
     @FXML private Button btnConfirmar;
-    @FXML private Button btnAdicionar; // Novo
-    @FXML private Button btnRemover;   // Novo
-    
+    @FXML private Button btnAdicionar; 
+    @FXML private Button btnRemover;   
     @FXML private ComboBox<CategoriaVeiculo> cmbModeloCarro;
     @FXML private ComboBox<Servico> cmbTipoServico;
-    
     @FXML private DatePicker dateData;
     @FXML private FlowPane fpHorarios;
-    
     @FXML private Label lblEndereco;
     @FXML private Label lblNomeLavaJato;
-    @FXML private Label lblValorTotal; // Novo
-    
+    @FXML private Label lblValorTotal; 
+    @FXML private TextFlow containerAviso;
     @FXML private TextField txtPlaca;
-
-    // --- Tabela e Colunas ---
     @FXML private TableView<Servico> tblServicos;
     @FXML private TableColumn<Servico, String> colServico;
     @FXML private TableColumn<Servico, String> colPreco;
-
-    // --- Dependências e Variáveis ---
     private final AgendamentoService agendamentoService;
     private LavaJato lavaJato;
     private LocalTime horarioSelecionado;
     private Cliente usuarioLogado;
     private UsuarioService usuarioService;
     
-    // Lista que alimenta a tabela automaticamente
     private final ObservableList<Servico> servicosSelecionados = FXCollections.observableArrayList();
     
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -76,12 +67,11 @@ public class ClienteAgendamentoController extends BaseController {
 
     @FXML
     public void initialize() {
-        // 1. Configurar Calendário e Tabela
         configurarCalendario();
         configurarTabelaServicos();
         configurarBotoesAcao();
 
-        // 2. Ouvinte para mudança de data
+        
         dateData.valueProperty().addListener((obs, antigo, novo) -> {
             if (novo != null) {
                 renderizarHorarios(novo);
@@ -110,39 +100,32 @@ public class ClienteAgendamentoController extends BaseController {
         return usuarioLogado;
     }
 
-    // --- Lógica da Tabela de Serviços (NOVO) ---
+    // aqui configura a tabela com os servicos e os bagui pra fazer nela
 
     private void configurarTabelaServicos() {
-        // Vincula a lista observável à tabela
         tblServicos.setItems(servicosSelecionados);
 
-        // Configura Coluna Serviço (Nome)
         colServico.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getNome()));
 
-        // Configura Coluna Preço (Formatado em R$)
         colPreco.setCellValueFactory(cellData -> {
             Double preco = cellData.getValue().getPrecoBase(); // Assumindo que getPreco retorna BigDecimal
             return new SimpleStringProperty(currencyFormat.format(preco));
         });
         
-        // Inicializa o total zerado
         atualizarValorTotal();
     }
 
     private void configurarBotoesAcao() {
-    // Botão Adicionar (+)
+
     btnAdicionar.setOnAction(e -> adicionarServico());
 
-    // Botão Remover (Lixeira)
     btnRemover.setOnAction(e -> removerServico());
     
     btnRemover.disableProperty().bind(tblServicos.getSelectionModel().selectedItemProperty().isNull());
     
-    // Botão Confirmar
     btnConfirmar.setOnAction(e -> onConfirmarAction());
 
-    // --- NOVO: Botão Cancelar ---
     btnCancelar.setOnAction(e -> {
         try {
             FXMLLoader loader =sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-cliente.fxml");
@@ -151,7 +134,8 @@ public class ClienteAgendamentoController extends BaseController {
             controller.carregarNegocios();
             
         } catch (Exception ex) {
-            exibirAlerta("Erro", "Não foi possível voltar para a Home: " + ex.getMessage());
+            AvisoUtils.exibirAvisoErro(containerAviso, "Não foi possível voltar para a Home: " + ex.getMessage());
+            AvisoUtils.limparCampoAviso(containerAviso, 5);
             ex.printStackTrace();
         }
     });
@@ -161,20 +145,20 @@ public class ClienteAgendamentoController extends BaseController {
         Servico servicoSelecionado = cmbTipoServico.getValue();
 
         if (servicoSelecionado == null) {
-            exibirAlerta("Atenção", "Selecione um serviço no menu antes de adicionar.");
+            AvisoUtils.exibirAvisoErro(containerAviso, "Selecione um serviço no menu antes de adicionar.");
+            AvisoUtils.limparCampoAviso(containerAviso, 5);
             return;
         }
 
-        // Verifica se já existe na lista para evitar duplicatas
         if (servicosSelecionados.contains(servicoSelecionado)) {
-            exibirAlerta("Atenção", "Este serviço já foi adicionado.");
+            AvisoUtils.exibirAvisoErro(containerAviso, "Este serviço já foi adicionado.");
+            AvisoUtils.limparCampoAviso(containerAviso, 5);
             return;
         }
 
         servicosSelecionados.add(servicoSelecionado);
         atualizarValorTotal();
         
-        // Limpa a seleção do combo para facilitar a próxima escolha
         cmbTipoServico.getSelectionModel().clearSelection();
     }
 
@@ -197,7 +181,7 @@ public class ClienteAgendamentoController extends BaseController {
         lblValorTotal.setText(currencyFormat.format(total));
     }
 
-    // --- Lógica Existente (Calendário e Horários) ---
+    // Aqui eu vou fazer a logica do calendario e dos horarios
 
     private void configurarCalendario() {
         dateData.setValue(LocalDate.now());
@@ -263,21 +247,16 @@ public class ClienteAgendamentoController extends BaseController {
         }
     }
     private void limparCampos() {
-    // 1. Limpa campos de texto e seleções
+    
     txtPlaca.clear();
     cmbModeloCarro.getSelectionModel().clearSelection();
     cmbTipoServico.getSelectionModel().clearSelection();
     
-    // 2. Limpa a lista de serviços da tabela
     servicosSelecionados.clear();
     atualizarValorTotal();
     
-    // 3. Reseta a seleção de horário
     horarioSelecionado = null;
     
-    // 4. Recarrega os horários da data atual. 
-    // Como o agendamento foi salvo no banco, o horário ocupado NÃO voltará nesta lista,
-    // fazendo o botão "sumir" visualmente.
     if (dateData.getValue() != null) {
         renderizarHorarios(dateData.getValue());
     }
@@ -285,12 +264,14 @@ public class ClienteAgendamentoController extends BaseController {
 
     private void onConfirmarAction() {
     if (horarioSelecionado == null || dateData.getValue() == null || servicosSelecionados.isEmpty()) {
-        exibirAlerta("Erro de Validação", "Preencha a data, horário e adicione pelo menos um serviço.");
+        AvisoUtils.exibirAvisoErro(containerAviso, "Preencha a data, horário e adicione pelo menos um serviço.");
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
         return;
     }
     
     if (cmbModeloCarro.getValue() == null || txtPlaca.getText().trim().isEmpty()) {
-        exibirAlerta("Erro de Validação", "Preencha o modelo do carro e a placa.");
+        AvisoUtils.exibirAvisoErro(containerAviso, "Preencha o modelo do carro e a placa.");
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
         return;
     }
     
@@ -310,26 +291,20 @@ public class ClienteAgendamentoController extends BaseController {
         
         agendamentoService.solicitarAgendamento(agendamento);
         
-        exibirAlerta("Sucesso", "Agendamento confirmado com sucesso!");
+        AvisoUtils.exibirAvisoSucesso(containerAviso, "Agendamento confirmado com sucesso!");
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
         
-        // --- AQUI ESTA A MUDANÇA ---
-        limparCampos(); // Limpa tudo e remove o botão do horário usado
+        limparCampos(); 
         
     } catch (NegocioException e) {
-        exibirAlerta("Erro", "Não foi possível confirmar: " + e.getMessage());
+        AvisoUtils.exibirAvisoErro(containerAviso, e.getMessage());
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
     } catch (Exception e) {
-        // Captura erros genéricos (como aquele NullPointerException do ID)
+        
         e.printStackTrace();
-        exibirAlerta("Erro Crítico", "Ocorreu um erro interno: " + e.getMessage());
+        AvisoUtils.exibirAvisoErro(containerAviso, "Ocorreu um erro interno: " + e.getMessage());
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
     }
 }
     
-    // Método auxiliar para alertas simples
-    private void exibirAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
 }

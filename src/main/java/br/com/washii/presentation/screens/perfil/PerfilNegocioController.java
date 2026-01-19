@@ -37,7 +37,6 @@ public class PerfilNegocioController {
     @FXML private StackPane paneFoto;
     @FXML private TextFlow containerAviso;
     
-    // Campos de Texto
     @FXML private TextField txtBairro, txtCapacidade, txtCep, txtCidade, 
                             txtCnpj, txtEmail, txtEstado, txtHoraFim, txtHoraInicio, 
                             txtNomeNegocio, txtNumero, txtRazaoSocial, 
@@ -54,33 +53,29 @@ public class PerfilNegocioController {
 
     @FXML
     public void initialize() {
-        // Agrupamos os campos para facilitar a manipulação em massa
         todosCampos = List.of(
             txtBairro, txtCapacidade, txtCep, txtCidade, txtCnpj, 
             txtEmail, txtEstado, txtHoraFim, txtHoraInicio, txtNomeNegocio, 
             txtNumero, txtRazaoSocial, txtRua, txtDuracaoServico
         );
 
-        // Estado inicial: Apenas leitura
+        
         configurarModoEdicao(false);
         carregarDados(buscarUsuarioLogado());
     }
 
     /**
-     * Alterna entre o modo de visualização e edição.
+     * A logica pra mudar entre editavel ou nçao ta aquii
      */
     @FXML
     void handleAlternarEdicao(ActionEvent event) {
         if (modoEdicao) {
-            // Se já estava editando, a ação agora é SALVAR
             boolean sucesso = salvarAlteracoes();
             
-            // Se salvou com sucesso:
             configurarModoEdicao(!sucesso);
             modoEdicao = !sucesso;
             
         } else {
-            // Se estava visualizando, a ação agora é EDITAR
             configurarModoEdicao(true);
             modoEdicao = true;
         }
@@ -94,11 +89,11 @@ public class PerfilNegocioController {
     }
 
     /**
-     * Gerencia a troca de foto de perfil usando o FileChooser.
+     * pra gerenciar a troca de foto de perfil usando o FileChooser.
      */
     @FXML
     void handleSelecionarFoto(MouseEvent event) {
-        if (!modoEdicao) return; // Só permite trocar foto se estiver editando
+        if (!modoEdicao) return; 
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecionar Logo do Negócio");
@@ -114,11 +109,11 @@ public class PerfilNegocioController {
         }
     }
 
+    // configuração do modo edicao
     private void configurarModoEdicao(boolean editavel) {
-        // 1. Alterna a propriedade editable de todos os campos
         todosCampos.forEach(tf -> tf.setEditable(editavel));
 
-        // 2. Atualiza o texto e estilo do botão
+        
         if (editavel) {
             btnEditar.setText("Salvar");
             btnEditar.getStyleClass().add("btn-salvar");
@@ -141,14 +136,10 @@ public class PerfilNegocioController {
 
     private void carregarDados(Usuario logado) {
         
-        // 2. Verifica se o usuário logado é de fato um Negocio (Cast seguro)
         if (logado instanceof Negocio negocio) {
-            
-            // Dados Principais
             txtNomeNegocio.setText(negocio.getNome());
             txtEmail.setText(negocio.getEmail());
             
-            // Endereço
             // Se negocio não tiver nenhum endereço (null) então é criado um novo
             if (negocio.getEndereco() == null) { negocio.setEndereco(new Endereco()); }
 
@@ -159,25 +150,22 @@ public class PerfilNegocioController {
             txtCidade.setText(negocio.getEndereco().getCidade());
             txtEstado.setText(negocio.getEndereco().getEstado());
 
-            // Carrega hora formatada
+            // carrega hora com formatacao
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             txtHoraInicio.setText(negocio.getInicioExpediente().format(formatter));
             txtHoraFim.setText(negocio.getFimExpediente().format(formatter));
             txtDuracaoServico.setText(negocio.getDuracaoMediaServico().format(formatter));
 
             txtCapacidade.setText(String.valueOf(negocio.getCapacidadeAtendimentoSimultaneo()));
-
-            // Dados Jurídicos
             txtCnpj.setText(negocio.getCnpj());
             txtRazaoSocial.setText(negocio.getRazaoSocial());
 
-            // Carregamento da Foto/Logo
+            // tentar carregar a foto
             try {
                 Image img = new Image(getClass().getResourceAsStream("/br/com/washii/assets/images/perfil/profile-placeholder.png")); // true para carregar em background
                 circleFoto.setFill(new ImagePattern(img));
             } catch (Exception e) {
                 System.err.println("Erro ao carregar imagem: " + e.getMessage());
-                // Mantém o preenchimento padrão caso a imagem falhe
             }
             
         }
@@ -185,13 +173,10 @@ public class PerfilNegocioController {
 
     private boolean salvarAlteracoes() {
         try {
-            // 1. Valida os dados da UI e lança uma exceção caso tenha dados invalidos
             validarCampos();
 
-            // 2. Pega o objeto para atualizar
             Negocio negocio = (Negocio) buscarUsuarioLogado();
 
-            // 3. Mapeia os campos da tela para o objeto
             negocio.setNome(txtNomeNegocio.getText());
             negocio.setEmail(txtEmail.getText());
             negocio.setCnpj(txtCnpj.getText());
@@ -199,14 +184,14 @@ public class PerfilNegocioController {
             negocio.setCapacidadeAtendimentoSimultaneo(Integer.parseInt(txtCapacidade.getText()));
 
 
-            // Converte e adiciona o horario no objeto
+            
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             negocio.setInicioExpediente(LocalTime.parse(txtHoraInicio.getText(), formatter));
             negocio.setFimExpediente(LocalTime.parse(txtHoraFim.getText(), formatter));
             negocio.setDuracaoMediaServico(LocalTime.parse(txtDuracaoServico.getText(), formatter));
 
             
-            // Atualiza o Endereço (se houver objeto de endereço)
+            // Atualiza o Endereço, se houver objeto de endereço
             if (negocio.getEndereco() != null) {
                 negocio.getEndereco().setCep(txtCep.getText());
                 negocio.getEndereco().setRua(txtRua.getText());
@@ -218,7 +203,6 @@ public class PerfilNegocioController {
 
             usuarioService.atualizarUsuario(negocio);
 
-            // Se salvar no banco, então salva localmente
             this.usuarioLogado = negocio;
             
             AvisoUtils.exibirAvisoSucesso(containerAviso, "Usuario atualizado com sucesso!");
@@ -242,10 +226,8 @@ public class PerfilNegocioController {
     }
         
     private void validarCampos() throws IllegalArgumentException {
-        // Valida o nome
         if (txtNomeNegocio.getText().isBlank()) throw new IllegalArgumentException("O nome do negócio é obrigatório.");
 
-        // Valida o CNPJ
         if (!txtCnpj.getText().isBlank()) {
             String apenasNumerosCnpj = txtCnpj.getText().replaceAll("[.\\-/]", "");
 
@@ -258,18 +240,18 @@ public class PerfilNegocioController {
             }
         }
         
-        // Valida o email
+        
         if (txtEmail.getText().isBlank() || !txtEmail.getText().contains("@")) {
             throw new IllegalArgumentException("E-mail inválido ou vazio.");
         }
 
-        // Valida o horario
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         try {
             LocalTime horaInicio = LocalTime.parse(txtHoraInicio.getText(), formatter);
             LocalTime horaFim = LocalTime.parse(txtHoraFim.getText(), formatter);
 
-            // Valida se o fim é depois do início
+            // Valida se o fim do expediente é uma hora além do inicio
             if (!horaFim.isAfter(horaInicio)) {
                 throw new IllegalArgumentException("O horário de fechamento deve ser após o horário de abertura.");
             }
@@ -280,7 +262,6 @@ public class PerfilNegocioController {
             throw new IllegalArgumentException("Horário inválido! Use o formato 00:00 (ex: 08:30)");
         }
 
-        // Valida a capacidade (inteiro)
         String capText = txtCapacidade.getText();
         if (capText == null || capText.isBlank()) {
             throw new IllegalArgumentException("A capacidade de atendimento deve ser informada.");

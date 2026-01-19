@@ -28,6 +28,7 @@ public class AgendamentoCardController {
     @FXML private Label lblNumeroAgendamento;
     @FXML private Label lblPlacaVeiculo;
     @FXML private Label lblStatus;
+    @FXML private Label lbltelefoneLabel;
     @FXML private VBox vboxServicos;
     @FXML private VBox cardRoot;
     private Agendamento agendamento;
@@ -50,26 +51,31 @@ public class AgendamentoCardController {
     public void setDados(Agendamento ag) {
         this.agendamento = ag;
 
-        // 1. Textos Básicos
+        
         lblNumeroAgendamento.setText("AGENDAMENTO #" + ag.getId());
         lblNomeCliente.setText(ag.getCliente().getNome());
         lblPlacaVeiculo.setText(ag.getVeiculo().getPlaca());
         lblModeloVeiculo.setText(ag.getVeiculo().getCategoriaVeiculo().toString());
+        if (ag.getCliente().getTelefone() != null) {
+            lbltelefoneLabel.setText(ag.getCliente().getTelefone());
+        }
+        else {
+            lbltelefoneLabel.setText("Telefone não informado");
+        }
+
         
-        // Exemplo de formatação: "Segunda, 14:30" ou "12/01, 14:30"
         lblDataHora.setText(formatarDataExibicao(ag.getData(),ag.getHora())); 
 
-        // 2. Status e Estilização CSS
+        
         configurarStatus(ag.getStatus());
 
-        // 3. Lista de Serviços (Dinâmica)
+        
         vboxServicos.getChildren().clear();
         ag.getServicos().forEach(servico -> {
             // Container para o serviço (Nome + Valor)
             javafx.scene.layout.HBox hbServico = new javafx.scene.layout.HBox();
             hbServico.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
             
-            // Nome do serviço
             Label lblNome = new Label("• " + servico.getNome());
             lblNome.getStyleClass().add("label-servico");
             
@@ -77,10 +83,10 @@ public class AgendamentoCardController {
             javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
             javafx.scene.layout.HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
             
-            // Valor formatado
+            
             String valorFormatado = String.format("R$ %.2f", servico.getPrecoBase());
             Label lblValor = new Label(valorFormatado);
-            lblValor.getStyleClass().add("label-servico-preco"); // Classe nova para o preço
+            lblValor.getStyleClass().add("label-servico-preco"); 
             
             hbServico.getChildren().addAll(lblNome, spacer, lblValor);
             vboxServicos.getChildren().add(hbServico);
@@ -107,10 +113,8 @@ public class AgendamentoCardController {
     }
 
     private void configurarStatus(StatusAgendamento status) {
-        // Define o texto formatado (Ex: NAO_COMPARECEU -> Não Compareceu)
         lblStatus.setText(status.toString().replace("_", " ")); 
 
-        // Limpa classes de cores antigas
         lblStatus.getStyleClass().removeAll(
             "status-em-andamento", "status-cancelado", "status-agendado", 
             "status-concluido", "status-nao-compareceu"
@@ -120,12 +124,11 @@ public class AgendamentoCardController {
             "agendamento-card-em-andamento", "agendamento-card-cancelado", "agendamento-card-agendado", "agendamento-card-concluido", "agendamento-card-nao-compareceu"
         );  
 
-        // Adiciona a classe base (se não houver no FXML) e a específica das variáveis CSS
+        
         if (!lblStatus.getStyleClass().contains("badge-status")) {
             lblStatus.getStyleClass().add("badge-status");
         }
         
-        // Mapeia o Enum para a classe CSS: status-nome-do-enum
         String classeCssCard = "agendamento-card-" + status.name().toLowerCase().replace("_", "-");
         String classeCssStatus = "status-" + status.name().toLowerCase().replace("_", "-");
 

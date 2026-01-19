@@ -1,6 +1,5 @@
 package br.com.washii.persistence;
 
-import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Servico;
 import br.com.washii.domain.repository.ServicoRepository;

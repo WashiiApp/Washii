@@ -1,7 +1,6 @@
 package br.com.washii.domain.entities;
 
 import br.com.washii.domain.enums.StatusAgendamento;
-import br.com.washii.domain.exceptions.DataRetroativaException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

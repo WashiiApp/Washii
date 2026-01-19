@@ -34,7 +34,7 @@ public class RelatorioNegocioController {
     // Objeto de formatação para Real Brasileiro (R$)
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
 
-    @FXML private LineChart<?, ?> chartLinha;
+    @FXML private LineChart<String, Number> chartLinha;
     @FXML private PieChart chartPizza;
     @FXML private TextFlow containerAvisos;
     @FXML private DatePicker dpFim;
@@ -168,7 +168,7 @@ public class RelatorioNegocioController {
 
         chartLinha.getData().clear();
         // Aqui fazemos um cast seguro ou garantimos que o chartLinha aceite a série
-        ((XYChart<String, Number>) chartLinha).getData().add(series);
+        chartLinha.getData().add(series);
 
         if (chartLinha.getYAxis() instanceof NumberAxis yAxis) {
             yAxis.setTickUnit(1.0);

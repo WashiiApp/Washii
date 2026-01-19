@@ -8,7 +8,6 @@ import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.domain.repository.AgendamentoRepository;
 import br.com.washii.infra.database.DatabaseConfig;
 
-import java.awt.datatransfer.Clipboard;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;

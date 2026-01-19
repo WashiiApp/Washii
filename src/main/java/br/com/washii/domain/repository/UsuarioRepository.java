@@ -3,7 +3,6 @@ package br.com.washii.domain.repository;
 import java.util.List;
 import java.util.Optional;
 
-import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 

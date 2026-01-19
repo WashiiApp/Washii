@@ -162,7 +162,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         WHERE id_negocio = ?
           AND data = ?
           AND hora = ?
-          AND status_agendamento IN ('EM_ANDAMENTO', 'CONCLUIDO', 'CANCELADO', 'AGENDADO','NAO_COMPARECEU')
+          AND status_agendamento IN ('EM_ANDAMENTO', 'AGENDADO')
     """;
 
         try (Connection conn = DatabaseConfig.getConnection();

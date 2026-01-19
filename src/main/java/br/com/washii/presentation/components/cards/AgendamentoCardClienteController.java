@@ -73,6 +73,9 @@ public class AgendamentoCardClienteController {
         lblHora.setText(ag.getHora().format(timeFormatter));
 
         
+        containerServicos.getChildren().clear();
+
+        // Serviços e valores
         for (Servico ser: ag.getServicos()){
             adicionarServicoAoContainer(ser.getNome(), ser.getPrecoBase());
         }

@@ -1,3 +1,5 @@
+
+
 package br.com.washii.persistence;
 
 import br.com.washii.domain.entities.*;
@@ -39,25 +41,25 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-        Agendamento ag = montarAgendamentoBasico(rs);
+                Agendamento ag = montarAgendamentoBasico(rs);
 
-        // buscando Cliente
-        Long idCliente = rs.getLong("id_cliente");
-        ag.setCliente(buscarCliente(conn, idCliente));
+                // buscando Cliente
+                Long idCliente = rs.getLong("id_cliente");
+                ag.setCliente(buscarCliente(conn, idCliente));
 
-        // buscando Negócio
-        Long idNegocio = rs.getLong("id_negocio");
-        ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
+                // buscando Negócio
+                Long idNegocio = rs.getLong("id_negocio");
+                ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
 
-        // buscando o veiculo
-        Long idVeiculo = rs.getLong("id_veiculo");
-        ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
+                // buscando o veiculo
+                Long idVeiculo = rs.getLong("id_veiculo");
+                ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
 
-        // buscnado Serviços
-        ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
+                // buscnado Serviços
+                ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
 
-        agendamentos.add(ag);
-    }
+                agendamentos.add(ag);
+            }
 
             return agendamentos;
 
@@ -162,7 +164,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         WHERE id_negocio = ?
           AND data = ?
           AND hora = ?
-          AND status_agendamento IN ('EM_ANDAMENTO', 'CONCLUIDO', 'CANCELADO', 'AGENDADO','NAO_COMPARECEU')
+          AND status_agendamento IN ('EM_ANDAMENTO', 'AGENDADO')
     """;
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -309,9 +311,9 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
         }
 
-     catch (SQLException e) {
-        throw new RuntimeException("Erro ao atualizar agendamento", e);
-    }
+        catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar agendamento", e);
+        }
 
     }
 
@@ -320,7 +322,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         String sql = "DELETE FROM agendamento WHERE id = ?";
 
         try(Connection conn = DatabaseConfig.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             stmt.executeUpdate();
@@ -331,9 +333,47 @@ public class AgendamentoPersistence implements AgendamentoRepository {
     }
 
     @Override
-    public Optional<Agendamento> buscarPorId(Long aLong) {
-        return Optional.empty();
+    public Optional<Agendamento> buscarPorId(Long idAgendamento) {
+        String sql = """
+        SELECT id, data, hora, status_agendamento, id_cliente, id_veiculo, id_negocio
+        FROM agendamento
+        WHERE id = ?
+    """;
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idAgendamento);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Agendamento ag = montarAgendamentoBasico(rs);
+
+                // Cliente
+                Long idCliente = rs.getLong("id_cliente");
+                ag.setCliente(buscarCliente(conn, idCliente));
+
+                // Negócio
+                Long idNegocio = rs.getLong("id_negocio");
+                ag.setNegocio(buscarNegocioCompleto(conn, idNegocio));
+
+                // Veículo
+                Long idVeiculo = rs.getLong("id_veiculo");
+                ag.setVeiculo(buscarVeiculo(conn, idVeiculo));
+
+                // Serviços
+                ag.setServicos(buscarServicosDoAgendamento(conn, ag.getId()));
+
+                return Optional.of(ag);
+            }
+
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar agendamento por ID", e);
+        }
     }
+
 
     @Override
     public List<Agendamento> listarTodos() {
@@ -495,7 +535,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
 
     private Cliente buscarCliente(Connection conn, Long idCliente) throws SQLException {
         String sql = """
-            SELECT u.nome
+            SELECT u.nome, u.email, c.telefone
             FROM cliente c
             JOIN usuario u ON c.id_usuario = u.id
             WHERE c.id = ?
@@ -507,6 +547,8 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             c.setId(idCliente);
             if (rs.next()) {
                 c.setNome(rs.getString("nome"));
+                c.setEmail(rs.getString("email"));
+                c.setTelefone(rs.getString("telefone"));
             } else {
                 c.setNome("Cliente não encontrado");
             }
@@ -526,4 +568,4 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         );
         return ag;
     }
-    }
+}

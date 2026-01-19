@@ -12,6 +12,7 @@ import br.com.washii.presentation.screens.perfil.PerfilClienteController;
 import br.com.washii.presentation.screens.perfil.PerfilNegocioController;
 import br.com.washii.presentation.screens.relatorio.RelatorioNegocioController;
 import br.com.washii.presentation.screens.servico.GestaoServicosController;
+import br.com.washii.presentation.screens.agendamentos.MeusAgendamentosNegocioController;
 import br.com.washii.service.ServiceFactory;
 
 public class ControllerFactory {
@@ -74,6 +75,10 @@ public class ControllerFactory {
 
         if (clazz == MeusAgendamentosClienteController.class) {
             return new MeusAgendamentosClienteController(serviceFactory.criarAgendamentoService());
+        }
+
+         if (clazz == MeusAgendamentosNegocioController.class) {
+            return new MeusAgendamentosNegocioController(serviceFactory.criarAgendamentoService());
         }
 
         if (clazz == RelatorioNegocioController.class) {

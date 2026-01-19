@@ -5,7 +5,6 @@ import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.components.cards.AgendamentoCardController;
 import br.com.washii.presentation.core.BaseController;
-import br.com.washii.service.AgendamentoMock;
 import br.com.washii.service.AgendamentoService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

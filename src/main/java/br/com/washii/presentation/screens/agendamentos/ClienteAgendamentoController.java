@@ -2,7 +2,6 @@ package br.com.washii.presentation.screens.agendamentos;
 
 import br.com.washii.domain.entities.LavaJato;
 import br.com.washii.domain.entities.Servico;
-import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.entities.Veiculo;
 import br.com.washii.domain.enums.CategoriaVeiculo;
 import br.com.washii.domain.enums.StatusAgendamento;
@@ -11,6 +10,7 @@ import br.com.washii.infra.session.Sessao;
 import br.com.washii.domain.entities.Cliente;
 import br.com.washii.service.AgendamentoService;
 import br.com.washii.service.UsuarioService;
+import br.com.washii.presentation.utils.AvisoUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,8 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
-
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -48,6 +48,8 @@ public class ClienteAgendamentoController extends BaseController {
     @FXML private Label lblEndereco;
     @FXML private Label lblNomeLavaJato;
     @FXML private Label lblValorTotal; // Novo
+    @FXML private TextFlow containerAviso;
+
     
     @FXML private TextField txtPlaca;
 
@@ -151,7 +153,8 @@ public class ClienteAgendamentoController extends BaseController {
             controller.carregarNegocios();
             
         } catch (Exception ex) {
-            exibirAlerta("Erro", "Não foi possível voltar para a Home: " + ex.getMessage());
+            AvisoUtils.exibirAvisoErro(containerAviso, "Não foi possível voltar para a Home: " + ex.getMessage());
+            AvisoUtils.limparCampoAviso(containerAviso, 5);
             ex.printStackTrace();
         }
     });
@@ -161,13 +164,15 @@ public class ClienteAgendamentoController extends BaseController {
         Servico servicoSelecionado = cmbTipoServico.getValue();
 
         if (servicoSelecionado == null) {
-            exibirAlerta("Atenção", "Selecione um serviço no menu antes de adicionar.");
+            AvisoUtils.exibirAvisoErro(containerAviso, "Selecione um serviço no menu antes de adicionar.");
+            AvisoUtils.limparCampoAviso(containerAviso, 5);
             return;
         }
 
         // Verifica se já existe na lista para evitar duplicatas
         if (servicosSelecionados.contains(servicoSelecionado)) {
-            exibirAlerta("Atenção", "Este serviço já foi adicionado.");
+            AvisoUtils.exibirAvisoErro(containerAviso, "Este serviço já foi adicionado.");
+            AvisoUtils.limparCampoAviso(containerAviso, 5);
             return;
         }
 
@@ -285,12 +290,14 @@ public class ClienteAgendamentoController extends BaseController {
 
     private void onConfirmarAction() {
     if (horarioSelecionado == null || dateData.getValue() == null || servicosSelecionados.isEmpty()) {
-        exibirAlerta("Erro de Validação", "Preencha a data, horário e adicione pelo menos um serviço.");
+        AvisoUtils.exibirAvisoErro(containerAviso, "Preencha a data, horário e adicione pelo menos um serviço.");
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
         return;
     }
     
     if (cmbModeloCarro.getValue() == null || txtPlaca.getText().trim().isEmpty()) {
-        exibirAlerta("Erro de Validação", "Preencha o modelo do carro e a placa.");
+        AvisoUtils.exibirAvisoErro(containerAviso, "Preencha o modelo do carro e a placa.");
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
         return;
     }
     
@@ -310,26 +317,20 @@ public class ClienteAgendamentoController extends BaseController {
         
         agendamentoService.solicitarAgendamento(agendamento);
         
-        exibirAlerta("Sucesso", "Agendamento confirmado com sucesso!");
+        AvisoUtils.exibirAvisoSucesso(containerAviso, "Agendamento confirmado com sucesso!");
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
         
-        // --- AQUI ESTA A MUDANÇA ---
-        limparCampos(); // Limpa tudo e remove o botão do horário usado
+        limparCampos(); 
         
     } catch (NegocioException e) {
-        exibirAlerta("Erro", "Não foi possível confirmar: " + e.getMessage());
+        AvisoUtils.exibirAvisoErro(containerAviso, e.getMessage());
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
     } catch (Exception e) {
-        // Captura erros genéricos (como aquele NullPointerException do ID)
+       
         e.printStackTrace();
-        exibirAlerta("Erro Crítico", "Ocorreu um erro interno: " + e.getMessage());
+        AvisoUtils.exibirAvisoErro(containerAviso, "Ocorreu um erro interno: " + e.getMessage());
+        AvisoUtils.limparCampoAviso(containerAviso, 5);
     }
 }
     
-    // Método auxiliar para alertas simples
-    private void exibirAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
 }

@@ -28,6 +28,7 @@ public class AgendamentoCardController {
     @FXML private Label lblNumeroAgendamento;
     @FXML private Label lblPlacaVeiculo;
     @FXML private Label lblStatus;
+    @FXML private Label lbltelefoneLabel;
     @FXML private VBox vboxServicos;
     @FXML private VBox cardRoot;
     private Agendamento agendamento;
@@ -55,7 +56,13 @@ public class AgendamentoCardController {
         lblNomeCliente.setText(ag.getCliente().getNome());
         lblPlacaVeiculo.setText(ag.getVeiculo().getPlaca());
         lblModeloVeiculo.setText(ag.getVeiculo().getCategoriaVeiculo().toString());
-        
+        if (ag.getCliente().getTelefone() != null) {
+            lbltelefoneLabel.setText(ag.getCliente().getTelefone());
+        }
+        else {
+            lbltelefoneLabel.setText("Telefone não informado");
+        }
+
         // Exemplo de formatação: "Segunda, 14:30" ou "12/01, 14:30"
         lblDataHora.setText(formatarDataExibicao(ag.getData(),ag.getHora())); 
 

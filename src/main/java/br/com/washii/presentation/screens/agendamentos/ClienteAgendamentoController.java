@@ -33,39 +33,28 @@ import br.com.washii.presentation.screens.home.HomeClienteController;
 
 public class ClienteAgendamentoController extends BaseController {
 
-    // --- Componentes FXML ---
     @FXML private Button btnCancelar;
     @FXML private Button btnConfirmar;
-    @FXML private Button btnAdicionar; // Novo
-    @FXML private Button btnRemover;   // Novo
-    
+    @FXML private Button btnAdicionar; 
+    @FXML private Button btnRemover;   
     @FXML private ComboBox<CategoriaVeiculo> cmbModeloCarro;
     @FXML private ComboBox<Servico> cmbTipoServico;
-    
     @FXML private DatePicker dateData;
     @FXML private FlowPane fpHorarios;
-    
     @FXML private Label lblEndereco;
     @FXML private Label lblNomeLavaJato;
-    @FXML private Label lblValorTotal; // Novo
+    @FXML private Label lblValorTotal; 
     @FXML private TextFlow containerAviso;
-
-    
     @FXML private TextField txtPlaca;
-
-    // --- Tabela e Colunas ---
     @FXML private TableView<Servico> tblServicos;
     @FXML private TableColumn<Servico, String> colServico;
     @FXML private TableColumn<Servico, String> colPreco;
-
-    // --- Dependências e Variáveis ---
     private final AgendamentoService agendamentoService;
     private LavaJato lavaJato;
     private LocalTime horarioSelecionado;
     private Cliente usuarioLogado;
     private UsuarioService usuarioService;
     
-    // Lista que alimenta a tabela automaticamente
     private final ObservableList<Servico> servicosSelecionados = FXCollections.observableArrayList();
     
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -78,12 +67,11 @@ public class ClienteAgendamentoController extends BaseController {
 
     @FXML
     public void initialize() {
-        // 1. Configurar Calendário e Tabela
         configurarCalendario();
         configurarTabelaServicos();
         configurarBotoesAcao();
 
-        // 2. Ouvinte para mudança de data
+        
         dateData.valueProperty().addListener((obs, antigo, novo) -> {
             if (novo != null) {
                 renderizarHorarios(novo);
@@ -112,39 +100,32 @@ public class ClienteAgendamentoController extends BaseController {
         return usuarioLogado;
     }
 
-    // --- Lógica da Tabela de Serviços (NOVO) ---
+    // aqui configura a tabela com os servicos e os bagui pra fazer nela
 
     private void configurarTabelaServicos() {
-        // Vincula a lista observável à tabela
         tblServicos.setItems(servicosSelecionados);
 
-        // Configura Coluna Serviço (Nome)
         colServico.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getNome()));
 
-        // Configura Coluna Preço (Formatado em R$)
         colPreco.setCellValueFactory(cellData -> {
             Double preco = cellData.getValue().getPrecoBase(); // Assumindo que getPreco retorna BigDecimal
             return new SimpleStringProperty(currencyFormat.format(preco));
         });
         
-        // Inicializa o total zerado
         atualizarValorTotal();
     }
 
     private void configurarBotoesAcao() {
-    // Botão Adicionar (+)
+
     btnAdicionar.setOnAction(e -> adicionarServico());
 
-    // Botão Remover (Lixeira)
     btnRemover.setOnAction(e -> removerServico());
     
     btnRemover.disableProperty().bind(tblServicos.getSelectionModel().selectedItemProperty().isNull());
     
-    // Botão Confirmar
     btnConfirmar.setOnAction(e -> onConfirmarAction());
 
-    // --- NOVO: Botão Cancelar ---
     btnCancelar.setOnAction(e -> {
         try {
             FXMLLoader loader =sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-cliente.fxml");
@@ -169,7 +150,6 @@ public class ClienteAgendamentoController extends BaseController {
             return;
         }
 
-        // Verifica se já existe na lista para evitar duplicatas
         if (servicosSelecionados.contains(servicoSelecionado)) {
             AvisoUtils.exibirAvisoErro(containerAviso, "Este serviço já foi adicionado.");
             AvisoUtils.limparCampoAviso(containerAviso, 5);
@@ -179,7 +159,6 @@ public class ClienteAgendamentoController extends BaseController {
         servicosSelecionados.add(servicoSelecionado);
         atualizarValorTotal();
         
-        // Limpa a seleção do combo para facilitar a próxima escolha
         cmbTipoServico.getSelectionModel().clearSelection();
     }
 
@@ -202,7 +181,7 @@ public class ClienteAgendamentoController extends BaseController {
         lblValorTotal.setText(currencyFormat.format(total));
     }
 
-    // --- Lógica Existente (Calendário e Horários) ---
+    // Aqui eu vou fazer a logica do calendario e dos horarios
 
     private void configurarCalendario() {
         dateData.setValue(LocalDate.now());
@@ -268,21 +247,16 @@ public class ClienteAgendamentoController extends BaseController {
         }
     }
     private void limparCampos() {
-    // 1. Limpa campos de texto e seleções
+    
     txtPlaca.clear();
     cmbModeloCarro.getSelectionModel().clearSelection();
     cmbTipoServico.getSelectionModel().clearSelection();
     
-    // 2. Limpa a lista de serviços da tabela
     servicosSelecionados.clear();
     atualizarValorTotal();
     
-    // 3. Reseta a seleção de horário
     horarioSelecionado = null;
     
-    // 4. Recarrega os horários da data atual. 
-    // Como o agendamento foi salvo no banco, o horário ocupado NÃO voltará nesta lista,
-    // fazendo o botão "sumir" visualmente.
     if (dateData.getValue() != null) {
         renderizarHorarios(dateData.getValue());
     }
@@ -326,7 +300,7 @@ public class ClienteAgendamentoController extends BaseController {
         AvisoUtils.exibirAvisoErro(containerAviso, e.getMessage());
         AvisoUtils.limparCampoAviso(containerAviso, 5);
     } catch (Exception e) {
-       
+        
         e.printStackTrace();
         AvisoUtils.exibirAvisoErro(containerAviso, "Ocorreu um erro interno: " + e.getMessage());
         AvisoUtils.limparCampoAviso(containerAviso, 5);

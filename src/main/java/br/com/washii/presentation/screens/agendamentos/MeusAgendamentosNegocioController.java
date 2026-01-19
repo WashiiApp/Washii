@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.infra.session.Sessao;
-import br.com.washii.presentation.components.cards.AgendamentoCardController; // Importe o controller certo!
+import br.com.washii.presentation.components.cards.AgendamentoCardController; 
 import br.com.washii.service.AgendamentoService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -32,20 +31,14 @@ public class MeusAgendamentosNegocioController {
     private AgendamentoService agendamentoService;
     private List<Agendamento> listaCompletaCache;
 
-    // --- Construtor ---
     public MeusAgendamentosNegocioController(AgendamentoService service) {
-        // Garante que o service exista antes de tudo
         this.agendamentoService = service;
     }
 
     @FXML
     public void initialize() {
-        System.out.println("--- INICIANDO TELA DE MEUS AGENDAMENTOS ---");
         
-        // 1. Configura o ComboBox
         cmbStatus.setItems(FXCollections.observableArrayList(StatusAgendamento.values()));
-        
-        // 2. IMPORTANTE: Chama o carregamento assim que a tela abre
         carregarAgendamentos();
     }
 
@@ -54,7 +47,6 @@ public class MeusAgendamentosNegocioController {
         
         try {
             Long idNegocio = Sessao.getInstance().getUsuarioLogado().getId();
-            System.out.println("Carregando agendamentos para o Negócio ID: " + idNegocio);
 
             // Intervalo de busca amplo para garantir que venha tudo
             LocalDate inicio = LocalDate.now().minusYears(2);
@@ -62,14 +54,11 @@ public class MeusAgendamentosNegocioController {
 
             // Busca no banco
             this.listaCompletaCache = agendamentoService.listarPorPeriodoENegocio(inicio, fim, idNegocio);
-            System.out.println("Total de agendamentos carregados: " + listaCompletaCache);
 
             if (listaCompletaCache == null || listaCompletaCache.isEmpty()) {
-                System.out.println("O Service retornou 0 agendamentos (Lista vazia ou nula).");
                 mostrarMensagemVazio("Nenhum agendamento encontrado no banco de dados.");
             } else {
-                System.out.println("Total encontrados no banco: " + listaCompletaCache.size());
-                aplicarFiltros(); // Exibe na tela
+                aplicarFiltros(); 
             }
             
         } catch (Exception e) {
@@ -90,17 +79,12 @@ public class MeusAgendamentosNegocioController {
 
         List<Agendamento> filtrados = listaCompletaCache.stream()
             .filter(ag -> {
-                // Filtro de Status
                 if (statusFiltro != null && ag.getStatus() != statusFiltro) return false;
-                
-                // Filtro de Data
                 if (dataFiltro != null && !ag.getData().equals(dataFiltro)) return false;
                 
                 return true;
             })
             .collect(Collectors.toList());
-
-        System.out.println("Total a exibir após filtro: " + filtrados.size());
 
         if (filtrados.isEmpty()) {
             mostrarMensagemVazio("Nenhum agendamento com esses filtros.");
@@ -113,24 +97,21 @@ public class MeusAgendamentosNegocioController {
 
     private void adicionarCardAoFluxo(Agendamento ag) {
         try {
-            // Certifique-se que o caminho do FXML está 100% correto
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/agendamento-card.fxml"));
             Parent card = loader.load();
 
             AgendamentoCardController controller = loader.getController();
             
             controller.setService(this.agendamentoService);
-            controller.setDados(ag); // Isso aqui preenche o visual
+            controller.setDados(ag); 
 
             controller.setOnUpdate(() -> {
-                System.out.println("Card atualizado. Recarregando lista...");
                 this.carregarAgendamentos(); 
             });
 
             flowCards.getChildren().add(card);
 
         } catch (IOException e) {
-            System.err.println("ERRO AO CARREGAR CARD:");
             e.printStackTrace();
         }
     }
@@ -141,7 +122,6 @@ public class MeusAgendamentosNegocioController {
         flowCards.getChildren().add(lbl);
     }
     
-    // Ações dos botões da tela principal
     @FXML
     void onFiltrar(ActionEvent event) {
         aplicarFiltros();
@@ -151,6 +131,6 @@ public class MeusAgendamentosNegocioController {
     void onLimparFiltro(ActionEvent event) {
         cmbStatus.setValue(null);
         dtpData.setValue(null);
-        aplicarFiltros(); // Re-exibe tudo sem filtro
+        aplicarFiltros(); 
     }
 }

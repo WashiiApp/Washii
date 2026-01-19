@@ -6,7 +6,6 @@ import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.components.cards.AgendamentoCardClienteController;
-import br.com.washii.service.AgendamentoMock;
 import br.com.washii.service.AgendamentoService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -52,8 +51,8 @@ public class MeusAgendamentosClienteController {
         StatusAgendamento status = cmbStatus.getValue();
         java.time.LocalDate data = dtpData.getValue();
 
-        // Aqui você filtraria sua lista original. 
-        // Exemplo simples filtrando o Mock:
+        // Aqui é pra filtrar quando tiver a lista real mas por enquanto tá com o mock pra ver em exemplo
+
         List<Agendamento> filtrados = agendamentoService.listarAgendamentosDoUsuario(Sessao.getInstance().getUsuarioLogado().getId()).stream()
             .filter(ag -> status == null || ag.getStatus() == status)
             .filter(ag -> data == null || ag.getData().equals(data))
@@ -73,7 +72,6 @@ public class MeusAgendamentosClienteController {
 
     public void carregarAgendamentos(){
         flowCards.getChildren().clear();
-        // criar metodo no service para listar todos os agendamentos por usuario.
         List<Agendamento> agendamentos = agendamentoService.listarAgendamentosDoUsuario(Sessao.getInstance().getUsuarioLogado().getId());
 
         for (Agendamento ag : agendamentos) {

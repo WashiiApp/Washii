@@ -84,14 +84,11 @@ public class HomeClienteController extends BaseController{
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/negocio-card.fxml"));
                     VBox card = loader.load();
 
-                    // 2. Obtém o Controller do Card que acabou de ser carregado
                     NegocioCardController controller = loader.getController();
             
-                    // 3. Injeta o SceneManager (se o BaseController exigir) e os dados
                     controller.setSceneManager(this.sceneManager); 
                     controller.setDados(lavaJato);
 
-                    // 4. Adiciona o card pronto ao container da tela principal
                     gridCards.getChildren().add(card);
 
                 } catch (IOException e) {

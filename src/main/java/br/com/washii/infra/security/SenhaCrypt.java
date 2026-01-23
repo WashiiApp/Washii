@@ -2,7 +2,7 @@ package br.com.washii.infra.security;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class SenhaUtils {
+public class SenhaCrypt {
 
     // Transforma senha pura em Hash
     public static String hashSenha(String senhaPura) {

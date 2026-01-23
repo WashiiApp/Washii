@@ -3,10 +3,8 @@ package br.com.washii.domain.entities;
 import br.com.washii.domain.enums.CategoriaServico;
 import java.util.Objects;
 
-/**
- * Representa um serviço oferecido por um Lava-Jato (ex: Lavagem Simples, Polimento).
- * Possui um preço base que pode ser ajustado conforme a categoria do veículo no momento do agendamento.
- */
+//Representa um serviço oferecido por um Lava-Jato (ex: Lavagem Simples, Polimento).Possui um preço base que pode ser ajustado conforme a categoria do veículo no momento do agendamento.
+
 public class Servico {
     private Long id;
     private String nome;

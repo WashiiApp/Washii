@@ -5,9 +5,9 @@ import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Servico;
 import br.com.washii.domain.repository.ServicoRepository;
 
-/**
- * Classe responsável pelas regras de negócio relacionadas aos serviços.
- */
+
+ //Classe responsável pelas regras de negócio relacionadas aos serviços.
+
 public class ServicoService {
 
     // Dependência de persistência (Repository)
@@ -18,9 +18,7 @@ public class ServicoService {
         this.persistence = persistence;
     }
 
-    /**
-     * Salva um novo serviço.
-     */
+
     public void salvarServico(Servico servico) {
         if (servico == null) {
             throw new IllegalArgumentException("Serviço não pode ser nulo.");
@@ -28,9 +26,6 @@ public class ServicoService {
         persistence.salvar(servico);
     }
 
-    /**
-     * Remove um serviço existente.
-     */
     public void removerServico(Servico servico) {
         if (servico == null) {
             throw new IllegalArgumentException("Serviço não pode ser nulo.");
@@ -38,9 +33,6 @@ public class ServicoService {
         persistence.remover(servico.getId());
     }
 
-    /**
-     * Atualiza os dados de um serviço.
-     */
     public void atualizarServico(Servico servico) {
         if (servico == null || servico.getId() == null) {
             throw new IllegalArgumentException("Serviço inválido para atualização.");

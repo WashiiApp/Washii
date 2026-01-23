@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Entidade central que representa o vínculo entre Cliente e Lava-Jato.
- * Gerencia o estado do serviço, data, hora e os itens contratados.
- */
+
+ //Entidade central que representa o vínculo entre Cliente e Lava-Jato. Gerencia o estado do serviço, data, hora e os itens contratados.
+
 public class Agendamento {
     private Long id;
     private Cliente cliente;
@@ -52,10 +51,7 @@ public class Agendamento {
         this.servicos = servicos != null ? servicos : new ArrayList<>();
     }
 
-    /**
-     * Regra de Negócio: Calcula o valor total do agendamento somando os serviços.
-     * Pode ser expandido futuramente para aplicar taxas baseadas no tipo do veículo.
-     */
+    //Regra de Negócio: Calcula o valor total do agendamento somando os serviços. Pode ser expandido futuramente para aplicar taxas baseadas no tipo do veículo.
     public double calcularValorTotal() {
         return servicos.stream()
                 .mapToDouble(Servico::getPrecoBase)

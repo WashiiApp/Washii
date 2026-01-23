@@ -45,9 +45,8 @@ public class AgendamentoCardController {
         this.agendamentoService = agendamentoService;
     }
 
-    /**
-     * Preenche o card com os dados do agendamento e aplica a estilização dinâmica.
-     */
+    //Preenche o card com os dados do agendamento e aplica a estilização dinâmica.
+
     public void setDados(Agendamento ag) {
         this.agendamento = ag;
 

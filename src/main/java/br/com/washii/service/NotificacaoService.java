@@ -7,9 +7,9 @@ import br.com.washii.domain.repository.NotificacaoRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Camada de serviço responsável pelas regras de negócio das notificações
- */
+
+//OBS: ainda nãp foi implementado, usar no futuro
+
 public class NotificacaoService {
 
     private final NotificacaoRepository notificacaoRepository;
@@ -19,9 +19,9 @@ public class NotificacaoService {
         this.notificacaoRepository = notificacaoRepository;
     }
 
-    /**
-     * Envia uma notificação para um usuário
-     */
+
+     //Envia uma notificação para um usuário
+
     public void enviar(Usuario destinatario, String titulo, String msg) {
         if (destinatario == null) {
             throw new IllegalArgumentException("Destinatário não pode ser nulo");
@@ -38,16 +38,16 @@ public class NotificacaoService {
         notificacaoRepository.salvar(notificacao);
     }
 
-    /**
-     * Lista todas as notificações de um usuário
-     */
+
+     //Lista todas as notificações de um usuário
+
     public List<Notificacao> listarPorUsuario(Usuario usuario) {
         return notificacaoRepository.buscarPorUsuario(usuario);
     }
 
-    /**
-     * Marca todas as notificações do usuário como lidas
-     */
+
+     //Marca todas as notificações do usuário como lidas
+
     public void limparNotificacoes(Usuario usuario) {
         List<Notificacao> notificacoes = notificacaoRepository.buscarPorUsuario(usuario);
 
@@ -57,9 +57,9 @@ public class NotificacaoService {
         }
     }
 
-    /**
-     * Conta quantas notificações não lidas o usuário possui
-     */
+
+     //Conta quantas notificações não lidas o usuário possui
+
     public int contarNaoLidas(Usuario usuario) {
         return notificacaoRepository.buscarPorUsuario(usuario).stream()
                 .filter(n -> !n.isLida())

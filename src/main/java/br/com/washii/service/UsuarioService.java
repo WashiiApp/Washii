@@ -4,14 +4,14 @@ import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.exceptions.EmailJaCadastradoException;
 import br.com.washii.domain.repository.UsuarioRepository;
-import br.com.washii.infra.security.SenhaUtils;
+import br.com.washii.infra.security.SenhaCrypt;
 import java.util.List;
 import java.util.Optional;
 
 
-/**
- * Camada de Serviço responsável pelas regras de negócio do Usuário
- */
+
+ //Camada de Serviço responsável pelas regras de negócio do Usuário
+
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
@@ -21,9 +21,6 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    /**
-     * Salva um novo usuário no sistema
-     */
     public void salvarNovoUsuario(Usuario user) {
         if (user == null) {
             throw new IllegalArgumentException("Usuário não pode ser nulo");
@@ -34,15 +31,12 @@ public class UsuarioService {
         }
 
         String  SenhaCrua = user.getSenha();
-        String SenhaCripto = SenhaUtils.hashSenha(SenhaCrua);
+        String SenhaCripto = SenhaCrypt.hashSenha(SenhaCrua);
         user.setSenha(SenhaCripto);
 
         usuarioRepository.salvar(user);
     }
 
-    /**
-     * Atualiza os dados de um usuário existente
-     */
     public void atualizarUsuario(Usuario user) {
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("Usuário inválido para atualização");
@@ -51,9 +45,6 @@ public class UsuarioService {
         usuarioRepository.atualizar(user);
     }
 
-    /**
-     * Remove um usuário do sistema
-     */
     public void removerUsuario(Usuario user) {
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("Usuário inválido para remoção");

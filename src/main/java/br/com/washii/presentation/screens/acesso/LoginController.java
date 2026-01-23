@@ -3,6 +3,7 @@ package br.com.washii.presentation.screens.acesso;
 import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.TipoUsuario;
 import br.com.washii.domain.exceptions.NegocioException;
+import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.service.AutenticacaoService;
 import javafx.event.ActionEvent;
@@ -66,8 +67,7 @@ public class LoginController extends BaseController{
 
         try {
             Usuario user = autenticacaoService.realizarLogin(email, senha);
-
-            Thread.sleep(1000);
+            Sessao.getInstance().iniciarSessao(user);
 
             // Escolhe a tela com base no TipoUsuario
             if (user.getTipoUsuario() == TipoUsuario.CLIENTE){

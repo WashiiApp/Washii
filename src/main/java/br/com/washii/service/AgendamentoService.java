@@ -3,6 +3,7 @@ package br.com.washii.service;
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.entities.Negocio;
 import br.com.washii.domain.enums.StatusAgendamento;
+import br.com.washii.domain.exceptions.HorarioIndisponivelException;
 import br.com.washii.domain.repository.AgendamentoRepository;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class AgendamentoService {
         boolean disponivel = validarDisponibilidade(agendamento.getData(), agendamento.getHora(), agendamento.getNegocio());
 
         if (!disponivel) {
-            throw new IllegalStateException("Horário indisponível para agendamento.");
+            throw new HorarioIndisponivelException();
         }
 
         agendamento.setStatus(StatusAgendamento.AGENDADO);
@@ -42,12 +43,6 @@ public class AgendamentoService {
     //Lista agendamentos por período e negócio.
     public List<Agendamento> listarPorData(LocalDate data, Long negocioId) {
         return repository.listarPorPeriodoENegocio(data, data, negocioId);
-    }
-
-    //Lista o histórico de agendamentos de um cliente.
-
-    public List<Agendamento> listarHistoricoUsuario(Long clienteId) {
-        return repository.listarPorCliente(clienteId);
     }
 
     public List<Agendamento> listarAgendamentosDoUsuario(Long userId) {

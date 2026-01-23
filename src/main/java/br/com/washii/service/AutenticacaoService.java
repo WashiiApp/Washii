@@ -5,14 +5,13 @@ import br.com.washii.domain.repository.UsuarioRepository;
 import java.util.Optional;
 import br.com.washii.domain.exceptions.EmailNaoCadastradoException;
 import br.com.washii.domain.exceptions.SenhaInvalidaException;
-import br.com.washii.infra.security.SenhaUtils;
+import br.com.washii.infra.security.SenhaCrypt;
 import br.com.washii.infra.session.Sessao;
 
 
-/**
- * Classe responsável pela autenticação de usuários.
- * Implementa as regras de login, logout e recuperação de senha.
- */
+
+ //Classe responsável pela autenticação de usuários. Implementa as regras de login, logout e recuperação de senha.
+
 public class AutenticacaoService {
 
 
@@ -23,9 +22,9 @@ public class AutenticacaoService {
         this.persistence = persistence;
     }
 
-    /**
-     * Realiza o login do usuário com base no email e senha.
-     */
+
+     //Realiza o login do usuário com base no email e senha.
+
     public Usuario realizarLogin(String email, String senha) {
         Optional<Usuario> usuarioOpt = persistence.buscarPorEmail(email);
 
@@ -35,32 +34,19 @@ public class AutenticacaoService {
 
         Usuario usuario = usuarioOpt.get();
 
-        if (!SenhaUtils.verificarSenha(senha, usuario.getSenha())) {
+        if (!SenhaCrypt.verificarSenha(senha, usuario.getSenha())) {
             throw new  SenhaInvalidaException();
 
         }
 
-        Sessao.getInstance().iniciarSessao(usuario);
-
         return usuario;
     }
 
-    /**
-     * Realiza o logout do usuário.
-     * (Em sistemas simples, apenas controle de sessão)
-     */
+
+     //Realiza o logout do usuário. (Em sistemas simples, apenas controle de sessão)
+
     public void realizarLogout() {
        Sessao.getInstance().encerrarSessao();
 
-    }
-    /**
-     * Simula a recuperação de senha via e-mail.
-     */
-    public void recuperarSenha(String email) {
-        Optional<Usuario> usuarioOpt = persistence.buscarPorEmail(email);
-
-        if (usuarioOpt.isEmpty()) {
-            throw new EmailNaoCadastradoException(email);
-        }
     }
 }

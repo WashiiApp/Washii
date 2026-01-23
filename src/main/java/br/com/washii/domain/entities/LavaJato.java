@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Entidade que representa a unidade física do Lava-Jato e suas regras de operação.
- */
+//Entidade que representa a unidade física do Lava-Jato e suas regras de operação.
 public class LavaJato extends Negocio {
 
     private Set<CategoriaVeiculo> categoriasAceitas = new HashSet<>();
@@ -49,9 +47,7 @@ public class LavaJato extends Negocio {
     }
 
 
-    /**
-     * Regra de Negócio: Verifica se o Lava-Jato tem estrutura para o veículo do cliente.
-     */
+    //Regra de Negócio: Verifica se o Lava-Jato tem estrutura para o veículo do cliente.
     public boolean suportaCategoria(CategoriaVeiculo categoria) {
         return categoriasAceitas.contains(categoria);
     }

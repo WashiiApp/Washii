@@ -48,9 +48,8 @@ public abstract class Negocio extends Usuario {
         return cnpj;
     }
 
-    /**
-     * Define o CNPJ removendo caracteres especiais.
-     */
+    //Define o CNPJ removendo caracteres especiais.
+
     public void setCnpj(String cnpj) {
         // cnpj nulo por enquanto - geraldo
         if (cnpj == null) {

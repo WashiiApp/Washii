@@ -2,9 +2,8 @@ package br.com.washii.domain.entities;
 
 import java.util.Objects;
 
-/**
- * Representa o endereço de um Cliente ou Unidade do Lava-Jato.
- */
+//Representa o endereço de um Cliente ou Unidade do Lava-Jato.
+
 public class Endereco {
     
     private Long id;
@@ -152,10 +151,8 @@ public class Endereco {
         return rua + ", " + numero + " - " + cidade + "/" + estado + " (CEP: " + cep + ")";
     }
 
-    /**
-     * Verifica se este endereço é o mesmo local físico que outro,
-     * 
-     */
+
+    //Verifica se este endereço é o mesmo local físico que outro,
     public boolean isMesmoLocal(Endereco outro) {
         if (outro == null) return false;
         

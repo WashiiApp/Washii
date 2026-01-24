@@ -90,10 +90,18 @@ public class AgendamentoCardNegocioController {
             vboxServicos.getChildren().add(hbServico);
         });
 
-        // 4. Controle de Visibilidade dos Botões
+        // 4. Controle de Visibilidade de Botões
         if (cardVisualizacao) {
+            // No modo visualização, não é exibido o botão de iniciar/concluir
             btnIniciar.setVisible(false);
             btnIniciar.setManaged(false);
+
+            boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
+                                     ag.getStatus() == StatusAgendamento.AGENDADO);
+
+            btnCancelar.setVisible(podeInteragir);
+            btnCancelar.setManaged(podeInteragir);
+
         } else {
             boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
                                      ag.getStatus() == StatusAgendamento.AGENDADO);

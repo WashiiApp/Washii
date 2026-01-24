@@ -9,8 +9,12 @@ import java.sql.SQLException;
 
 public class DatabaseConfig {
 
-
-    static Dotenv dotenv = Dotenv.load();
+    // Adicionamos .configure().ignoreIfMissing().load()
+    // Isso evita que o app trave caso você decida usar variáveis de ambiente do sistema no futuro
+    static Dotenv dotenv = Dotenv.configure()
+            .directory("./") // Força a busca na pasta onde o JAR está sendo executado
+            .ignoreIfMissing()
+            .load();
 
     private static final String HOST = dotenv.get("DB_HOST");
     private static final String PORT = dotenv.get("DB_PORT");

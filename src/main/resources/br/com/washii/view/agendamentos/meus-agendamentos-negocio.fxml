@@ -35,8 +35,6 @@
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <VBox spacing="5.0">
@@ -53,10 +51,10 @@
                            </children>
                         </VBox>
 
-                        <HBox alignment="BOTTOM_RIGHT" prefHeight="35.0" prefWidth="115.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.valignment="BOTTOM">
+                        <HBox alignment="BOTTOM_RIGHT" prefHeight="35.0" prefWidth="115.0" spacing="10.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                            <children>
-                              <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#onLimparFiltro" prefHeight="35.0" prefWidth="61.0" styleClass="button-primary" text="Limpar" />
-                              <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#onFiltrar" prefHeight="35.0" styleClass="button-secondary" text="Filtrar" />
+                              <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#onLimparFiltro" prefHeight="35.0" styleClass="button-secondary" text="Limpar" />
+                              <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#onFiltrar" prefHeight="35.0" styleClass="button-primary" text="Filtrar" />
                            </children>
                         </HBox>
                      </children>

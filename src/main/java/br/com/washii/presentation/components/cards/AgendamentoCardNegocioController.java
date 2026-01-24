@@ -95,8 +95,7 @@ public class AgendamentoCardNegocioController {
             btnIniciar.setVisible(false);
             btnIniciar.setManaged(false);
 
-            boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
-                                     ag.getStatus() == StatusAgendamento.AGENDADO);
+            boolean podeInteragir = (ag.getStatus() == StatusAgendamento.AGENDADO);
 
             btnCancelar.setVisible(podeInteragir);
             btnCancelar.setManaged(podeInteragir);

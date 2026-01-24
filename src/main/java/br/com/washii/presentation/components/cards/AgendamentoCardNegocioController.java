@@ -4,8 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
-import br.com.washii.domain.entities.Agendamento; // Ajuste o pacote conforme seu projeto
+import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.service.AgendamentoService;
 import javafx.event.ActionEvent;
@@ -34,7 +33,7 @@ public class AgendamentoCardNegocioController {
     private Agendamento agendamento;
     private boolean emAndamento = false;
     private Runnable onUpdate;
-    private boolean cardVisualizacao = false; // Não disponibiliza botões de ação, como iniciar ou finalizar agendamento
+    private boolean cardVisualizacao = false;
 
     public void setOnUpdate(Runnable onUpdate) {
         this.onUpdate = onUpdate;

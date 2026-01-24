@@ -12,13 +12,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // TESTES
+        
         StyleManager styleManager = new StyleManager(
             "/br/com/washii/style/global.css",
             "/br/com/washii/style/componentes.css",
             "/br/com/washii/style/tema-claro.css"
         );
-
 
         // Instancia a fabrica de construtores e a fabrica de services
         // Centraliza a lógica de instanciação de objetos

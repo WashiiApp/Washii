@@ -16,7 +16,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class AgendamentoCardController {
+public class AgendamentoCardNegocioController {
 
     private AgendamentoService agendamentoService;
 
@@ -32,10 +32,9 @@ public class AgendamentoCardController {
     @FXML private VBox vboxServicos;
     @FXML private VBox cardRoot;
     private Agendamento agendamento;
-
     private boolean emAndamento = false;
-
     private Runnable onUpdate;
+    private boolean cardVisualizacao = false; // Não disponibiliza botões de ação, como iniciar ou finalizar agendamento
 
     public void setOnUpdate(Runnable onUpdate) {
         this.onUpdate = onUpdate;
@@ -92,23 +91,32 @@ public class AgendamentoCardController {
         });
 
         // 4. Controle de Visibilidade dos Botões
-        boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
-                                 ag.getStatus() == StatusAgendamento.AGENDADO);
-
-        btnIniciar.setVisible(podeInteragir);
-        btnIniciar.setManaged(podeInteragir);
-        btnCancelar.setVisible(podeInteragir);
-        btnCancelar.setManaged(podeInteragir);
-
-        if (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO) {
-            btnIniciar.setText("CONCLUIR");
-            btnCancelar.setVisible(false);
-            btnCancelar.setManaged(false);
-            emAndamento = true;
+        if (cardVisualizacao) {
+            btnIniciar.setVisible(false);
+            btnIniciar.setManaged(false);
         } else {
-            btnIniciar.setText("INICIAR");
-            emAndamento = false;
+            boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
+                                     ag.getStatus() == StatusAgendamento.AGENDADO);
+
+            btnIniciar.setVisible(podeInteragir);
+            btnIniciar.setManaged(podeInteragir);
+            btnCancelar.setVisible(podeInteragir);
+            btnCancelar.setManaged(podeInteragir);
+
+            if (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO) {
+                btnIniciar.setText("CONCLUIR");
+                btnCancelar.setVisible(false);
+                btnCancelar.setManaged(false);
+                emAndamento = true;
+            } else {
+                btnIniciar.setText("INICIAR");
+                emAndamento = false;
+            }
         }
+    }
+
+    public void setCardVisualizacao(boolean valor){
+        cardVisualizacao = valor;
     }
 
     private void configurarStatus(StatusAgendamento status) {

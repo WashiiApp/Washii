@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.infra.session.Sessao;
-import br.com.washii.presentation.components.cards.AgendamentoCardController; 
+import br.com.washii.presentation.components.cards.AgendamentoCardNegocioController; 
 import br.com.washii.service.AgendamentoService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -75,8 +75,6 @@ public class MeusAgendamentosNegocioController {
         StatusAgendamento statusFiltro = cmbStatus.getValue();
         LocalDate dataFiltro = dtpData.getValue();
 
-        System.out.println("Filtrando... Status: " + statusFiltro + " | Data: " + dataFiltro);
-
         List<Agendamento> filtrados = listaCompletaCache.stream()
             .filter(ag -> {
                 if (statusFiltro != null && ag.getStatus() != statusFiltro) return false;
@@ -97,12 +95,16 @@ public class MeusAgendamentosNegocioController {
 
     private void adicionarCardAoFluxo(Agendamento ag) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/agendamento-card.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/washii/view/components/cards/agendamento-card-negocio.fxml"));
             Parent card = loader.load();
 
-            AgendamentoCardController controller = loader.getController();
+            AgendamentoCardNegocioController controller = loader.getController();
             
             controller.setService(this.agendamentoService);
+            // Transforma o card para visualização, não podendo execultar comandos de iniciar ou
+            // concluir agendamento, apenas cancelar.
+            // Importante ser definido antes do metodo setDados.
+            controller.setCardVisualizacao(true);
             controller.setDados(ag); 
 
             controller.setOnUpdate(() -> {

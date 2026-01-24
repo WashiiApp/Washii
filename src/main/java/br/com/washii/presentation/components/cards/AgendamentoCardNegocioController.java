@@ -4,8 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
-import br.com.washii.domain.entities.Agendamento; // Ajuste o pacote conforme seu projeto
+import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.service.AgendamentoService;
 import javafx.event.ActionEvent;
@@ -16,7 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class AgendamentoCardController {
+public class AgendamentoCardNegocioController {
 
     private AgendamentoService agendamentoService;
 
@@ -32,10 +31,9 @@ public class AgendamentoCardController {
     @FXML private VBox vboxServicos;
     @FXML private VBox cardRoot;
     private Agendamento agendamento;
-
     private boolean emAndamento = false;
-
     private Runnable onUpdate;
+    private boolean cardVisualizacao = false;
 
     public void setOnUpdate(Runnable onUpdate) {
         this.onUpdate = onUpdate;
@@ -91,24 +89,40 @@ public class AgendamentoCardController {
             vboxServicos.getChildren().add(hbServico);
         });
 
-        // 4. Controle de Visibilidade dos Botões
-        boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
-                                 ag.getStatus() == StatusAgendamento.AGENDADO);
+        // 4. Controle de Visibilidade de Botões
+        if (cardVisualizacao) {
+            // No modo visualização, não é exibido o botão de iniciar/concluir
+            btnIniciar.setVisible(false);
+            btnIniciar.setManaged(false);
 
-        btnIniciar.setVisible(podeInteragir);
-        btnIniciar.setManaged(podeInteragir);
-        btnCancelar.setVisible(podeInteragir);
-        btnCancelar.setManaged(podeInteragir);
+            boolean podeInteragir = (ag.getStatus() == StatusAgendamento.AGENDADO);
 
-        if (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO) {
-            btnIniciar.setText("CONCLUIR");
-            btnCancelar.setVisible(false);
-            btnCancelar.setManaged(false);
-            emAndamento = true;
+            btnCancelar.setVisible(podeInteragir);
+            btnCancelar.setManaged(podeInteragir);
+
         } else {
-            btnIniciar.setText("INICIAR");
-            emAndamento = false;
+            boolean podeInteragir = (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO || 
+                                     ag.getStatus() == StatusAgendamento.AGENDADO);
+
+            btnIniciar.setVisible(podeInteragir);
+            btnIniciar.setManaged(podeInteragir);
+            btnCancelar.setVisible(podeInteragir);
+            btnCancelar.setManaged(podeInteragir);
+
+            if (ag.getStatus() == StatusAgendamento.EM_ANDAMENTO) {
+                btnIniciar.setText("CONCLUIR");
+                btnCancelar.setVisible(false);
+                btnCancelar.setManaged(false);
+                emAndamento = true;
+            } else {
+                btnIniciar.setText("INICIAR");
+                emAndamento = false;
+            }
         }
+    }
+
+    public void setCardVisualizacao(boolean valor){
+        cardVisualizacao = valor;
     }
 
     private void configurarStatus(StatusAgendamento status) {

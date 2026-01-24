@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="cardRoot" maxWidth="350.0" minWidth="300.0" spacing="10.0" styleClass="agendamento-card" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.components.cards.AgendamentoCardController">
+<VBox fx:id="cardRoot" maxWidth="350.0" minWidth="300.0" spacing="10.0" styleClass="agendamento-card" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.components.cards.AgendamentoCardNegocioController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>

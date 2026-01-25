@@ -1,10 +1,10 @@
 module br.com.washii {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires javafx.graphics;
+    requires transitive javafx.controls;
+    requires transitive javafx.fxml;
+    requires transitive javafx.graphics;
+    requires transitive javafx.base;
     requires java.sql;
     requires io.github.cdimascio.dotenv.java;
-    requires javafx.base;
     requires jbcrypt;
     requires java.datatransfer;
     requires org.kordamp.ikonli.javafx;

@@ -157,9 +157,13 @@ public class AgendamentoCardNegocioController {
         alert.setContentText("Esta ação não poderá ser desfeita.");
 
         if (alert.showAndWait().get() == ButtonType.OK ) {
-            agendamentoService.cancelarAgendamento(agendamento);
-            if (onUpdate != null) {
-                onUpdate.run();
+            try {
+                agendamentoService.cancelarAgendamento(agendamento);
+                if (onUpdate != null) {
+                    onUpdate.run();
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); 
             }
         }
     }

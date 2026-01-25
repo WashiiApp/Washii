@@ -1,6 +1,8 @@
 package br.com.washii.presentation.components.cards;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 import br.com.washii.domain.entities.Agendamento;
 import br.com.washii.domain.entities.Endereco;
 import br.com.washii.domain.entities.Servico;
@@ -8,7 +10,10 @@ import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.service.AgendamentoService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -43,13 +48,20 @@ public class AgendamentoCardClienteController {
 
     @FXML
     void onCancelarAgendamento(ActionEvent event) {
-        try {
-            agendamentoService.cancelarAgendamento(agendamento);
-
-            onUpdate.run();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cancelamento");
+        alert.setHeaderText("Deseja realmente CANCELAR o Agendamento #" + agendamento.getId() + "?");
+        alert.setContentText("Esta ação não poderá ser desfeita.");
+        
+        if (alert.showAndWait().get() == ButtonType.OK ) {
+            try {
+                agendamentoService.cancelarAgendamento(agendamento);
+                if (onUpdate != null) {
+                    onUpdate.run();
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); 
+            }
         }
     }
 

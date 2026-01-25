@@ -90,7 +90,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         List<Agendamento> agendamentos = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection()) {
-
+            // buscando o id do cliente correto
             Long idCliente = buscarIdClientePorIdUsuario(conn, idUsuario);
 
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -98,6 +98,8 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
+
+                    // setando basicamento o agendamento, cliente, buscando o negocio, veiculo do cliente (montando o card)
                     Agendamento ag = montarAgendamentoBasico(rs);
 
                     Cliente cliente = new Cliente();
@@ -211,6 +213,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             Veiculo veiculo = entidade.getVeiculo();
             Long idVeiculo = null;
 
+            // buscando veiculo do client
             try (PreparedStatement stmtBusca = conn.prepareStatement(sqlBuscarVeiculo)) {
                 stmtBusca.setString(1, veiculo.getPlaca());
 
@@ -221,7 +224,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                 }
             }
 
-            // buscando id
+            // buscando id do cliente correto
             Long idCliente = buscarIdClientePorIdUsuario(
                     conn,
                     entidade.getCliente().getId()
@@ -230,7 +233,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
             if (idVeiculo == null) {
                 try (PreparedStatement stmtInsertVeiculo =
                              conn.prepareStatement(sqlInserirVeiculo, Statement.RETURN_GENERATED_KEYS)) {
-
+                    // setando veiculo
                     stmtInsertVeiculo.setString(1, veiculo.getPlaca());
                     stmtInsertVeiculo.setString(2, veiculo.getCategoriaVeiculo().name());
                     stmtInsertVeiculo.setLong(3, idCliente);
@@ -250,6 +253,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
                     sqlAgendamento, Statement.RETURN_GENERATED_KEYS
             );
 
+            // montando o card
             stmtAg.setDate(1, Date.valueOf(entidade.getData()));
             stmtAg.setTime(2, Time.valueOf(entidade.getHora()));
             stmtAg.setString(3, entidade.getStatus().name());
@@ -434,10 +438,7 @@ public class AgendamentoPersistence implements AgendamentoRepository {
         return null;
     }
 
-    private List<Servico> buscarServicosDoAgendamento(
-            Connection conn,
-            Long idAgendamento
-    ) throws SQLException {
+    private List<Servico> buscarServicosDoAgendamento(Connection conn, Long idAgendamento) throws SQLException {
 
         String sql = """
         SELECT 

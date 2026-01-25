@@ -30,9 +30,9 @@ public class UsuarioService {
             throw new EmailJaCadastradoException();
         }
 
-        String  SenhaCrua = user.getSenha();
-        String SenhaCripto = SenhaCrypt.hashSenha(SenhaCrua);
-        user.setSenha(SenhaCripto);
+        String  senhaCrua = user.getSenha();
+        String senhaCrypt = SenhaCrypt.hashSenha(senhaCrua);
+        user.setSenha(senhaCrypt);
 
         usuarioRepository.salvar(user);
     }

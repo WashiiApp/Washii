@@ -40,8 +40,8 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             if ("NEGOCIO".equals(tipo)) {
                 String sqlNegocio = """
-                    INSERT INTO negocio (id_usuario, cnpj, razao_social, inicio_expediente, fim_expediente)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO negocio (id_usuario, cnpj, razao_social, inicio_expediente, fim_expediente, duracao_media, capacidade_atendimento)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                 """;
 
                 PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio);
@@ -52,6 +52,8 @@ public class UsuarioPersistence implements UsuarioRepository {
                 if (usuario instanceof LavaJato lavajato) {
                     stmtNegocio.setTime(4, Time.valueOf(lavajato.getInicioExpediente()));
                     stmtNegocio.setTime(5, Time.valueOf(lavajato.getFimExpediente()));
+                    stmtNegocio.setTime(6, Time.valueOf(lavajato.getDuracaoMediaServico()));
+                    stmtNegocio.setInt(7, lavajato.getCapacidadeAtendimentoSimultaneo());
                 }
 
                 stmtNegocio.executeUpdate();
@@ -87,7 +89,7 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         String sqlNegocio = """
                 UPDATE negocio
-                SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?
+                SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?, duracao_media = ?, capacidade_atendimento = ?
                 WHERE id_usuario = ?
                 """;
 
@@ -125,7 +127,9 @@ public class UsuarioPersistence implements UsuarioRepository {
                         stmtNegocio.setString(2, negocio.getRazaoSocial());
                         stmtNegocio.setTime(3, Time.valueOf(negocio.getInicioExpediente()));
                         stmtNegocio.setTime(4, Time.valueOf(negocio.getFimExpediente()));
-                        stmtNegocio.setLong(5, usuario.getId()); // id_usuario
+                        stmtNegocio.setTime(5, Time.valueOf(negocio.getDuracaoMediaServico()));
+                        stmtNegocio.setInt(6, negocio.getCapacidadeAtendimentoSimultaneo());
+                        stmtNegocio.setLong(7, usuario.getId()); // id_usuario
 
                         stmtNegocio.executeUpdate();
                     }
@@ -185,7 +189,11 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         c.telefone,
         n.cnpj,
-        n.razao_social
+        n.razao_social,
+        n.inicio_expediente,
+        n.fim_expediente,
+        n.duracao_media,
+        n.capacidade_atendimento
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -219,6 +227,10 @@ public class UsuarioPersistence implements UsuarioRepository {
                 LavaJato lavaJato = new LavaJato();
                 lavaJato.setCnpj(rs.getString("cnpj"));
                 lavaJato.setRazaoSocial(rs.getString("razao_social"));
+                lavaJato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
+                lavaJato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+                lavaJato.setDuracaoMediaServico(rs.getTime("duracao_media").toLocalTime());
+                lavaJato.setCapacidadeAtendimentoSimultaneo(rs.getInt("capacidade_atendimento"));
                 usuario = lavaJato;
 
 //                Negocio negocio = new Negocio();
@@ -303,7 +315,10 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         c.telefone,
         n.cnpj,
-        n.razao_social
+        n.razao_social,
+        n.inicio_expediente,
+        n.fim_expediente,
+        n.duracao_media
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -331,6 +346,10 @@ public class UsuarioPersistence implements UsuarioRepository {
                     LavaJato lavaJato = new LavaJato();
                     lavaJato.setCnpj(rs.getString("cnpj"));
                     lavaJato.setRazaoSocial(rs.getString("razao_social"));
+                    lavaJato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
+                    lavaJato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+                    lavaJato.setDuracaoMediaServico(rs.getTime("duracao_media").toLocalTime());
+
                     usuario = lavaJato;
 
 //                    Negocio negocio = new Negocio();
@@ -394,7 +413,8 @@ public class UsuarioPersistence implements UsuarioRepository {
         n.cnpj,
         n.razao_social,
         n.inicio_expediente,
-        n.fim_expediente
+        n.fim_expediente,
+        n.duracao_media
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -427,6 +447,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 lavaJato.setRazaoSocial(rs.getString("razao_social"));
                 lavaJato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
                 lavaJato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+                lavaJato.setDuracaoMediaServico(rs.getTime("duracao_media").toLocalTime());
                 usuario = lavaJato;
 //                Negocio negocio = new Negocio();
 //                negocio.setCnpj(rs.getString("cnpj"));
@@ -472,6 +493,8 @@ public class UsuarioPersistence implements UsuarioRepository {
             n.razao_social,
             n.inicio_expediente,
             n.fim_expediente,
+            n.duracao_media,
+            n.capacidade_atendimento,
         
             u.nome,
             u.email,
@@ -516,6 +539,9 @@ public class UsuarioPersistence implements UsuarioRepository {
                 lavajato.setFimExpediente(
                         rs.getTime("fim_expediente").toLocalTime()
                 );
+
+                lavajato.setDuracaoMediaServico(rs.getTime("duracao_media").toLocalTime());
+                lavajato.setCapacidadeAtendimentoSimultaneo(rs.getInt("capacidade_atendimento"));
 
                 // setando endereço
                 Endereco endereco = new Endereco();

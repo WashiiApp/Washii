@@ -20,7 +20,7 @@
          <children>
             <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../assets/logos/lg-washii-blue-32.png" />
+                  <Image url="@../../assets/logos/lg-washii-32.png" />
                </image>
             </ImageView>
             <Label text="Washii" textFill="#4eafd9">

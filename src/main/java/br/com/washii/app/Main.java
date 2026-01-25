@@ -29,8 +29,8 @@ public class Main extends Application {
         primaryStage.setMinHeight(450);
         primaryStage.setMinWidth(400);
         primaryStage.getIcons().addAll(
-                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-blue-32.png")),
-                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/branding/app-icon/ic-washii-blue-128.png"))
+                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/app-icon/ic-washii-32.png")),
+                new Image(getClass().getResourceAsStream("/br/com/washii/assets/icons/app-icon/ic-washii-128.png"))
         );
 
         // Carrega Inicialmente a tela de login

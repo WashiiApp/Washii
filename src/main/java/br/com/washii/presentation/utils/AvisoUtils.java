@@ -21,16 +21,16 @@ public class AvisoUtils {
     }
 
     public static void limparCampoAviso(TextFlow container, int segundos){
-        // 1. Aguarda o tempo solicitado
+        // Aguarda o tempo solicitado
         PauseTransition pause = new PauseTransition(Duration.seconds(segundos));
         
         pause.setOnFinished(e -> {
-            // 2. Cria uma animação de SAÍDA (FadeOut)
+            // Cria uma animação de saída
             FadeTransition fadeOut = new FadeTransition(Duration.millis(300), container);
             fadeOut.setFromValue(1.0); // De totalmente visível
             fadeOut.setToValue(0.0);   // Para invisível
             
-            // 3. Só desliga o Managed e Visible APÓS a animação acabar
+            // Só desliga o Managed e Visible APÓS a animação acabar
             fadeOut.setOnFinished(event -> {
                 container.setVisible(false);
                 container.setManaged(false);
@@ -42,18 +42,16 @@ public class AvisoUtils {
         pause.play();
     }
 
-    // --- Método Privado (A lógica centralizada) ---
-
     private static void configurarEExibir(TextFlow container, String mensagem, String classeCssTexto) {
         container.getChildren().clear();
 
-        // 1. Cria o nó de texto
+        // Cria o nó de texto
         Text texto = new Text(mensagem);
         
-        // 2. Aplica as classes CSS ao TEXTO, não ao container
+        // Aplica as classes CSS ao TEXTO, não ao container
         texto.getStyleClass().addAll("mensagem-aviso", classeCssTexto);
 
-        // 3. Adiciona ao container
+        // Adiciona ao container
         container.getChildren().add(texto);
 
         // Torna visível e ocupa espaço no layout

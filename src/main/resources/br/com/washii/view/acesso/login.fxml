@@ -23,7 +23,7 @@
          <children>
             <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../assets/logos/lg-washii-blue-128.png" />
+                  <Image url="@../../assets/logos/lg-washii-128.png" />
                </image>
             </ImageView>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="logo-label" text="Washii">
@@ -69,9 +69,10 @@
             </PasswordField>
          </children>
       </HBox>
-      <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+      <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="5.0">
          <children>
-            <TextFlow fx:id="errorContainer" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
+            <TextFlow fx:id="conteinerAviso" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="SOMETIMES" />
             <Hyperlink fx:id="lnkEsqueciSenha" layoutX="269.0" layoutY="10.0" minWidth="-Infinity" onAction="#onEsqueciSenha" text="Esqueci a senha" />
          </children>
       </HBox>

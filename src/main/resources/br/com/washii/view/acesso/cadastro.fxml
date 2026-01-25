@@ -23,7 +23,7 @@
          <children>
             <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../assets/logos/lg-washii-blue-128.png" />
+                  <Image url="@../../assets/logos/lg-washii-128.png" />
                </image>
             </ImageView>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="logo-label" text="Washii">

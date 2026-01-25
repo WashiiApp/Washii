@@ -1,3 +1,4 @@
+@SuppressWarnings("module")
 module br.com.washii {
     requires transitive javafx.controls;
     requires transitive javafx.fxml;

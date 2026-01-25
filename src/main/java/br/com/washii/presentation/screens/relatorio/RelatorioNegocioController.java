@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import br.com.washii.domain.entities.Agendamento;
+import br.com.washii.domain.enums.StatusAgendamento;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.utils.AvisoUtils;
 import br.com.washii.service.AgendamentoService;
@@ -100,8 +100,11 @@ public class RelatorioNegocioController {
             return;
         }
 
-        double faturamentoTotal = calcularFaturamento(dados);
-        int qtdTotalAgendamentos = dados.size();
+        // Filtra os agendamentos para apenas aqueles que já forma concluídos
+        List<Agendamento> dadosFiltrados = dados.stream().filter(ag -> ag.getStatus() == StatusAgendamento.CONCLUIDO).toList();
+
+        double faturamentoTotal = calcularFaturamento(dadosFiltrados);
+        int qtdTotalAgendamentos = dadosFiltrados.size();
         double ticketMedio = calcularTicketMedio(faturamentoTotal, qtdTotalAgendamentos);
 
         // APLICAÇÃO DA FORMATAÇÃO
@@ -110,8 +113,8 @@ public class RelatorioNegocioController {
         lblTicketMedio.setText(currencyFormat.format(ticketMedio));
 
         // Carregar graficos
-        atualizarGraficoPizza(dados);
-        atualizarGraficoLinha(dados);
+        atualizarGraficoPizza(dadosFiltrados);
+        atualizarGraficoLinha(dadosFiltrados);
     }
 
     private double calcularFaturamento(List<Agendamento> dados) {

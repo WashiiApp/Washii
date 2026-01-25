@@ -87,7 +87,7 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         String sqlNegocio = """
                 UPDATE negocio
-                SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?
+                SET cnpj = ?, razao_social = ?, inicio_expediente = ?, fim_expediente = ?, duracao_media = ?
                 WHERE id_usuario = ?
                 """;
 
@@ -125,7 +125,8 @@ public class UsuarioPersistence implements UsuarioRepository {
                         stmtNegocio.setString(2, negocio.getRazaoSocial());
                         stmtNegocio.setTime(3, Time.valueOf(negocio.getInicioExpediente()));
                         stmtNegocio.setTime(4, Time.valueOf(negocio.getFimExpediente()));
-                        stmtNegocio.setLong(5, usuario.getId()); // id_usuario
+                        stmtNegocio.setTime(5, Time.valueOf(negocio.getDuracaoMediaServico()));
+                        stmtNegocio.setLong(6, usuario.getId()); // id_usuario
 
                         stmtNegocio.executeUpdate();
                     }
@@ -185,7 +186,10 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         c.telefone,
         n.cnpj,
-        n.razao_social
+        n.razao_social,
+        n.inicio_expediente,
+        n.fim_expediente,
+        n.duracao_media
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -219,6 +223,9 @@ public class UsuarioPersistence implements UsuarioRepository {
                 LavaJato lavaJato = new LavaJato();
                 lavaJato.setCnpj(rs.getString("cnpj"));
                 lavaJato.setRazaoSocial(rs.getString("razao_social"));
+                lavaJato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
+                lavaJato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+                lavaJato.setDuracaoMediaServico(rs.getTime("duracao_media").toLocalTime());
                 usuario = lavaJato;
 
 //                Negocio negocio = new Negocio();
@@ -394,7 +401,8 @@ public class UsuarioPersistence implements UsuarioRepository {
         n.cnpj,
         n.razao_social,
         n.inicio_expediente,
-        n.fim_expediente
+        n.fim_expediente,
+        n.duracao_media
 
     FROM usuario u
     JOIN endereco e ON e.id = u.id_endereco
@@ -427,6 +435,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 lavaJato.setRazaoSocial(rs.getString("razao_social"));
                 lavaJato.setInicioExpediente(rs.getTime("inicio_expediente").toLocalTime());
                 lavaJato.setFimExpediente(rs.getTime("fim_expediente").toLocalTime());
+                lavaJato.setDuracaoMediaServico(rs.getTime("duracao_media").toLocalTime());
                 usuario = lavaJato;
 //                Negocio negocio = new Negocio();
 //                negocio.setCnpj(rs.getString("cnpj"));

@@ -21,6 +21,7 @@ public class UsuarioPersistence implements UsuarioRepository {
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // return para pegar a chave na qual irá gerar pelo o serial
 
             salvarEndereco(usuario);
 
@@ -105,10 +106,11 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             conn.setAutoCommit(false);
 
+            // mandando pra atualizar o end
             atualizarEndereco(conn, usuario.getEndereco());
 
             try (PreparedStatement stmtUsuario = conn.prepareStatement(sql)) {
-
+                // att usuario
                 stmtUsuario.setString(1, usuario.getEmail());
                 stmtUsuario.setString(2, usuario.getSenha());
                 stmtUsuario.setString(3, usuario.getNome());
@@ -122,7 +124,7 @@ public class UsuarioPersistence implements UsuarioRepository {
                 if (usuario instanceof Negocio negocio) {
 
                     try (PreparedStatement stmtNegocio = conn.prepareStatement(sqlNegocio)) {
-
+                        // att negocio
                         stmtNegocio.setString(1, negocio.getCnpj());
                         stmtNegocio.setString(2, negocio.getRazaoSocial());
                         stmtNegocio.setTime(3, Time.valueOf(negocio.getInicioExpediente()));
@@ -137,6 +139,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             }
             if (tipoUsuario.equals(TipoUsuario.CLIENTE)) {
                 if (usuario instanceof Cliente cliente) {
+                    // att cliente
                     try (PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
                         stmtCliente.setString(1, cliente.getTelefone());
                         stmtCliente.setLong(2, usuario.getId());
@@ -266,7 +269,7 @@ public class UsuarioPersistence implements UsuarioRepository {
             throw new RuntimeException("Erro ao buscar usuário", e);
         }
     }
-
+    // procurando o id do cliente passando do usuario
     public Optional<Long> buscarIdClientePorIdUsuario(Long idUsuario) {
         String sql = """
         SELECT id
@@ -435,7 +438,7 @@ public class UsuarioPersistence implements UsuarioRepository {
 
             String tipoStr = rs.getString("tipo");
             Usuario usuario;
-
+            // setando cliente ou negocio
             if ("CLIENTE".equals(tipoStr)) {
                 Cliente cliente = new Cliente();
                 cliente.setTelefone(rs.getString("telefone"));
@@ -525,7 +528,7 @@ public class UsuarioPersistence implements UsuarioRepository {
 
                 LavaJato lavajato = new LavaJato();
 
-                // setando lavajato
+                // setando lavajato (negocio)
                 lavajato.setId(rs.getLong("usuario_id"));
 
                 lavajato.setNome(rs.getString("nome"));
@@ -570,7 +573,6 @@ public class UsuarioPersistence implements UsuarioRepository {
         }
     }
 
-    // salvar o endereço
     public void salvarEndereco(Usuario usuario) {
         String sqlEndereco = """
         INSERT INTO endereco (cep, pais, estado, bairro, rua, referencia, cidade, numero)

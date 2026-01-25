@@ -5,6 +5,7 @@ import br.com.washii.domain.enums.TipoUsuario;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.core.BaseController;
+import br.com.washii.presentation.utils.AvisoUtils;
 import br.com.washii.service.AutenticacaoService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ public class LoginController extends BaseController{
     private Button btnEntrar;
 
     @FXML
-    private TextFlow errorContainer;
+    private TextFlow conteinerAviso;
 
     @FXML
     private Hyperlink lnkCadastro;
@@ -97,17 +98,14 @@ public class LoginController extends BaseController{
     @FXML
     void onEsqueciSenha(ActionEvent event) {
         limparCampoErro();
-        exibirErro("Entre em contato com o suporte para resetar sua senha");
+        AvisoUtils.exibirAvisoAlerta(conteinerAviso, "Entre em contato com o suporte para resetar sua senha");
     }
 
     private void exibirErro(String msg){
-        errorContainer.setVisible(true);
-        Text erro = new Text(msg);
-        errorContainer.getChildren().add(erro);
+        AvisoUtils.exibirAvisoErro(conteinerAviso, msg);
     }
 
     private void limparCampoErro(){
-        errorContainer.setVisible(false);
-        errorContainer.getChildren().clear();
+        conteinerAviso.getChildren().clear();
     }
 }

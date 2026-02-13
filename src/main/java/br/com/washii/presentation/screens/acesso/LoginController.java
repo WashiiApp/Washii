@@ -66,11 +66,7 @@ public class LoginController extends BaseController {
     }
 
     private boolean validarEmail() {
-        if (!txtEmail.getText().contains("@")){
-            exibirErro("E-mail inválido");
-            return false;
-        }
-        return true;
+        return txtEmail.getText().contains("@");
     }
 
     private void executarLoginAsync() {

@@ -61,50 +61,50 @@ public class CadastroController extends BaseController {
    }
 
     private boolean validarDados() {
-        if (verificarCamposEmBranco()) return false;
+        if (verificarCamposEmBranco()) {
+            exibirAvisoErro("Preencha todos os campos.");
+            return false;
+        }
 
-        if (!validarCampoEmail()) return false;
+        if (!validarCampoEmail()) {
+            exibirAvisoErro("E-mail inválido");
+            return false;
+        }
 
-        if (!validarCampoSenha()) return false;
+        if (!verificarNumeroMinimoDeCaracteresParaSenha()) {
+            exibirAvisoErro("A senha deve ter no mínimo " + NUMERO_MINIMO_CARACTERE_PARA_SENHA + " caracteres");
+            return false;
+        }
+
+        if (!verificarSeSenhasConferem()) {
+            exibirAvisoErro("As senhas não conferem.");
+            return false;
+        }
 
         return true;
     }
 
     private boolean verificarCamposEmBranco() {
-        if (    tipoUsuario.getSelectedToggle() == null ||
+        return  tipoUsuario.getSelectedToggle() == null ||
                 txtNome.getText().isBlank()   ||
                 txtEmail.getText().isBlank()  ||
                 txtCEP.getText().isBlank()    ||
                 txtEstado.getText().isBlank() ||
                 txtCidade.getText().isBlank() ||
                 pwdSenha.getText().isBlank()  ||
-                pwdSenhaConferida.getText().isBlank()) {
-            exibirAvisoErro("Preencha todos os campos.");
-            return true;
-        }
-
-        return false;
+                pwdSenhaConferida.getText().isBlank();
     }
 
     private boolean validarCampoEmail() {
-        if (!txtEmail.getText().contains("@")){
-            exibirAvisoErro("E-mail inválido");
-            return false;
-        }
-        return true;
+        return txtEmail.getText().contains("@");
     }
 
-    private boolean validarCampoSenha() {
-        if (pwdSenha.getText().length() < NUMERO_MINIMO_CARACTERE_PARA_SENHA){
-            exibirAvisoErro("A senha deve ter no mínimo " + NUMERO_MINIMO_CARACTERE_PARA_SENHA + " caracteres");
-            return false;
-        }
-        if (!pwdSenha.getText().equals(pwdSenhaConferida.getText())) {
-            exibirAvisoErro("As senhas não conferem.");
-            return false;
-        }
+    private boolean verificarNumeroMinimoDeCaracteresParaSenha() {
+        return pwdSenha.getText().length() >= NUMERO_MINIMO_CARACTERE_PARA_SENHA;
+    }
 
-        return true;
+    private boolean verificarSeSenhasConferem() {
+        return pwdSenha.getText().equals(pwdSenhaConferida.getText());
     }
 
     private Usuario criarUsuario() {
@@ -122,8 +122,7 @@ public class CadastroController extends BaseController {
         } else if (selecionado == rbCliente) {
             usuario = new Cliente(nome, email, senha, endereco, TipoUsuario.CLIENTE);
         } else {
-            exibirAvisoErro("Tipo de conta não identificado.");
-            return null;
+            throw new IllegalStateException("Tipo de conta inválido");
         }
 
         return usuario;
@@ -141,10 +140,7 @@ public class CadastroController extends BaseController {
     private void cadastrarUsuarioAsync(Usuario usuario) {
         ativarModoCarregamento("Cadastrando...");
 
-        CompletableFuture.supplyAsync(() -> {
-            usuarioService.salvarNovoUsuario(usuario);
-            return null;
-        })
+        CompletableFuture.runAsync(() -> usuarioService.salvarNovoUsuario(usuario))
         .thenRun(() -> {
             Platform.runLater(() -> {
                 exibirAvisoSucesso("Cadastro realizado com sucesso! Você já pode fazer login.");

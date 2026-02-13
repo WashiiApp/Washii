@@ -71,7 +71,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="5.0">
          <children>
-            <TextFlow fx:id="conteinerAviso" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
+            <TextFlow fx:id="containerAviso" styleClass="error-container" visible="false" HBox.hgrow="ALWAYS" />
             <Region HBox.hgrow="SOMETIMES" />
             <Hyperlink fx:id="lnkEsqueciSenha" layoutX="269.0" layoutY="10.0" minWidth="-Infinity" onAction="#onEsqueciSenha" text="Esqueci a senha" />
          </children>

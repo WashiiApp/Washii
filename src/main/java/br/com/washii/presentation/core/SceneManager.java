@@ -5,115 +5,70 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import br.com.washii.infra.factory.ControllerFactory;
 
 /**
- * Responsável pelo gerenciamento de navegação, fluxo de telas e temas da aplicação Washii.
- * Centraliza a lógica de carregamento de arquivos FXML e a aplicação dinâmica de estilos CSS.
- * * @author Grupo Washii
+ * Gerenciador de navegação que delega o feedback visual ao OverlayManager.
  */
 public class SceneManager {
 
-    /** Janela principal da aplicação (Stage). */
     private final Stage primaryStage;
     private final StyleManager styleManager;
     private final ControllerFactory controllerFactory;
+    private final OverlayManager overlayManager;
 
-    /** Área de conteúdo para carregamento de telas internas (ex: dashboard). */
     private Pane contentArea;
 
-    /**
-     * Construtor do gerenciador de cenas.
-     * @param primaryStage O Stage principal fornecido pela classe Application do JavaFX.
-     */
     public SceneManager(Stage primaryStage, StyleManager styleManager, ControllerFactory controllerFactory) {
         this.primaryStage = primaryStage;
         this.styleManager = styleManager;
         this.controllerFactory = controllerFactory;
+        this.overlayManager = new OverlayManager();
     }
 
+    // --- DELEGAÇÃO DE CARREGAMENTO ---
 
-    // --- MÉTODOS DE NAVEGAÇÃO ---
+    public void setModoCarregamento(boolean ativar) {
+        overlayManager.setStatus(ativar, "Processando...");
+    }
 
-    /**
-     * Substitui a cena inteira do Stage principal por uma nova tela.
-     * @param fxmlPath Caminho do arquivo FXML da nova tela.
-     */
-    public void switchFullScene(String fxmlPath) {
+    public void setModoCarregamento(boolean ativar, String mensagem) {
+        overlayManager.setStatus(ativar, mensagem);
+    }
+
+    // --- NAVEGAÇÃO ---
+
+    public FXMLLoader switchFullScene(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-            // Instancia o Controller no controllerFactory
-            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
-
+            loader.setControllerFactory(controllerFactory::criar);
             Parent root = loader.load();
-            injectManager(loader);
+            injectSceneManager(loader);
 
-            Scene scene = new Scene(root);
-            // Aplica os estilos ativos na nova cena para manter consistência visual
+            // 1. Prepara o conteúdo dentro do OverlayManager
+            overlayManager.setContent(root);
+
+            // 2. RECUPERA o wrapper
+            StackPane wrapper = overlayManager.getLoadingWrapper();
+
+            // 3. A CHAVE PARA O ERRO: Se o wrapper já estiver em uma cena, remova-o de lá
+            if (wrapper.getScene() != null) {
+                wrapper.getScene().setRoot(new Pane()); // Define uma raiz vazia temporária para a cena antiga
+            }
+
+            // 4. Agora sim, cria a nova Scene com o wrapper "livre"
+            Scene scene = new Scene(wrapper);
             styleManager.applyTo(scene);
 
             primaryStage.setScene(scene);
             primaryStage.show();
+
+            return loader;
         } catch (IOException e) {
-            System.err.println("Erro ao carregar cena completa: " + fxmlPath);
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Carrega uma tela FXML dentro de um container específico (Pane).
-     * @param fxmlPath Caminho do arquivo FXML da tela interna.
-     * @throws IllegalStateException Caso a contentArea não tenha sido definida previamente via setContentArea.
-     */
-    public void loadInternalScreen(String fxmlPath) {
-        if (contentArea == null) {
-            throw new IllegalStateException("Erro: A 'contentArea' não foi definida.");
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
-
-            Parent node = loader.load();
-            injectManager(loader);
-
-            contentArea.getChildren().setAll(node);
-        } catch (IOException e) {
-            System.err.println("Erro ao carregar tela interna: " + fxmlPath);
-            e.printStackTrace();
-        }
-    }
-
-    public FXMLLoader loadCenterBorderPane(String fxmlPath) {
-        try {
-            // 1. Obtém a raiz da cena atual através do Stage principal
-            Parent root = primaryStage.getScene().getRoot();
-
-            // 2. Verifica se a raiz (ou o container principal) é um BorderPane
-            if (root instanceof BorderPane mainLayout) {
-                
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-                loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
-
-                Parent newNode = loader.load();
-                injectManager(loader);
-
-                // 3. Troca o centro diretamente
-                mainLayout.setCenter(newNode);
-
-                return loader;
-
-            } else {
-                throw new IllegalStateException("A tela atual não possui um BorderPane como raiz.");
-            }
-
-        } catch (IOException e) {
-            System.err.println("Erro ao carregar FXML: " + fxmlPath);
             e.printStackTrace();
         }
 
@@ -121,61 +76,91 @@ public class SceneManager {
     }
 
     /**
-     * Abre uma nova janela modal (Popup) que bloqueia a interação com a janela principal.
-     * @param fxmlPath Caminho do arquivo FXML do popup.
-     * @param title Título que será exibido na barra da janela.
+     * Troca apenas o centro de um BorderPane que já está na tela.
+     * Como o switchFullScene já colocou o BorderPane dentro do OverlayManager,
+     * basta trocar o nó do centro normalmente.
      */
+    public FXMLLoader loadCenterBorderPane(String fxmlPath) {
+        try {
+            // Buscamos o BorderPane que está "escondido" dentro do wrapper do OverlayManager
+            Parent root = primaryStage.getScene().getRoot(); // Isso retorna o StackPane do Overlay
+            BorderPane mainLayout = findBorderPane(root);
+
+            if (mainLayout != null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+                loader.setControllerFactory(controllerFactory::criar);
+                Parent newNode = loader.load();
+                injectSceneManager(loader);
+
+                // Troca o centro diretamente.
+                // O loading continua funcionando porque o BorderPane inteiro está sob o Overlay.
+                mainLayout.setCenter(newNode);
+                return loader;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Auxiliar para encontrar o BorderPane mesmo se ele estiver dentro de um StackPane de loading.
+     */
+    private BorderPane findBorderPane(Parent root) {
+        // Caso 1: A própria raiz já é o BorderPane
+        if (root instanceof BorderPane bp) return bp;
+
+        // Caso 2: A raiz é o StackPane do OverlayManager (o mais provável)
+        if (root instanceof StackPane sp) {
+            // Procuramos nos filhos do StackPane se algum é o BorderPane
+            return sp.getChildren().stream()
+                    .filter(n -> n instanceof BorderPane)
+                    .map(n -> (BorderPane) n)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        return null;
+    }
+
+    // --- MÉTODOS REUTILIZADOS (Sem alterações de lógica) ---
+
+    public void loadInternalScreen(String fxmlPath) {
+        if (contentArea == null) throw new IllegalStateException("contentArea não definida.");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            loader.setControllerFactory(controllerFactory::criar);
+            Parent node = loader.load();
+            injectSceneManager(loader);
+            contentArea.getChildren().setAll(node);
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+
     public void openPopup(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-            loader.setControllerFactory(clazz -> controllerFactory.criar(clazz));
-
+            loader.setControllerFactory(controllerFactory::criar);
             Parent root = loader.load();
-            injectManager(loader);
-
+            injectSceneManager(loader);
             Stage popupStage = new Stage();
             popupStage.setTitle(title);
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(primaryStage);
-
             Scene popupScene = new Scene(root);
             styleManager.applyTo(popupScene);
-
             popupStage.setScene(popupScene);
             popupStage.showAndWait();
-        } catch (IOException e) {
-            System.err.println("Erro ao abrir popup: " + fxmlPath);
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    /**
-     * Define o container onde as telas internas serão renderizadas.
-     * @param contentArea O Pane (geralmente um StackPane ou AnchorPane) de destino.
-     */
-    public void setContentArea(Pane contentArea) {
-        this.contentArea = contentArea;
-    }
+    public void setContentArea(Pane contentArea) { this.contentArea = contentArea; }
+    public Stage getPrimaryStage(){ return this.primaryStage; }
 
-    /**
-     * @return Primary Stage
-     */
-    public Stage getPrimaryStage(){
-        return this.primaryStage;
-    }
-
-    /**
-     * Injeta a instância deste SceneManager no Controller da tela carregada.
-     * O Controller deve estender a classe BaseController para receber a referência.
-     * @param loader O FXMLLoader utilizado para carregar a tela atual.
-     */
-    private void injectManager(FXMLLoader loader) {
+    private void injectSceneManager(FXMLLoader loader) {
         Object controller = loader.getController();
-        if (controller instanceof BaseController) {
-            BaseController baseController = (BaseController) controller;
-
-            baseController.setSceneManager(this);
+        if (controller instanceof BaseController base) {
+            base.setSceneManager(this);
         }
     }
 }

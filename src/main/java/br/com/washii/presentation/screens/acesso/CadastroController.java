@@ -7,7 +7,9 @@ import br.com.washii.domain.entities.Usuario;
 import br.com.washii.domain.enums.TipoUsuario;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.presentation.core.BaseController;
+import br.com.washii.presentation.utils.AvisoUtils;
 import br.com.washii.service.UsuarioService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,54 +17,33 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CadastroController extends BaseController {
 
-    private UsuarioService usuarioService;
+    private static final int NUMERO_MINIMO_CARACTERE_PARA_SENHA = 4;
 
-    @FXML
-    private RadioButton rbNegocio;
+    private final UsuarioService usuarioService;
 
-    @FXML
-    private RadioButton rbCliente;
+    @FXML private RadioButton rbNegocio, rbCliente;
 
-    @FXML
-    private ToggleGroup tipoUsuario;
+    @FXML private ToggleGroup tipoUsuario;
 
-    @FXML
-    private Button btnCadastrar;
+    @FXML private Button btnCadastrar, btnIrParaLogin;
 
-    @FXML
-    private Button btnIrParaLogin;
+    @FXML private PasswordField pwdSenha, pwdSenhaConferida;
 
-    @FXML
-    private PasswordField pwdSenha;
+    @FXML private TextFlow avisoContainer;
 
-    @FXML
-    private PasswordField pwdSenhaConferida;
+    @FXML private TextField txtCEP, txtCidade, txtEmail, txtEstado, txtNome;
 
-    @FXML
-    private TextFlow avisoContainer;
 
-    @FXML
-    private TextField txtCEP;
-
-    @FXML
-    private TextField txtCidade;
-
-    @FXML
-    private TextField txtEmail;
-
-    @FXML
-    private TextField txtEstado;
-
-    @FXML
-    private TextField txtNome;
-
-    public CadastroController(UsuarioService userService){
-        this.usuarioService = userService;
+    public CadastroController(UsuarioService usuarioService){
+        this.usuarioService = usuarioService;
     }
 
     @FXML
@@ -74,90 +55,142 @@ public class CadastroController extends BaseController {
     void onCadastrar(ActionEvent event) {
     limparCampoAviso();
 
-    // 1. Captura e Validação do RadioButton
-    RadioButton selecionado = (RadioButton) tipoUsuario.getSelectedToggle();
-    if (selecionado == null) {
-        exibirAvisoErro("Por favor, selecione o tipo da conta.");
-        return;
+    if (!validarDados()) return;
+
+    cadastrarUsuarioAsync(criarUsuario());
+   }
+
+    private boolean validarDados() {
+        if (verificarCamposEmBranco()) return false;
+
+        if (!validarCampoEmail()) return false;
+
+        if (!validarCampoSenha()) return false;
+
+        return true;
     }
 
-    // 2. Captura dos Textos
-    String nome = txtNome.getText();
-    String email = txtEmail.getText();
-    String cep = txtCEP.getText();
-    String estado = txtEstado.getText();
-    String cidade = txtCidade.getText();
-    String senha = pwdSenha.getText();
-    String senha2 = pwdSenhaConferida.getText();
+    private boolean verificarCamposEmBranco() {
+        if (    tipoUsuario.getSelectedToggle() == null ||
+                txtNome.getText().isBlank()   ||
+                txtEmail.getText().isBlank()  ||
+                txtCEP.getText().isBlank()    ||
+                txtEstado.getText().isBlank() ||
+                txtCidade.getText().isBlank() ||
+                pwdSenha.getText().isBlank()  ||
+                pwdSenhaConferida.getText().isBlank()) {
+            exibirAvisoErro("Preencha todos os campos.");
+            return true;
+        }
 
-    // 3. Validação de campos vazios e senhas
-    if (nome.isBlank() || email.isBlank() || cep.isBlank() || senha.isBlank()) {
-        exibirAvisoErro("Por favor, preencha todos os campos.");
-        return;
+        return false;
     }
 
-    if (!email.isBlank() && !email.contains("@")){
-        exibirAvisoErro("E-mail inválido");
-        return;
+    private boolean validarCampoEmail() {
+        if (!txtEmail.getText().contains("@")){
+            exibirAvisoErro("E-mail inválido");
+            return false;
+        }
+        return true;
     }
 
-    if (!senha.equals(senha2)) {
-        exibirAvisoErro("As senhas não conferem.");
-        return;
+    private boolean validarCampoSenha() {
+        if (pwdSenha.getText().length() < NUMERO_MINIMO_CARACTERE_PARA_SENHA){
+            exibirAvisoErro("A senha deve ter no mínimo " + NUMERO_MINIMO_CARACTERE_PARA_SENHA + " caracteres");
+            return false;
+        }
+        if (!pwdSenha.getText().equals(pwdSenhaConferida.getText())) {
+            exibirAvisoErro("As senhas não conferem.");
+            return false;
+        }
+
+        return true;
     }
 
-    // 4. Criação dos Objetos
-    Endereco endereco = new Endereco(cep, estado, cidade, null, null, null, "Brasil");
-    Usuario usuario;
+    private Usuario criarUsuario() {
+        Endereco endereco = criarEndereco();
 
-    // Comparação mais segura (verifique se o texto no Scene Builder bate exatamente)
-    if (selecionado == rbNegocio) {
-        usuario = new LavaJato(nome, email, senha, endereco, TipoUsuario.NEGOCIO);
-    } else if (selecionado == rbCliente) {
-        usuario = new Cliente(nome, email, senha, endereco, TipoUsuario.CLIENTE);
-    } else {
-        exibirAvisoErro("Tipo de conta não identificado.");
-        return;
+        RadioButton selecionado = (RadioButton) tipoUsuario.getSelectedToggle();
+        String nome = txtNome.getText().trim();
+        String email = txtEmail.getText().trim();
+        String senha = pwdSenha.getText().trim();
+
+        Usuario usuario;
+
+        if (selecionado == rbNegocio) {
+            usuario = new LavaJato(nome, email, senha, endereco, TipoUsuario.NEGOCIO);
+        } else if (selecionado == rbCliente) {
+            usuario = new Cliente(nome, email, senha, endereco, TipoUsuario.CLIENTE);
+        } else {
+            exibirAvisoErro("Tipo de conta não identificado.");
+            return null;
+        }
+
+        return usuario;
     }
 
-    try {
-        // 5. Chamada ao Service
-        usuarioService.salvarNovoUsuario(usuario);
+    private Endereco criarEndereco(){
+        String cep = txtCEP.getText();
+        String estado = txtEstado.getText();
+        String cidade = txtCidade.getText();
 
-        // 6. Feedback de Sucesso
-        exibirAvisoSucesso("Cadastro realizado com sucesso! Você já pode fazer login.");
+        return new Endereco(cep, estado, cidade, null, null, null, "Brasil");
 
-    } catch (NegocioException e) {
-        exibirAvisoErro(e.getMessage());
-    } catch (Exception e) {
-        exibirAvisoErro("Erro inesperado: " + e.getMessage());
-        e.printStackTrace();
     }
-}
+
+    private void cadastrarUsuarioAsync(Usuario usuario) {
+        ativarModoCarregamento("Cadastrando...");
+
+        CompletableFuture.supplyAsync(() -> {
+            usuarioService.salvarNovoUsuario(usuario);
+            return null;
+        })
+        .thenRun(() -> {
+            Platform.runLater(() -> {
+                exibirAvisoSucesso("Cadastro realizado com sucesso! Você já pode fazer login.");
+            });
+        })
+        .exceptionally(this::tratarErroCadastro)
+        .whenComplete((_, ex) -> {
+            desativarModoCarregamento();
+        });
+    }
+
+    private Void tratarErroCadastro(Throwable ex) {
+        Throwable erro = ex.getCause() != null ? ex.getCause(): ex;
+
+        Platform.runLater(() -> {
+            if (erro instanceof NegocioException){
+                exibirAvisoErro(erro.getMessage());
+                return;
+            }
+            exibirAvisoErro("Ocorreu um erro inesperado: " + erro.getMessage());
+            erro.printStackTrace();
+        });
+        return null;
+    }
+
+    private void ativarModoCarregamento(String mensagem) {
+        btnCadastrar.setDisable(true);
+        btnIrParaLogin.setDisable(true);
+        sceneManager.setModoCarregamento(true, mensagem);
+    }
+
+    private void desativarModoCarregamento() {
+        btnCadastrar.setDisable(false);
+        btnIrParaLogin.setDisable(false);
+        sceneManager.setModoCarregamento(false);
+    }
 
     private void exibirAvisoErro(String msg){
-        avisoContainer.setVisible(true);
-        avisoContainer.getStyleClass().clear();
-
-        avisoContainer.getStyleClass().add("error-container");
-
-        Text erro = new Text(msg);
-        avisoContainer.getChildren().add(erro);
+        AvisoUtils.exibirAvisoErro(avisoContainer, msg);
     }
 
     private void exibirAvisoSucesso(String msg) {
-        avisoContainer.setVisible(true);
-        avisoContainer.getStyleClass().clear();
-
-        avisoContainer.getStyleClass().add("success-container");
-
-        Text aviso = new Text(msg);
-        avisoContainer.getChildren().add(aviso);
+        AvisoUtils.exibirAvisoSucesso(avisoContainer, msg);
     }
 
     private void limparCampoAviso(){
-        avisoContainer.getStyleClass().clear();
-        avisoContainer.setVisible(false);
         avisoContainer.getChildren().clear();
     }
 }

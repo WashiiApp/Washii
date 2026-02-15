@@ -6,6 +6,7 @@ import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.presentation.utils.AvisoUtils;
+import br.com.washii.presentation.utils.ValidadorDeEmail;
 import br.com.washii.service.AutenticacaoService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -18,28 +19,32 @@ import javafx.scene.text.TextFlow;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-
 public class LoginController extends BaseController {
 
     private final AutenticacaoService autenticacaoService;
-
     private final Map<TipoUsuario, String> rotasPorTipoUsuario = Map.of(
             TipoUsuario.NEGOCIO, "/br/com/washii/view/layout/negocio-layout.fxml",
             TipoUsuario.CLIENTE, "/br/com/washii/view/layout/cliente-layout.fxml"
     );
-
     @FXML private Button btnEntrar;
-
     @FXML private TextFlow containerAviso;
-
     @FXML private Hyperlink lnkCadastro, lnkEsqueciSenha;
-
     @FXML private PasswordField pwdSenha;
-
     @FXML private TextField txtEmail;
 
     public LoginController(AutenticacaoService autenticacaoService){
         this.autenticacaoService = autenticacaoService;
+    }
+
+    @FXML
+    void onEsqueciSenha() {
+        limparCampoErro();
+        AvisoUtils.exibirAvisoAlerta(containerAviso, "Entre em contato com o suporte para resetar sua senha");
+    }
+
+    @FXML
+    void irParaCadastro(){
+        sceneManager.loadCenterBorderPane("/br/com/washii/view/acesso/cadastro.fxml");
     }
 
     @FXML
@@ -54,7 +59,7 @@ public class LoginController extends BaseController {
             exibirErro("Preencha todos os campos");
             return false;
         }
-        if (!validarEmail()) {
+        if (!isEmailValido()) {
             exibirErro("E-mail inválido");
             return false;
         }
@@ -65,8 +70,8 @@ public class LoginController extends BaseController {
         return txtEmail.getText().isBlank() || pwdSenha.getText().isBlank();
     }
 
-    private boolean validarEmail() {
-        return txtEmail.getText().contains("@");
+    private boolean isEmailValido() {
+        return ValidadorDeEmail.validar(txtEmail.getText());
     }
 
     private void executarLoginAsync() {
@@ -88,11 +93,6 @@ public class LoginController extends BaseController {
         sceneManager.setModoCarregamento(true, mensagem);
     }
 
-    private void desativarModoCarregamento(){
-        btnEntrar.setDisable(false);
-        sceneManager.setModoCarregamento(false);
-    }
-
     private Usuario autenticarUsuario() {
         return autenticacaoService.realizarLogin(
                 txtEmail.getText(),
@@ -108,7 +108,7 @@ public class LoginController extends BaseController {
         Platform.runLater(() -> {
             String rota = rotasPorTipoUsuario.get(tipoUsuario);
             if (rota == null){
-                throw new RuntimeException("Usuario não mapeado");
+                throw new RuntimeException("Usuário não mapeado");
             }
             sceneManager.switchFullScene(rota);
         });
@@ -128,22 +128,16 @@ public class LoginController extends BaseController {
         return null;
     }
 
-    @FXML
-    void irParaCadastro(ActionEvent event){
-        sceneManager.loadCenterBorderPane("/br/com/washii/view/acesso/cadastro.fxml");
-    }
-
-    @FXML
-    void onEsqueciSenha(ActionEvent event) {
-        limparCampoErro();
-        AvisoUtils.exibirAvisoAlerta(containerAviso, "Entre em contato com o suporte para resetar sua senha");
-    }
-
-    private void exibirErro(String msg){
-        AvisoUtils.exibirAvisoErro(containerAviso, msg);
+    private void desativarModoCarregamento(){
+        btnEntrar.setDisable(false);
+        sceneManager.setModoCarregamento(false);
     }
 
     private void limparCampoErro(){
         containerAviso.getChildren().clear();
+    }
+
+    private void exibirErro(String msg){
+        AvisoUtils.exibirAvisoErro(containerAviso, msg);
     }
 }

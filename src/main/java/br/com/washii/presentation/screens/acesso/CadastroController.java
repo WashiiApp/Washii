@@ -8,9 +8,9 @@ import br.com.washii.domain.enums.TipoUsuario;
 import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.presentation.utils.AvisoUtils;
+import br.com.washii.presentation.utils.ValidadorDeEmail;
 import br.com.washii.service.UsuarioService;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -18,46 +18,35 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.TextFlow;
-
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class CadastroController extends BaseController {
 
     private static final int NUMERO_MINIMO_CARACTERE_PARA_SENHA = 4;
-
     private final UsuarioService usuarioService;
-
     @FXML private RadioButton rbNegocio, rbCliente;
-
     @FXML private ToggleGroup tipoUsuario;
-
     @FXML private Button btnCadastrar, btnIrParaLogin;
-
     @FXML private PasswordField pwdSenha, pwdSenhaConferida;
-
     @FXML private TextFlow avisoContainer;
-
     @FXML private TextField txtCEP, txtCidade, txtEmail, txtEstado, txtNome;
-
 
     public CadastroController(UsuarioService usuarioService){
         this.usuarioService = usuarioService;
     }
 
     @FXML
-    void irParaLogin(ActionEvent event) {
+    void irParaLogin() {
         sceneManager.loadCenterBorderPane("/br/com/washii/view/acesso/login.fxml");
     }
 
    @FXML
-    void onCadastrar(ActionEvent event) {
-    limparCampoAviso();
+    void onCadastrar() {
+        limparCampoAviso();
 
-    if (!validarDados()) return;
+        if (!validarDados()) return;
 
-    cadastrarUsuarioAsync(criarUsuario());
+        executarCadastroAsync(criarUsuario());
    }
 
     private boolean validarDados() {
@@ -66,7 +55,7 @@ public class CadastroController extends BaseController {
             return false;
         }
 
-        if (!validarCampoEmail()) {
+        if (!isEmailValido()) {
             exibirAvisoErro("E-mail inválido");
             return false;
         }
@@ -95,8 +84,8 @@ public class CadastroController extends BaseController {
                 pwdSenhaConferida.getText().isBlank();
     }
 
-    private boolean validarCampoEmail() {
-        return txtEmail.getText().contains("@");
+    private boolean isEmailValido() {
+        return ValidadorDeEmail.validar(txtEmail.getText());
     }
 
     private boolean verificarNumeroMinimoDeCaracteresParaSenha() {
@@ -134,21 +123,27 @@ public class CadastroController extends BaseController {
         String cidade = txtCidade.getText();
 
         return new Endereco(cep, estado, cidade, null, null, null, "Brasil");
-
     }
 
-    private void cadastrarUsuarioAsync(Usuario usuario) {
+    private void executarCadastroAsync(Usuario usuario) {
         ativarModoCarregamento("Cadastrando...");
 
-        CompletableFuture.runAsync(() -> usuarioService.salvarNovoUsuario(usuario))
-        .thenRun(() -> {
-            Platform.runLater(() -> {
-                exibirAvisoSucesso("Cadastro realizado com sucesso! Você já pode fazer login.");
-            });
-        })
-        .exceptionally(this::tratarErroCadastro)
-        .whenComplete((_, ex) -> {
-            desativarModoCarregamento();
+        CompletableFuture
+                .runAsync(() -> usuarioService.salvarNovoUsuario(usuario))
+                .thenRun(this::exibirMensagemSucesso)
+                .exceptionally(this::tratarErroCadastro)
+                .whenComplete((_, _) -> desativarModoCarregamento());
+    }
+
+    private void ativarModoCarregamento(String mensagem) {
+        btnCadastrar.setDisable(true);
+        btnIrParaLogin.setDisable(true);
+        sceneManager.setModoCarregamento(true, mensagem);
+    }
+
+    private void exibirMensagemSucesso() {
+        Platform.runLater(() -> {
+            exibirAvisoSucesso("Cadastro realizado com sucesso! Você já pode fazer login.");
         });
     }
 
@@ -164,12 +159,6 @@ public class CadastroController extends BaseController {
             erro.printStackTrace();
         });
         return null;
-    }
-
-    private void ativarModoCarregamento(String mensagem) {
-        btnCadastrar.setDisable(true);
-        btnIrParaLogin.setDisable(true);
-        sceneManager.setModoCarregamento(true, mensagem);
     }
 
     private void desativarModoCarregamento() {

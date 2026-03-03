@@ -6,105 +6,138 @@ import br.com.washii.domain.exceptions.NegocioException;
 import br.com.washii.infra.session.Sessao;
 import br.com.washii.presentation.core.BaseController;
 import br.com.washii.presentation.utils.AvisoUtils;
+import br.com.washii.presentation.utils.ValidadorDeEmail;
 import br.com.washii.service.AutenticacaoService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.TextFlow;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-public class LoginController extends BaseController{
+public class LoginController extends BaseController {
 
-    private AutenticacaoService autenticacaoService;
+    private final AutenticacaoService autenticacaoService;
+    private final Map<TipoUsuario, String> rotasPorTipoUsuario = Map.of(
+            TipoUsuario.NEGOCIO, "/br/com/washii/view/layout/negocio-layout.fxml",
+            TipoUsuario.CLIENTE, "/br/com/washii/view/layout/cliente-layout.fxml"
+    );
+    @FXML private Button btnEntrar;
+    @FXML private TextFlow containerAviso;
+    @FXML private Hyperlink lnkCadastro, lnkEsqueciSenha;
+    @FXML private PasswordField pwdSenha;
+    @FXML private TextField txtEmail;
 
-    @FXML
-    private Button btnEntrar;
-
-    @FXML
-    private TextFlow conteinerAviso;
-
-    @FXML
-    private Hyperlink lnkCadastro;
-
-    @FXML
-    private Hyperlink lnkEsqueciSenha;
-
-    @FXML
-    private PasswordField pwdSenha;
-
-    @FXML
-    private TextField txtEmail;
-
-    // AutenticacaoService é injetado no SceneManager
-    public LoginController(AutenticacaoService authService){
-        this.autenticacaoService = authService;
+    public LoginController(AutenticacaoService autenticacaoService){
+        this.autenticacaoService = autenticacaoService;
     }
 
     @FXML
-    void onEntrar(ActionEvent event){
+    void onEsqueciSenha() {
         limparCampoErro();
-
-        if (txtEmail.getText().isBlank() || pwdSenha.getText().isBlank()) {
-            exibirErro("Preencha todos os campos");
-            return;
-        }
-
-        if (!txtEmail.getText().isBlank() && !txtEmail.getText().contains("@")){
-            exibirErro("E-mail inválido");
-            return;
-        }
-
-        btnEntrar.setDisable(true);
-        Scene secen = btnEntrar.getScene();
-        secen.setCursor(Cursor.WAIT);
-
-        String email = txtEmail.getText();
-        String senha = pwdSenha.getText();
-
-        try {
-            Usuario user = autenticacaoService.realizarLogin(email, senha);
-            Sessao.getInstance().iniciarSessao(user);
-
-            // Escolhe a tela com base no TipoUsuario
-            if (user.getTipoUsuario() == TipoUsuario.CLIENTE){
-                sceneManager.switchFullScene("/br/com/washii/view/layout/cliente-layout.fxml");
-            } else if (user.getTipoUsuario() == TipoUsuario.NEGOCIO){
-                sceneManager.switchFullScene("/br/com/washii/view/layout/negocio-layout.fxml");
-            } else {
-                exibirErro("Tipo de Usuário desconhecido.");
-            }
-
-        } catch (NegocioException e) {
-            exibirErro(e.getMessage());
-        } catch (Exception e){
-            e.printStackTrace();
-            exibirErro("Ocorreu um erro inesperado.");
-        } finally {
-            btnEntrar.setDisable(false);
-            secen.setCursor(Cursor.DEFAULT);
-        }
+        AvisoUtils.exibirAvisoAlerta(containerAviso, "Entre em contato com o suporte para resetar sua senha");
     }
 
     @FXML
-    void irParaCadastro(ActionEvent event){
+    void irParaCadastro(){
         sceneManager.loadCenterBorderPane("/br/com/washii/view/acesso/cadastro.fxml");
     }
 
     @FXML
-    void onEsqueciSenha(ActionEvent event) {
+    void onEntrar(){
         limparCampoErro();
-        AvisoUtils.exibirAvisoAlerta(conteinerAviso, "Entre em contato com o suporte para resetar sua senha");
+        if (!validarDados()) return;
+        executarLoginAsync();
     }
 
-    private void exibirErro(String msg){
-        AvisoUtils.exibirAvisoErro(conteinerAviso, msg);
+    private boolean validarDados() {
+        if (verificarCamposEmBranco()){
+            exibirErro("Preencha todos os campos");
+            return false;
+        }
+        if (!isEmailValido()) {
+            exibirErro("E-mail inválido");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verificarCamposEmBranco() {
+        return txtEmail.getText().isBlank() || pwdSenha.getText().isBlank();
+    }
+
+    private boolean isEmailValido() {
+        return ValidadorDeEmail.validar(txtEmail.getText());
+    }
+
+    private void executarLoginAsync() {
+        ativarModoCarregamento("Validando dados...");
+
+        CompletableFuture
+                .supplyAsync(this::autenticarUsuario)
+                .thenApply(user -> {
+                    iniciarSessao(user);
+                    return user.getTipoUsuario();
+                })
+                .thenAccept(this::navegarParaHome)
+                .exceptionally(this::tratarErroLogin)
+                .whenComplete((_, _) -> desativarModoCarregamento());
+    }
+
+    private void ativarModoCarregamento(String mensagem){
+        btnEntrar.setDisable(true);
+        sceneManager.setModoCarregamento(true, mensagem);
+    }
+
+    private Usuario autenticarUsuario() {
+        return autenticacaoService.realizarLogin(
+                txtEmail.getText(),
+                pwdSenha.getText()
+        );
+    }
+
+    private void iniciarSessao(Usuario user) {
+        Sessao.getInstance().iniciarSessao(user);
+    }
+
+    private void navegarParaHome(TipoUsuario tipoUsuario) {
+        Platform.runLater(() -> {
+            String rota = rotasPorTipoUsuario.get(tipoUsuario);
+            if (rota == null){
+                throw new RuntimeException("Usuário não mapeado");
+            }
+            sceneManager.switchFullScene(rota);
+        });
+    }
+
+    private Void tratarErroLogin(Throwable ex) {
+        Throwable erro = ex.getCause() != null? ex.getCause(): ex;
+
+        Platform.runLater(() -> {
+            if (erro instanceof NegocioException){
+                exibirErro(erro.getMessage());
+                return;
+            }
+            exibirErro("Ocorreu um erro inesperado: " + erro.getMessage());
+            erro.printStackTrace();
+        });
+        return null;
+    }
+
+    private void desativarModoCarregamento(){
+        btnEntrar.setDisable(false);
+        sceneManager.setModoCarregamento(false);
     }
 
     private void limparCampoErro(){
-        conteinerAviso.getChildren().clear();
+        containerAviso.getChildren().clear();
+    }
+
+    private void exibirErro(String msg){
+        AvisoUtils.exibirAvisoErro(containerAviso, msg);
     }
 }

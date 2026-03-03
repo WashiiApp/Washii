@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" styleClass="login-background" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.screens.acesso.AcessoLayoutController">
-    <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-    </padding>
+
+<BorderPane fx:id="borderPaneLogin" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            prefHeight="600.0" prefWidth="800.0" styleClass="login-background" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.washii.presentation.screens.acesso.AcessoLayoutController">
     <center>
         <!-- Inclui a tela de login por padrão -->
         <fx:include fx:id="login" source="login.fxml" />
@@ -19,9 +19,10 @@
             <font>
                 <Font name="DejaVu Sans Condensed Bold" size="14.0" />
             </font>
-         <cursor>
-            <Cursor fx:constant="NONE" />
-         </cursor>
+            <cursor>
+                <Cursor fx:constant="NONE" />
+            </cursor>
         </Label>
     </bottom>
 </BorderPane>
+

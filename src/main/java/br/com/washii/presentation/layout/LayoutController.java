@@ -6,8 +6,7 @@ import br.com.washii.service.AutenticacaoService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-// Classe pai dos controllers do MainLayout 
-// Agrupa metodos ou atributos comuns aos controllers do MainLayout 
+
 public abstract class LayoutController extends BaseController {
 
     private AutenticacaoService autenticacaoService;
@@ -21,7 +20,6 @@ public abstract class LayoutController extends BaseController {
 
     @FXML
     void onSair(){
-        // Realizar logout
         sceneManager.switchFullScene("/br/com/washii/view/acesso/acesso-layout.fxml");
         autenticacaoService.realizarLogout();
     }
@@ -29,8 +27,8 @@ public abstract class LayoutController extends BaseController {
     protected void setBoasVindas(){
         String nomeUser = Sessao.getInstance().getUsuarioLogado().getNome();
 
-        String pNomeUser = nomeUser.split(" ")[0];
+        String primeiroNomeUser = nomeUser.split(" ")[0];
 
-        lblBoasVindas.setText("Bem vindo, " + pNomeUser);
+        lblBoasVindas.setText("Bem vindo, " + primeiroNomeUser);
     }
 }

@@ -1,8 +1,6 @@
 package br.com.washii.presentation.layout;
 
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.Map;
 import br.com.washii.presentation.core.SceneManager;
 import br.com.washii.presentation.screens.home.HomeNegocioController;
 import br.com.washii.service.AutenticacaoService;
@@ -12,20 +10,19 @@ import javafx.scene.layout.HBox;
 
 public class NegocioLayoutController extends LayoutController {
 
-    @FXML
-    private HomeNegocioController homeNegocioController;
-
-    @FXML
-    private HBox navHome, navAgendamentos, navServico, navRelatorio, navPerfil;
-
-    private List<HBox> allNavContainer;
+    @FXML private HomeNegocioController homeNegocioController;
+    @FXML private HBox navHome, navAgendamentos, navServico, navRelatorio, navPerfil;
+    private HBox selectedContainer;
+    private Map<HBox, String> navigationMap;
 
     @Override
     public void setSceneManager(SceneManager sceneManager) {
-        // 1. Seta no próprio Layout
         super.setSceneManager(sceneManager);
-        
-        // 2. Repassa para a Home que foi incluída
+
+        setSceneManagerOnHomeNegocioController(sceneManager);
+    }
+
+    private void setSceneManagerOnHomeNegocioController(SceneManager sceneManager) {
         if (homeNegocioController != null) {
             homeNegocioController.setSceneManager(sceneManager);
         }
@@ -39,34 +36,52 @@ public class NegocioLayoutController extends LayoutController {
     void initialize() {
         setBoasVindas();
 
-        allNavContainer = Arrays.asList(navHome, navAgendamentos, navServico, navRelatorio, navPerfil);
+        selectedContainer = navHome;
+
+        initializeNavigationMap();
+    }
+
+    private void initializeNavigationMap() {
+        navigationMap = Map.of(
+            navHome, "/br/com/washii/view/home/home-negocio.fxml",
+            navAgendamentos, "/br/com/washii/view/agendamentos/meus-agendamentos-negocio.fxml",
+            navServico, "/br/com/washii/view/servico/gestao-servicos.fxml",
+            navRelatorio, "/br/com/washii/view/relatorio/relatorio-negocio.fxml",
+            navPerfil, "/br/com/washii/view/perfil/perfil-negocio.fxml"
+        );
     }
 
     @FXML
     void handleNavClick(MouseEvent event){
-        HBox containerClicked = (HBox) event.getSource();
+        
+        removeStyleSelectedContainer();
 
-        for (HBox nav : allNavContainer) {
-            if(nav.getStyleClass().remove("nav-container-active")){
-            }
+        updateSelectedContainer(event);
+
+        addStyleSelectedContainer();
+
+        navigateToSelectedContainer();
+    }
+
+    private void removeStyleSelectedContainer() {
+        selectedContainer.getStyleClass().remove("nav-container-active");
+    }
+
+    private void updateSelectedContainer(MouseEvent event) {
+        selectedContainer = (HBox) event.getSource();
+    }
+
+    private void addStyleSelectedContainer() {
+        selectedContainer.getStyleClass().add("nav-container-active");
+    }
+
+    private void navigateToSelectedContainer(){
+        String pathView = navigationMap.get(selectedContainer);
+
+        if (pathView == null) {
+            throw new IllegalStateException("Container não mapeado: " + selectedContainer);
         }
 
-        containerClicked.getStyleClass().add("nav-container-active");
-
-        if (containerClicked == navHome) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/home/home-negocio.fxml");
-
-        } else if (containerClicked == navAgendamentos) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/agendamentos/meus-agendamentos-negocio.fxml");
-            
-        } else if (containerClicked == navServico) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/servico/gestao-servicos.fxml");
-
-        } else if (containerClicked == navRelatorio) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/relatorio/relatorio-negocio.fxml");
-            
-        } else if (containerClicked == navPerfil) {
-            sceneManager.loadCenterBorderPane("/br/com/washii/view/perfil/perfil-negocio.fxml");
-        }
+        sceneManager.loadCenterBorderPane(pathView);
     }
 }

@@ -14,11 +14,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configurar JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '25'
           distribution: 'temurin'
           cache: 'maven'
+      - name: Dar permissão de execução ao mvnw
+        run: chmod +x ./mvnw
 
       - name: Build com Maven
         run: ./mvnw clean install
